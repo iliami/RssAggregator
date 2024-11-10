@@ -1,6 +1,0 @@
-@RssAggregator_HostAddress = http://localhost:5183
-
-GET {{RssAggregator_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
