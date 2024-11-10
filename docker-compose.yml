@@ -1,0 +1,6 @@
+﻿services:
+  rssaggregator:
+    image: rssaggregator
+    build:
+      context: .
+      dockerfile: RssAggregator/Dockerfile
