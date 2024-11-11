@@ -9,7 +9,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
         <PackageReference Include="FastEndpoints" Version="5.31.0" />
+        <PackageReference Include="FastEndpoints.Security" Version="5.31.0" />
         <PackageReference Include="FastEndpoints.Swagger" Version="5.31.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
