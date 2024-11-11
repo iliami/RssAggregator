@@ -1,6 +1,6 @@
 using FastEndpoints;
 
-namespace RssAggregator.Features;
+namespace RssAggregator.Features.HealthEndpoint;
 
 public class HealthEndpoint : Endpoint<HealthRequest, HealthResponse>
 {
@@ -17,6 +17,3 @@ public class HealthEndpoint : Endpoint<HealthRequest, HealthResponse>
 }
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public record HealthRequest(string Check);
-
-public record HealthResponse(string AllCaps);
