@@ -5,9 +5,11 @@
       context: .
       dockerfile: RssAggregator/Dockerfile
     ports:
-      - 5000:5000
+      - 5183:5000
     networks:
       - net
+    environment:
+      ASPNETCORE_DATABASE_CONNECTIONSTRING: "Host=rssaggregator-db; Port=5432; Database=RssAggregatorDatabase; Username=postgres; Password=password;"
     depends_on:
       - rssaggregator-db
   rssaggregator-db:
@@ -25,6 +27,7 @@
       - rssaggregator-db-data:/var/lib/postgres/data
       - ./RssAggregator.Database:/docker-entrypoint-initdb.d
   adminer:
+    container_name: RssAggregatorDbLocal-Adminer
     image: adminer
     ports:
       - 8080:8080
