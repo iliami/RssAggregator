@@ -1,6 +1,39 @@
 ﻿services:
-  rssaggregator:
-    image: rssaggregator
+  rssaggregator-app:
+    container_name: RssAggregatorApp
     build:
       context: .
       dockerfile: RssAggregator/Dockerfile
+    ports:
+      - 5000:5000
+    networks:
+      - net
+    depends_on:
+      - rssaggregator-db
+  rssaggregator-db:
+    container_name: RssAggregatorDb
+    image: postgres
+    expose:
+      - 5432
+    networks:
+      - net
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: RssAggregatorDatabase
+    volumes:
+      - rssaggregator-db-data:/var/lib/postgres/data
+      - ./RssAggregator.Database:/docker-entrypoint-initdb.d
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    networks:
+      - net
+    depends_on:
+      - rssaggregator-db
+networks:
+  net:
+    driver: bridge
+volumes:
+  rssaggregator-db-data:
