@@ -11,5 +11,8 @@ public class Feed
     public required string Url { get; set; }
     public DateTime? LastFetchedAt { get; set; }
 
+    public List<Subscription> Subscriptions { get; set; } = [];
+    public List<AppUser> Users { get; set; } = [];
+    
     public List<Post> Posts { get; } = [];
 }

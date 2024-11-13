@@ -11,4 +11,7 @@ public class AppUser
     public required string Password { get; set; }
     [StringLength(16)]
     public required string Role { get; set; }
+
+    public List<Subscription> Subscriptions { get; set; } = [];
+    public List<Feed> Feeds { get; set; } = [];
 }
