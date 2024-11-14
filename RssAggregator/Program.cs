@@ -1,8 +1,8 @@
 using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using RssAggregator.Application.Abstractions;
 using RssAggregator.Persistence;
 
 var builder = WebApplication.CreateBuilder();
@@ -14,6 +14,7 @@ builder.Services
                                builder.Configuration.GetConnectionString("DevelopmentPostgres");
         options.UseNpgsql(connectionString);
     })
+    .AddScoped<IAppDbContext, AppDbContext>()
     .AddAuthenticationJwtBearer(signingOptions =>
     {
         var singingKey = builder.Configuration["JwtOptions:SecretKey"];

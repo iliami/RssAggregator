@@ -9,7 +9,7 @@ using RssAggregator.Persistence;
 
 #nullable disable
 
-namespace RssAggregator.Migrations
+namespace RssAggregator.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20241111111512_Add-AppUser")]

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace RssAggregator.Migrations
+namespace RssAggregator.Persistence.Migrations
 {
     /// <inheritdoc />
     public partial class AddFeedConfigureAppUser : Migration

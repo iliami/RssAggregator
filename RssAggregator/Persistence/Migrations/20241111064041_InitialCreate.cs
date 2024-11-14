@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace RssAggregator.Migrations
+namespace RssAggregator.Persistence.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

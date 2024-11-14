@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using RssAggregator.Persistence.Entities;
+using RssAggregator.Application.Abstractions;
+using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Persistence;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options), IAppDbContext
 {
     public DbSet<AppUser> AppUsers { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
