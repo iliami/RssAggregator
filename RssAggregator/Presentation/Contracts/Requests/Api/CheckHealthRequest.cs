@@ -1,3 +1,3 @@
 namespace RssAggregator.Presentation.Contracts.Requests.Api;
 
-public record HealthRequest(string Check);
+public record CheckHealthRequest(string Check);

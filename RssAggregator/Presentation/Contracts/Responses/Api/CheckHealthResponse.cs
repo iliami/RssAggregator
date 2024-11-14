@@ -1,3 +1,3 @@
 namespace RssAggregator.Presentation.Contracts.Responses.Api;
 
-public record HealthResponse(string AllCaps);
+public record CheckHealthResponse(string AllCaps);
