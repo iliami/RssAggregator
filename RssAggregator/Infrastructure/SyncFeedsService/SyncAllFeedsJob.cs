@@ -12,9 +12,21 @@ public class SyncAllFeedsJob(
     : BackgroundService
 {
     private const int CycleIntervalMilliseconds = 60000;
+    private Dictionary<Guid, HashSet<string>> _feedIdPostIds = null!;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        using var scope = serviceProvider.CreateScope();
+
+        var dbContext = scope.ServiceProvider.GetRequiredService<IAppDbContext>();
+
+        _feedIdPostIds = await dbContext.Feeds
+            .AsNoTracking()
+            .Include(f => f.Posts)
+            .ToDictionaryAsync(
+                k => k.Id,
+                v => v.Posts.Select(p => p.Url).ToHashSet(), stoppingToken);
+
         while (!stoppingToken.IsCancellationRequested)
         {
             await FetchAllFeeds(stoppingToken);
@@ -29,9 +41,7 @@ public class SyncAllFeedsJob(
 
         var dbContext = scope.ServiceProvider.GetRequiredService<IAppDbContext>();
 
-        var allFeeds = dbContext.Feeds
-            .AsNoTracking()
-            .ToList();
+        var allFeeds = await dbContext.Feeds.ToListAsync(ct);
 
         await Parallel.ForEachAsync(allFeeds, ct,
             async (feed, token) => await FetchSingleFeed(feed.Id, token));
@@ -40,25 +50,20 @@ public class SyncAllFeedsJob(
     private async Task FetchSingleFeed(Guid feedId, CancellationToken ct = default)
     {
         using var scope = serviceProvider.CreateScope();
-
         var dbContext = scope.ServiceProvider.GetRequiredService<IAppDbContext>();
-
-        var dbFeed = await dbContext.Feeds
-            .Include(x => x.Posts)
-            .FirstAsync(x => x.Id == feedId, ct);
-
+        
+        var feed = await dbContext.Feeds.FirstAsync(f => f.Id == feedId, ct);
+        
         var httpClient = httpClientFactory.CreateClient();
         var serializer = new XmlSerializer(typeof(RssRoot));
-
-        var xmlString = await httpClient.GetStringAsync(dbFeed.Url, ct);
-
-        using var reader = new StringReader(xmlString);
-
-        var feedFromInternet = (RssRoot)serializer.Deserialize(reader)!;
-
+        var xmlString = await httpClient.GetStringAsync(feed.Url, ct);
+        using var stringReader = new StringReader(xmlString);
+        
+        var feedFromInternet = (RssRoot)serializer.Deserialize(stringReader)!;
+        
         var posts = feedFromInternet.Channel.Items
             .Where(scrapedPost =>
-                dbFeed.Posts.All(dbPost => scrapedPost.Link != dbPost.Url))
+                _feedIdPostIds[feed.Id].All(url => scrapedPost.Link != url))
             .Select(scrapedPost => new Post
             {
                 Title = scrapedPost.Title,
@@ -66,12 +71,29 @@ public class SyncAllFeedsJob(
                 Description = scrapedPost.Description,
                 PublishDate = DateTime.Parse(scrapedPost.PubDate).ToUniversalTime(),
             }).ToList();
+        
+        if (feed.Name != feedFromInternet.Channel.Title)
+        {
+            feed.Name = feedFromInternet.Channel.Title;
+        }
+        
+        if (feed.Description != feedFromInternet.Channel.Description)
+        {
+            feed.Description = feedFromInternet.Channel.Description;
+        }
+        
+        if (posts.Count != 0)
+        {
+            feed.Posts.AddRange(posts);
 
-        dbFeed.Name = feedFromInternet.Channel.Title;
-        dbFeed.Description = feedFromInternet.Channel.Description;
-        dbFeed.LastFetchedAt = DateTime.UtcNow;
-        dbFeed.Posts.AddRange(posts);
-
+            foreach (var post in posts)
+            {
+                _feedIdPostIds[feed.Id].Add(post.Url);
+            }
+        }
+        
+        feed.LastFetchedAt = DateTime.UtcNow;
+        
         await dbContext.SaveChangesAsync(ct);
     }
 }
