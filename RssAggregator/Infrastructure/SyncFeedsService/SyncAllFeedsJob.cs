@@ -67,6 +67,8 @@ public class SyncAllFeedsJob(
                 PublishDate = DateTime.Parse(scrapedPost.PubDate).ToUniversalTime(),
             }).ToList();
 
+        dbFeed.Name = feedFromInternet.Channel.Title;
+        dbFeed.Description = feedFromInternet.Channel.Description;
         dbFeed.LastFetchedAt = DateTime.UtcNow;
         dbFeed.Posts.AddRange(posts);
 
