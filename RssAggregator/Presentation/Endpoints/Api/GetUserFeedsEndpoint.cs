@@ -1,8 +1,8 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using RssAggregator.Application.Abstractions;
-using RssAggregator.Application.DTO;
 using RssAggregator.Presentation.Contracts.Responses.Api;
+using RssAggregator.Presentation.DTO;
 using RssAggregator.Presentation.Extensions;
 
 namespace RssAggregator.Presentation.Endpoints.Api;
