@@ -2,7 +2,7 @@ using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using RssAggregator.Application.Abstractions;
 using RssAggregator.Presentation.Contracts.Responses.Api;
-using RssAggregator.Presentation.DTO.PostDto;
+using RssAggregator.Presentation.DTO;
 
 namespace RssAggregator.Presentation.Endpoints.Api;
 
@@ -20,7 +20,7 @@ public class GetFeedPostsEndpoint(IAppDbContext DbContext) : EndpointWithoutRequ
         var posts = await DbContext.Posts
             .AsNoTracking()
             .Where(p => p.FeedId == feedId)
-            .Select(p => new PostShortDto(
+            .Select(p => new PostDto(
                 p.Id,
                 p.Title,
                 p.PublishDate,

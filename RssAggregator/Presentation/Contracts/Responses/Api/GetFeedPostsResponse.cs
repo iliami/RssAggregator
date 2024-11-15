@@ -1,5 +1,5 @@
-using RssAggregator.Presentation.DTO.PostDto;
+using RssAggregator.Presentation.DTO;
 
 namespace RssAggregator.Presentation.Contracts.Responses.Api;
 
-public record GetFeedPostsResponse(List<PostShortDto> Posts);
+public record GetFeedPostsResponse(List<PostDto> Posts);
