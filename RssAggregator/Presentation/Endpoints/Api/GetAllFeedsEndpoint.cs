@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RssAggregator.Application.Abstractions;
 using RssAggregator.Presentation.Contracts.Responses.Api;
 using RssAggregator.Presentation.DTO;
+using RssAggregator.Presentation.DTO.FeedDto;
 
 namespace RssAggregator.Presentation.Endpoints.Api;
 

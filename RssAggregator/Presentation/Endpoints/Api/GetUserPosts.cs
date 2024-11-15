@@ -21,17 +21,18 @@ public class GetUserPosts(IAppDbContext DbContext) : EndpointWithoutRequest<GetU
         var posts = await DbContext.Posts
             .AsNoTracking()
             .Where(p => DbContext.Subscriptions
-                .Any(s => 
+                .Any(s =>
                     s.AppUserId == userId && s.FeedId == p.FeedId))
             .Select(p => new PostShortDto(
                 p.Id,
                 p.Title,
                 p.PublishDate,
-                p.Url))
+                p.Url,
+                p.FeedId))
             .ToListAsync(ct);
 
         var res = new GetUserPostsResponse(posts);
-        
+
         return res;
     }
 }
