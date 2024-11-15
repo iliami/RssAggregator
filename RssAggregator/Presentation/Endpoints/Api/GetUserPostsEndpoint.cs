@@ -7,7 +7,7 @@ using RssAggregator.Presentation.Extensions;
 
 namespace RssAggregator.Presentation.Endpoints.Api;
 
-public class GetUserPosts(IAppDbContext DbContext) : EndpointWithoutRequest<GetUserPostsResponse>
+public class GetUserPostsEndpoint(IAppDbContext DbContext) : EndpointWithoutRequest<GetUserPostsResponse>
 {
     public override void Configure()
     {
