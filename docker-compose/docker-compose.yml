@@ -1,17 +1,16 @@
 ﻿services:
   rssaggregator-app:
     container_name: RssAggregatorApp
-    build:
-      context: .
-      dockerfile: RssAggregator/Dockerfile
+    build: ../RssAggregator/
     ports:
       - 5183:5000
     networks:
       - net
     environment:
-      ASPNETCORE_DATABASE_CONNECTIONSTRING: "Host=rssaggregator-db; Port=5432; Database=RssAggregatorDatabase; Username=postgres; Password=password;"
+      ASPNETCORE_RSSAGGREGATOR_DATABASE_CONNECTIONSTRING: "Host=rssaggregator-db; Port=5432; Database=RssAggregatorDatabase; Username=root; Password=password;"
     depends_on:
-      - rssaggregator-db
+      rssaggregator-db:
+        condition: "service_healthy"
   rssaggregator-db:
     container_name: RssAggregatorDb
     image: postgres
@@ -20,14 +19,20 @@
     networks:
       - net
     environment:
-      POSTGRES_USER: postgres
+      POSTGRES_USER: root
       POSTGRES_PASSWORD: password
       POSTGRES_DB: RssAggregatorDatabase
     volumes:
       - rssaggregator-db-data:/var/lib/postgres/data
-      - ./RssAggregator.Database:/docker-entrypoint-initdb.d
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "RssAggregatorDatabase"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 30s
   adminer:
-    container_name: RssAggregatorDbLocal-Adminer
+    container_name: RssAggregatorDb-Adminer
     image: adminer
     ports:
       - 8080:8080

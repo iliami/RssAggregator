@@ -7,9 +7,9 @@ EXPOSE 5000
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["RssAggregator/RssAggregator.csproj", "RssAggregator/"]
+COPY ["./RssAggregator.csproj", "RssAggregator/"]
 RUN dotnet restore "RssAggregator/RssAggregator.csproj"
-COPY . .
+COPY [".", "RssAggregator/"]
 WORKDIR "/src/RssAggregator"
 RUN dotnet build "RssAggregator.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
