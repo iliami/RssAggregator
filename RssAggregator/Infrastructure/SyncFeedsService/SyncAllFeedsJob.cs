@@ -62,8 +62,10 @@ public class SyncAllFeedsJob(
         var feedFromInternet = (RssRoot)serializer.Deserialize(stringReader)!;
         
         var posts = feedFromInternet.Channel.Items
-            .Where(scrapedPost =>
-                _feedIdPostIds[feed.Id].All(url => scrapedPost.Link != url))
+            .Where(scrapedPost => 
+                (_feedIdPostIds.TryGetValue(feed.Id, out var urls) && 
+                 urls.All(url => scrapedPost.Link != url)) ||
+                urls is null)
             .Select(scrapedPost => new Post
             {
                 Title = scrapedPost.Title,
@@ -88,7 +90,14 @@ public class SyncAllFeedsJob(
 
             foreach (var post in posts)
             {
-                _feedIdPostIds[feed.Id].Add(post.Url);
+                if (_feedIdPostIds.TryGetValue(feed.Id, out var urls))
+                {
+                    urls.Add(post.Url);
+                }
+                else
+                {
+                    _feedIdPostIds[feed.Id] = [post.Url];
+                }
             }
         }
         
