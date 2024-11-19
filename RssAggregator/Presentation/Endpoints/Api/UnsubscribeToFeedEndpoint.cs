@@ -15,7 +15,7 @@ public class UnsubscribeToFeedEndpoint(IAppDbContext DbContext) : Endpoint<Unsub
 
     public override async Task HandleAsync(UnsubscribeToFeedRequest req, CancellationToken ct)
     {
-        var (userId, _) = User.ToIdNameTuple();
+        var (userId, _) = User.ToIdEmailTuple();
         
         var subscription = await DbContext.Subscriptions.FirstOrDefaultAsync(s => s.AppUserId == userId && s.FeedId == req.FeedId, ct);
         if (subscription is null)

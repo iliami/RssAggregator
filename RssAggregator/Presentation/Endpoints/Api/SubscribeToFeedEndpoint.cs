@@ -15,7 +15,7 @@ public class SubscribeToFeedEndpoint(IAppDbContext DbContext) : Endpoint<Subscri
 
     public override async Task HandleAsync(SubscribeToFeedRequest req, CancellationToken ct)
     {
-        var (userId, _) = User.ToIdNameTuple();
+        var (userId, _) = User.ToIdEmailTuple();
         var subscription = new Subscription
         {
             AppUserId = userId,

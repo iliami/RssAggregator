@@ -16,7 +16,7 @@ public class GetUserPostsEndpoint(IAppDbContext DbContext) : EndpointWithoutRequ
 
     public override async Task<GetUserPostsResponse> ExecuteAsync(CancellationToken ct)
     {
-        var (userId, _) = User.ToIdNameTuple();
+        var (userId, _) = User.ToIdEmailTuple();
 
         var posts = await DbContext.Posts
             .AsNoTracking()

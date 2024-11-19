@@ -16,7 +16,7 @@ public class GetUserFeedsEndpoint(IAppDbContext DbContext) : EndpointWithoutRequ
 
     public override async Task<GetUserFeedsResponse> ExecuteAsync(CancellationToken ct)
     {
-        var (userId, _) = User.ToIdNameTuple();
+        var (userId, _) = User.ToIdEmailTuple();
 
         var feeds = await DbContext.Feeds.AsNoTracking()
             .Where(f => f.Subscriptions.Any(s => s.AppUserId == userId))

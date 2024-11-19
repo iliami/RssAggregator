@@ -42,9 +42,9 @@ public class LoginEndpoint(IAppDbContext DbContext) : Endpoint<LoginRequest, Log
         {
             options.SigningKey = secretKey;
             options.User.Claims.Add(new Claim(JwtRegisteredClaimNames.Sub, storedUser.Id.ToString()));
-            options.User.Claims.Add(new Claim(JwtRegisteredClaimNames.Name, storedUser.Email));
+            options.User.Claims.Add(new Claim(JwtRegisteredClaimNames.Email, storedUser.Email));
             options.User.Roles.Add(storedUser.Role);
-            options.ExpireAt = DateTime.Now.AddHours(12);
+            options.ExpireAt = DateTime.Now.AddHours(1);
         });
 
         var response = new LoginResponse(token, storedUser.Email);

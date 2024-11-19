@@ -5,11 +5,11 @@ namespace RssAggregator.Presentation.Extensions;
 
 public static class UserMethods
 {
-    public static (Guid UserId, string UserName) ToIdNameTuple(this ClaimsPrincipal User)
+    public static (Guid UserId, string UserEmail) ToIdEmailTuple(this ClaimsPrincipal User)
     {
         var userId = Guid.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
-        var userName = User.FindFirstValue(JwtRegisteredClaimNames.Name)!;
+        var userEmail = User.FindFirstValue(JwtRegisteredClaimNames.Email)!;
         
-        return (userId, userName);
+        return (userId, userEmail);
     }
 }
