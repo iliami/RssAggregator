@@ -21,7 +21,7 @@ public class RegisterEndpoint(IAppDbContext DbContext) : Endpoint<RegisterReques
         {
             Email = req.Email,
             Password = req.Password.GetHash(),
-            Role = req.Role
+            Role = "base_user"
         };
         
         await DbContext.AppUsers.AddAsync(newUser, ct);
