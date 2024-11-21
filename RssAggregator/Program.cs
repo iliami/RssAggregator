@@ -3,7 +3,7 @@ using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using Microsoft.EntityFrameworkCore;
 using RssAggregator.Application.Abstractions;
-using RssAggregator.Infrastructure.SyncFeedsService;
+using RssAggregator.Infrastructure.BackgroundJobs.SyncFeedsService;
 using RssAggregator.Persistence;
 
 var builder = WebApplication.CreateBuilder();

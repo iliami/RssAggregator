@@ -2,9 +2,9 @@ using System.Xml.Serialization;
 using Microsoft.EntityFrameworkCore;
 using RssAggregator.Application.Abstractions;
 using RssAggregator.Domain.Entities;
-using RssAggregator.Infrastructure.SyncFeedsService.RssXmlModels;
+using RssAggregator.Infrastructure.BackgroundJobs.SyncFeedsService.RssXmlModels;
 
-namespace RssAggregator.Infrastructure.SyncFeedsService;
+namespace RssAggregator.Infrastructure.BackgroundJobs.SyncFeedsService;
 
 public class SyncAllFeedsJob(
     IHttpClientFactory httpClientFactory,
