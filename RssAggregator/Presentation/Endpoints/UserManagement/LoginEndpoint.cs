@@ -10,7 +10,7 @@ using RssAggregator.Presentation.Contracts.Responses.UserManagement;
 
 namespace RssAggregator.Presentation.Endpoints.UserManagement;
 
-public class LoginEndpoint(IAppDbContext DbContext) : Endpoint<LoginRequest, LoginResponse>
+public class LoginEndpoint(IAppDbContext DbContext) : Endpoint<LoginRequest, AuthResponse>
 {
     public override void Configure()
     {
@@ -18,7 +18,7 @@ public class LoginEndpoint(IAppDbContext DbContext) : Endpoint<LoginRequest, Log
         AllowAnonymous();
     }
 
-    public override async Task<LoginResponse> ExecuteAsync(LoginRequest req, CancellationToken ct)
+    public override async Task<AuthResponse> ExecuteAsync(LoginRequest req, CancellationToken ct)
     {
         var storedUser = await DbContext.AppUsers.AsNoTracking().FirstOrDefaultAsync(u => u.Email == req.Email, ct);
         if (storedUser is null)
@@ -32,22 +32,27 @@ public class LoginEndpoint(IAppDbContext DbContext) : Endpoint<LoginRequest, Log
             ThrowError("Invalid password", StatusCodes.Status400BadRequest);
         }
 
-        var secretKey = Config["JwtOptions:SecretKey"];
-        if (secretKey is null)
-        {
-            ThrowError("Cannot create token", StatusCodes.Status500InternalServerError);
-        }
+        // var secretKey = Config["JwtOptions:SecretKey"];
+        // if (secretKey is null)
+        // {
+        //     ThrowError("Cannot create token", StatusCodes.Status500InternalServerError);
+        // }
         
-        var token = JwtBearer.CreateToken(options =>
-        {
-            options.SigningKey = secretKey;
-            options.User.Claims.Add(new Claim(JwtRegisteredClaimNames.Sub, storedUser.Id.ToString()));
-            options.User.Claims.Add(new Claim(JwtRegisteredClaimNames.Email, storedUser.Email));
-            options.User.Roles.Add(storedUser.Role);
-            options.ExpireAt = DateTime.Now.AddHours(1);
-        });
+        // var token = JwtBearer.CreateToken(options =>
+        // {
+        //     options.SigningKey = secretKey;
+        //     options.User.Claims.Add(new Claim(JwtRegisteredClaimNames.Sub, storedUser.Id.ToString()));
+        //     options.User.Claims.Add(new Claim(JwtRegisteredClaimNames.Email, storedUser.Email));
+        //     options.User.Roles.Add(storedUser.Role);
+        //     options.ExpireAt = DateTime.Now.AddHours(1);
+        // });
 
-        var response = new LoginResponse(token, storedUser.Email);
+        var response = await CreateTokenWith<RefreshTokenEndpoint>(storedUser.Id.ToString(), u =>
+        {
+            u.Claims.Add(new Claim(JwtRegisteredClaimNames.Sub, storedUser.Id.ToString()));
+            u.Claims.Add(new Claim(JwtRegisteredClaimNames.Email, storedUser.Email));
+            u.Roles.Add(storedUser.Role);
+        });
 
         return response;
     }

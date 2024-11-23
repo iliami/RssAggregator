@@ -17,6 +17,7 @@ builder.Services
     .AddScoped<IAppDbContext, AppDbContext>()
     .AddHttpClient()
     .AddHostedService<SyncAllFeedsJob>()
+    .AddMemoryCache()
     .AddAuthenticationJwtBearer(signingOptions =>
     {
         var singingKey = builder.Configuration["JwtOptions:SecretKey"];
