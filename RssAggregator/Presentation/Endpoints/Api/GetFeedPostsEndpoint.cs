@@ -17,10 +17,14 @@ public class GetFeedPostsEndpoint(IAppDbContext DbContext) : Endpoint<GetFeedPos
     public override async Task<GetFeedPostsResponse> ExecuteAsync(GetFeedPostsRequest req, CancellationToken ct)
     {
         var feedId = req.FeedId;
+        var take = req.PageSize;
+        var skip = (req.Page - 1) * req.PageSize;
         
         var posts = await DbContext.Posts
             .AsNoTracking()
             .Where(p => p.FeedId == feedId)
+            .Skip(skip)
+            .Take(take)
             .Select(p => new PostDto(
                 p.Id,
                 p.Title,
