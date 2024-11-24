@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using RssAggregator.Application.Abstractions;
 using RssAggregator.Infrastructure.BackgroundJobs.SyncFeedsService;
 using RssAggregator.Persistence;
+using RssAggregator.Presentation.Middleware;
 
 var builder = WebApplication.CreateBuilder();
 builder.Services
@@ -31,6 +32,7 @@ builder.Services
 var app = builder.Build();
 app
     .UseSwaggerGen()
+    .UseJwtRevocation<TokenBlacklistCheckerMiddleware>()
     .UseAuthentication()
     .UseAuthorization()
     .UseFastEndpoints();

@@ -1,6 +1,5 @@
 using FastEndpoints;
 using FastEndpoints.Security;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using RssAggregator.Presentation.Contracts.Requests.UserManagement;
 using RssAggregator.Presentation.Contracts.Responses.UserManagement;
@@ -19,7 +18,7 @@ public class RefreshTokenEndpoint : RefreshTokenService<RefreshTokenRequest, Aut
             options.AccessTokenValidity = TimeSpan.FromHours(1);
             options.RefreshTokenValidity = TimeSpan.FromDays(1);
             
-            options.Endpoint("auth/refresh-token", ep => { });
+            options.Endpoint("auth/refresh-token", delegate { });
         });
         
         _memoryCache = memoryCache;
@@ -37,17 +36,21 @@ public class RefreshTokenEndpoint : RefreshTokenService<RefreshTokenRequest, Aut
     {
         var key = $"userid-{req.UserId}";
         
-        var tokens = _memoryCache.Get<AuthResponse>(key);
-        if (tokens is null)
+        var success = _memoryCache.TryGetValue<AuthResponse>(key, out var tokens);
+        if (!success)
         {
             AddError("There's no token to refresh");
         }
         else
         {
             _memoryCache.Remove(key);
-            if (!(req.UserId == tokens.UserId && req.RefreshToken == tokens.RefreshToken))
+            if (!(req.UserId == tokens!.UserId && req.RefreshToken == tokens.RefreshToken))
             {
                 AddError(r=>r.RefreshToken, "Refresh token is invalid");
+            }
+            else
+            {
+                _memoryCache.Set(tokens.AccessToken, "true", TimeSpan.FromDays(1));
             }
         }
         
