@@ -11,7 +11,7 @@ public class GetUserPostsEndpoint(IAppDbContext DbContext) : EndpointWithoutRequ
 {
     public override void Configure()
     {
-        Get("api/feeds/me/posts");
+        Get("api/posts/me");
     }
 
     public override async Task<GetUserPostsResponse> ExecuteAsync(CancellationToken ct)

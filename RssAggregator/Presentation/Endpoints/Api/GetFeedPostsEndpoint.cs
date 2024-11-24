@@ -1,21 +1,22 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using RssAggregator.Application.Abstractions;
+using RssAggregator.Presentation.Contracts.Requests.Api;
 using RssAggregator.Presentation.Contracts.Responses.Api;
 using RssAggregator.Presentation.DTO;
 
 namespace RssAggregator.Presentation.Endpoints.Api;
 
-public class GetFeedPostsEndpoint(IAppDbContext DbContext) : EndpointWithoutRequest<GetFeedPostsResponse>
+public class GetFeedPostsEndpoint(IAppDbContext DbContext) : Endpoint<GetFeedPostsRequest, GetFeedPostsResponse>
 {
     public override void Configure()
     {
-        Get("api/feeds/{id:guid}/posts");
+        Get("api/posts");
     }
 
-    public override async Task<GetFeedPostsResponse> ExecuteAsync(CancellationToken ct)
+    public override async Task<GetFeedPostsResponse> ExecuteAsync(GetFeedPostsRequest req, CancellationToken ct)
     {
-        var feedId = Route<Guid>("id");
+        var feedId = req.FeedId;
         
         var posts = await DbContext.Posts
             .AsNoTracking()

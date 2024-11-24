@@ -1,6 +1,8 @@
+using System.Text.Json;
 using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using RssAggregator.Application.Abstractions;
 using RssAggregator.Infrastructure.BackgroundJobs.SyncFeedsService;
@@ -25,6 +27,10 @@ builder.Services
         signingOptions.SigningKey = singingKey;
     })
     .AddAuthorization()
+    .Configure<JsonOptions>(options =>
+    {
+        options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    })
     .SwaggerDocument()
     .AddFastEndpoints();
 
