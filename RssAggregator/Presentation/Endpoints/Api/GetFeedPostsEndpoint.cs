@@ -1,13 +1,11 @@
 using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
-using RssAggregator.Application.Abstractions;
+using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Presentation.Contracts.Requests.Api;
 using RssAggregator.Presentation.Contracts.Responses.Api;
-using RssAggregator.Presentation.DTO;
 
 namespace RssAggregator.Presentation.Endpoints.Api;
 
-public class GetFeedPostsEndpoint(IAppDbContext DbContext) : Endpoint<GetFeedPostsRequest, GetFeedPostsResponse>
+public class GetFeedPostsEndpoint(IPostRepository PostRepository) : Endpoint<GetFeedPostsRequest, GetFeedPostsResponse>
 {
     public override void Configure()
     {
@@ -19,22 +17,13 @@ public class GetFeedPostsEndpoint(IAppDbContext DbContext) : Endpoint<GetFeedPos
         var feedId = req.FeedId;
         var take = req.PageSize;
         var skip = (req.Page - 1) * req.PageSize;
-        
-        var posts = await DbContext.Posts
-            .AsNoTracking()
-            .Where(p => p.FeedId == feedId)
+
+        var allPosts = await PostRepository.GetByFeedIdAsync(feedId, ct);
+
+        var posts = allPosts
             .Skip(skip)
-            .Take(take)
-            .Select(p => new PostDto(
-                p.Id,
-                p.Title,
-                p.PublishDate,
-                p.Url,
-                p.FeedId))
-            .ToListAsync(ct);
+            .Take(take);
 
-        var res = new GetFeedPostsResponse(posts);
-
-        return res;
+        return new GetFeedPostsResponse(posts);
     }
 }
