@@ -1,3 +1,3 @@
-namespace RssAggregator.Presentation.DTO;
+namespace RssAggregator.Application.DTO;
 
 public record FeedDto(Guid Id, string Name);

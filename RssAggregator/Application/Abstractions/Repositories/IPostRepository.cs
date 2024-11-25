@@ -1,5 +1,5 @@
+using RssAggregator.Application.DTO;
 using RssAggregator.Domain.Entities;
-using RssAggregator.Presentation.DTO;
 
 namespace RssAggregator.Application.Abstractions.Repositories;
 

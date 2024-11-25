@@ -1,4 +1,4 @@
-using RssAggregator.Presentation.DTO;
+using RssAggregator.Application.DTO;
 
 namespace RssAggregator.Presentation.Contracts.Responses.Api;
 
