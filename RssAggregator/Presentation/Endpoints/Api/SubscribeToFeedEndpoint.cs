@@ -1,12 +1,11 @@
 using FastEndpoints;
-using RssAggregator.Application.Abstractions;
-using RssAggregator.Domain.Entities;
+using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Presentation.Contracts.Requests.Api;
 using RssAggregator.Presentation.Extensions;
 
 namespace RssAggregator.Presentation.Endpoints.Api;
 
-public class SubscribeToFeedEndpoint(IAppDbContext DbContext) : Endpoint<SubscribeToFeedRequest>
+public class SubscribeToFeedEndpoint(ISubscriptionRepository SubscriptionRepository) : Endpoint<SubscribeToFeedRequest>
 {
     public override void Configure()
     {
@@ -16,13 +15,6 @@ public class SubscribeToFeedEndpoint(IAppDbContext DbContext) : Endpoint<Subscri
     public override async Task HandleAsync(SubscribeToFeedRequest req, CancellationToken ct)
     {
         var (userId, _) = User.ToIdEmailTuple();
-        var subscription = new Subscription
-        {
-            AppUserId = userId,
-            FeedId = req.FeedId
-        };
-        
-        await DbContext.Subscriptions.AddAsync(subscription, ct);
-        await DbContext.SaveChangesAsync(ct);
+        await SubscriptionRepository.AddAsync(userId, req.FeedId, ct);
     }
 }
