@@ -5,8 +5,10 @@ using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using RssAggregator.Application.Abstractions;
+using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Infrastructure.BackgroundJobs.SyncFeedsService;
 using RssAggregator.Persistence;
+using RssAggregator.Persistence.Repositories;
 using RssAggregator.Presentation.Middleware;
 
 var builder = WebApplication.CreateBuilder();
@@ -18,6 +20,10 @@ builder.Services
         options.UseNpgsql(connectionString);
     })
     .AddScoped<IAppDbContext, AppDbContext>()
+    .AddScoped<IAppUserRepository, AppUserRepository>()
+    .AddScoped<ISubscriptionRepository, SubscriptionRepository>()
+    .AddScoped<IFeedRepository, FeedRepository>()
+    .AddScoped<IPostRepository, PostRepository>()
     .AddHttpClient()
     .AddHostedService<SyncAllFeedsJob>()
     .AddMemoryCache()
