@@ -1,6 +1,5 @@
 using System.Xml.Serialization;
-using Microsoft.EntityFrameworkCore;
-using RssAggregator.Application.Abstractions;
+using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Domain.Entities;
 using RssAggregator.Infrastructure.BackgroundJobs.SyncFeedsService.RssXmlModels;
 
@@ -12,22 +11,29 @@ public class SyncAllFeedsJob(
     : BackgroundService
 {
     private const int CycleIntervalMilliseconds = 60000;
-    private Dictionary<Guid, HashSet<string>> _feedIdPostIds = null!;
+    private readonly Dictionary<Guid, HashSet<string>> _feedIdPostIds = [];
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         using var scope = serviceProvider.CreateScope();
 
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<SyncAllFeedsJob>>();
-        var dbContext = scope.ServiceProvider.GetRequiredService<IAppDbContext>();
+        var postRepository = scope.ServiceProvider.GetRequiredService<IPostRepository>();
+        
+        var posts = await postRepository.GetPostsAsync(stoppingToken);
 
-        _feedIdPostIds = await dbContext.Feeds
-            .AsNoTracking()
-            .Include(f => f.Posts)
-            .ToDictionaryAsync(
-                k => k.Id,
-                v => v.Posts.Select(p => p.Url).ToHashSet(), stoppingToken);
-
+        foreach (var post in posts)
+        {
+            if (_feedIdPostIds.TryGetValue(post.FeedId, out var urls))
+            {
+                urls.Add(post.Url);
+            }
+            else
+            {
+                _feedIdPostIds[post.FeedId] = [post.Url];
+            }
+        }
+        
         while (!stoppingToken.IsCancellationRequested)
         {
             try
@@ -47,9 +53,9 @@ public class SyncAllFeedsJob(
     {
         using var scope = serviceProvider.CreateScope();
 
-        var dbContext = scope.ServiceProvider.GetRequiredService<IAppDbContext>();
-
-        var allFeeds = await dbContext.Feeds.ToListAsync(ct);
+        var feedRepository = scope.ServiceProvider.GetRequiredService<IFeedRepository>();
+        
+        var allFeeds = await feedRepository.GetFeedsAsync(ct);
 
         await Parallel.ForEachAsync(allFeeds, ct,
             async (feed, token) => await FetchSingleFeed(feed.Id, token));
@@ -61,13 +67,13 @@ public class SyncAllFeedsJob(
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<SyncAllFeedsJob>>();
         try
         {
-            var dbContext = scope.ServiceProvider.GetRequiredService<IAppDbContext>();
+            var feedRepository = scope.ServiceProvider.GetRequiredService<IFeedRepository>();
 
-            var feed = await dbContext.Feeds.FirstAsync(f => f.Id == feedId, ct);
+            var feed = await feedRepository.GetByIdAsync(feedId, ct);
 
             var httpClient = httpClientFactory.CreateClient();
             var serializer = new XmlSerializer(typeof(RssRoot));
-            var xmlString = await httpClient.GetStringAsync(feed.Url, ct);
+            var xmlString = await httpClient.GetStringAsync(feed!.Url, ct);
             using var stringReader = new StringReader(xmlString);
 
             var feedFromInternet = (RssRoot)serializer.Deserialize(stringReader)!;
@@ -83,6 +89,7 @@ public class SyncAllFeedsJob(
                     Url = scrapedPost.Link,
                     Description = scrapedPost.Description,
                     PublishDate = DateTime.Parse(scrapedPost.PubDate).ToUniversalTime(),
+                    FeedId = feedId
                 }).ToList();
 
             if (feed.Name != feedFromInternet.Channel.Title)
@@ -97,7 +104,9 @@ public class SyncAllFeedsJob(
 
             if (posts.Count != 0)
             {
-                feed.Posts.AddRange(posts);
+                var postRepository = scope.ServiceProvider.GetRequiredService<IPostRepository>();
+
+                await postRepository.AddRangeAsync(posts, ct);
 
                 foreach (var post in posts)
                 {
@@ -114,7 +123,7 @@ public class SyncAllFeedsJob(
 
             feed.LastFetchedAt = DateTime.UtcNow;
 
-            await dbContext.SaveChangesAsync(ct);
+            await feedRepository.UpdateAsync(feed.Id, feed, ct);
         }
         catch (Exception e)
         {

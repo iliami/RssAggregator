@@ -34,7 +34,10 @@ public class PostRepository(IAppDbContext DbContext) : IPostRepository
                 p.Url,
                 p.FeedId))
             .ToListAsync(ct);
-    
+
     public async Task AddRangeAsync(IEnumerable<Post> posts, CancellationToken ct = default)
-        => await DbContext.Posts.AddRangeAsync(posts, ct);
+    {
+        await DbContext.Posts.AddRangeAsync(posts, ct);
+        await DbContext.SaveChangesAsync(ct);
+    }
 }
