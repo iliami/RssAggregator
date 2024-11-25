@@ -1,13 +1,12 @@
 using FastEndpoints;
-using RssAggregator.Application.Abstractions;
+using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Application.Extensions;
-using RssAggregator.Domain.Entities;
 using RssAggregator.Presentation.Contracts.Requests.UserManagement;
 using RssAggregator.Presentation.Contracts.Responses.UserManagement;
 
 namespace RssAggregator.Presentation.Endpoints.UserManagement;
 
-public class RegisterEndpoint(IAppDbContext DbContext) : Endpoint<RegisterRequest, RegisterResponse>
+public class RegisterEndpoint(IAppUserRepository UserRepository) : Endpoint<RegisterRequest, RegisterResponse>
 {
     public override void Configure()
     {
@@ -17,18 +16,12 @@ public class RegisterEndpoint(IAppDbContext DbContext) : Endpoint<RegisterReques
 
     public override async Task<RegisterResponse> ExecuteAsync(RegisterRequest req, CancellationToken ct)
     {
-        var newUser = new AppUser
-        {
-            Email = req.Email,
-            Password = req.Password.GetHash(),
-            Role = "base_user"
-        };
+        var id = await UserRepository.AddAsync(
+            req.Email, 
+            req.Password.GetHash(), 
+            "base_user", ct);
         
-        await DbContext.AppUsers.AddAsync(newUser, ct);
-        
-        await DbContext.SaveChangesAsync(ct);
-
-        var res = new RegisterResponse(newUser.Id.ToString(), newUser.Email);
+        var res = new RegisterResponse(id.ToString(), req.Email);
         
         return res;
     }
