@@ -1,11 +1,10 @@
 using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
-using RssAggregator.Application.Abstractions;
+using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Presentation.Contracts.Responses.Api;
 
 namespace RssAggregator.Presentation.Endpoints.Api;
 
-public class GetFeedEndpoint(IAppDbContext DbContext) : EndpointWithoutRequest<GetFeedResponse>
+public class GetFeedEndpoint(IFeedRepository FeedRepository) : EndpointWithoutRequest<GetFeedResponse>
 {
     public override void Configure()
     {
@@ -16,9 +15,7 @@ public class GetFeedEndpoint(IAppDbContext DbContext) : EndpointWithoutRequest<G
     {
         var feedId = Route<Guid>("id");
 
-        var storedFeed = await DbContext.Feeds
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == feedId, ct);
+        var storedFeed = await FeedRepository.GetByIdAsync(feedId, ct);
         
         if (storedFeed is null)
         {
