@@ -1,4 +1,5 @@
 using System.Xml.Serialization;
+using Microsoft.Extensions.Caching.Memory;
 using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Domain.Entities;
 using RssAggregator.Infrastructure.BackgroundJobs.SyncFeedsService.RssXmlModels;
@@ -7,11 +8,11 @@ namespace RssAggregator.Infrastructure.BackgroundJobs.SyncFeedsService;
 
 public class SyncAllFeedsJob(
     IHttpClientFactory httpClientFactory,
-    IServiceProvider serviceProvider)
+    IServiceProvider serviceProvider,
+    IMemoryCache memoryCache)
     : BackgroundService
 {
     private const int CycleIntervalMilliseconds = 60000;
-    private readonly Dictionary<Guid, HashSet<string>> _feedIdPostIds = [];
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -24,13 +25,14 @@ public class SyncAllFeedsJob(
 
         foreach (var post in posts)
         {
-            if (_feedIdPostIds.TryGetValue(post.FeedId, out var urls))
+            var key = $"feed_{post.FeedId}";
+            if (memoryCache.TryGetValue<List<string>>(key, out var urls))
             {
-                urls.Add(post.Url);
+                urls!.Add(post.Url);
             }
             else
             {
-                _feedIdPostIds[post.FeedId] = [post.Url];
+                memoryCache.Set<List<string>>(key, [post.Url]);
             }
         }
         
@@ -80,8 +82,8 @@ public class SyncAllFeedsJob(
 
             var posts = feedFromInternet.Channel.Items
                 .Where(scrapedPost =>
-                    (_feedIdPostIds.TryGetValue(feed.Id, out var urls) &&
-                     urls.All(url => scrapedPost.Link != url)) ||
+                    (memoryCache.TryGetValue<List<string>>($"feed_{feed.Id}", out var urls) &&
+                     urls!.All(url => scrapedPost.Link != url)) ||
                     urls is null)
                 .Select(scrapedPost => new Post
                 {
@@ -108,15 +110,16 @@ public class SyncAllFeedsJob(
 
                 await postRepository.AddRangeAsync(posts, ct);
 
+                var key = $"feed_{feed.Id}";
                 foreach (var post in posts)
                 {
-                    if (_feedIdPostIds.TryGetValue(feed.Id, out var urls))
+                    if (memoryCache.TryGetValue<List<string>>(key, out var urls))
                     {
-                        urls.Add(post.Url);
+                        urls!.Add(post.Url);
                     }
                     else
                     {
-                        _feedIdPostIds[feed.Id] = [post.Url];
+                        memoryCache.Set<List<string>>(key, [post.Url]);
                     }
                 }
             }
