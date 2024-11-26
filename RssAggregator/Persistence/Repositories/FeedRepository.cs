@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using RssAggregator.Application;
 using RssAggregator.Application.Abstractions;
 using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Application.DTO;
 using RssAggregator.Domain.Entities;
+using RssAggregator.Persistence.QueryExtensions;
 
 namespace RssAggregator.Persistence.Repositories;
 
@@ -11,15 +13,17 @@ public class FeedRepository(IAppDbContext DbContext) : IFeedRepository
     public async Task<Feed?> GetByIdAsync(Guid id, CancellationToken ct = default)
         => await DbContext.Feeds.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id, ct);
 
-    public async Task<IEnumerable<FeedDto>> GetFeedsAsync(CancellationToken ct = default)
+    public async Task<IEnumerable<FeedDto>> GetFeedsAsync(PaginationParams? paginationParams = null, CancellationToken ct = default)
         => await DbContext.Feeds.AsNoTracking()
             .Select(f => new FeedDto(f.Id, f.Name))
+            .WithPagination(paginationParams)
             .ToListAsync(ct);
 
-    public async Task<IEnumerable<FeedDto>> GetByUserIdAsync(Guid userId, CancellationToken ct = default)
+    public async Task<IEnumerable<FeedDto>> GetByUserIdAsync(Guid userId, PaginationParams? paginationParams = null, CancellationToken ct = default)
         => await DbContext.Feeds.AsNoTracking()
             .Where(f => DbContext.Subscriptions.Any(s => s.FeedId == f.Id))
             .Select(f => new FeedDto(f.Id, f.Name))
+            .WithPagination(paginationParams)
             .ToListAsync(ct);
 
     public async Task<Guid> AddAsync(string name, string url, CancellationToken ct = default)

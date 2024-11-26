@@ -1,20 +1,28 @@
 using FastEndpoints;
+using RssAggregator.Application;
 using RssAggregator.Application.Abstractions.Repositories;
+using RssAggregator.Presentation.Contracts.Requests.Api;
 using RssAggregator.Presentation.Contracts.Responses.Api;
 
 namespace RssAggregator.Presentation.Endpoints.Api;
 
 public class GetAllFeedsEndpoint(IFeedRepository FeedRepository)
-    : EndpointWithoutRequest<GetAllFeedsResponse>
+    : Endpoint<GetAllFeedsRequest, GetAllFeedsResponse>
 {
     public override void Configure()
     {
         Get("api/feeds");
     }
 
-    public override async Task<GetAllFeedsResponse> ExecuteAsync(CancellationToken ct)
+    public override async Task<GetAllFeedsResponse> ExecuteAsync(GetAllFeedsRequest req, CancellationToken ct)
     {
-        var feeds = await FeedRepository.GetFeedsAsync(ct);
+        var paginationParams = new PaginationParams
+        {
+            Page = req.Page,
+            PageSize = req.PageSize,
+        };
+        
+        var feeds = await FeedRepository.GetFeedsAsync(paginationParams, ct);
 
         return new GetAllFeedsResponse(feeds);
     }

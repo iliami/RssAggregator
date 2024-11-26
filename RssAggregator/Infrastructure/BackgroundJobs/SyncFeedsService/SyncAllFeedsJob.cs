@@ -57,7 +57,7 @@ public class SyncAllFeedsJob(
 
         var feedRepository = scope.ServiceProvider.GetRequiredService<IFeedRepository>();
         
-        var allFeeds = await feedRepository.GetFeedsAsync(ct);
+        var allFeeds = await feedRepository.GetFeedsAsync(ct: ct);
 
         await Parallel.ForEachAsync(allFeeds, ct,
             async (feed, token) => await FetchSingleFeed(feed.Id, token));
