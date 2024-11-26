@@ -22,9 +22,15 @@ public class GetUserFeedsEndpoint(IFeedRepository FeedRepository) : Endpoint<Get
             Page = req.Page,
             PageSize = req.PageSize,
         };
-        
-        var feeds = await FeedRepository.GetByUserIdAsync(userId, paginationParams, ct);
-        
+
+        var sortingParams = new SortingParams
+        {
+            SortBy = req.SortBy,
+            SortDirection = req.SortDirection,
+        };
+
+        var feeds = await FeedRepository.GetByUserIdAsync(userId, paginationParams, sortingParams, ct);
+
         return new GetUserFeedsResponse(feeds);
     }
 }

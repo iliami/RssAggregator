@@ -4,25 +4,32 @@ using RssAggregator.Application.Abstractions;
 using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Application.DTO;
 using RssAggregator.Domain.Entities;
+using RssAggregator.Persistence.KeySelectors;
 using RssAggregator.Persistence.QueryExtensions;
 
 namespace RssAggregator.Persistence.Repositories;
 
 public class FeedRepository(IAppDbContext DbContext) : IFeedRepository
 {
+    private static FeedKeySelector KeySelector { get; } = new();
+
     public async Task<Feed?> GetByIdAsync(Guid id, CancellationToken ct = default)
         => await DbContext.Feeds.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id, ct);
 
-    public async Task<IEnumerable<FeedDto>> GetFeedsAsync(PaginationParams? paginationParams = null, CancellationToken ct = default)
+    public async Task<IEnumerable<FeedDto>> GetFeedsAsync(PaginationParams? paginationParams = null,
+        SortingParams? sortParams = null, CancellationToken ct = default)
         => await DbContext.Feeds.AsNoTracking()
-            .Select(f => new FeedDto(f.Id, f.Name))
+            .WithSorting(sortParams, KeySelector)
+            .Select(f => new FeedDto(f.Id, f.Name, f.Url, f.Subscriptions.Count, f.Posts.Count))
             .WithPagination(paginationParams)
             .ToListAsync(ct);
 
-    public async Task<IEnumerable<FeedDto>> GetByUserIdAsync(Guid userId, PaginationParams? paginationParams = null, CancellationToken ct = default)
+    public async Task<IEnumerable<FeedDto>> GetByUserIdAsync(Guid userId, PaginationParams? paginationParams = null,
+        SortingParams? sortParams = null, CancellationToken ct = default)
         => await DbContext.Feeds.AsNoTracking()
             .Where(f => DbContext.Subscriptions.Any(s => s.FeedId == f.Id))
-            .Select(f => new FeedDto(f.Id, f.Name))
+            .WithSorting(sortParams, KeySelector)
+            .Select(f => new FeedDto(f.Id, f.Name, f.Url, f.Subscriptions.Count, f.Posts.Count))
             .WithPagination(paginationParams)
             .ToListAsync(ct);
 

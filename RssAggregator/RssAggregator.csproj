@@ -30,7 +30,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Application\Filters\" />
       <Folder Include="Domain\" />
       <Folder Include="Infrastructure\BackgroundJobs\" />
     </ItemGroup>

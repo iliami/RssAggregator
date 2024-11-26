@@ -21,8 +21,14 @@ public class GetAllFeedsEndpoint(IFeedRepository FeedRepository)
             Page = req.Page,
             PageSize = req.PageSize,
         };
+
+        var sortingParams = new SortingParams
+        {
+            SortBy = req.SortBy,
+            SortDirection = req.SortDirection,
+        };
         
-        var feeds = await FeedRepository.GetFeedsAsync(paginationParams, ct);
+        var feeds = await FeedRepository.GetFeedsAsync(paginationParams, sortingParams, ct);
 
         return new GetAllFeedsResponse(feeds);
     }

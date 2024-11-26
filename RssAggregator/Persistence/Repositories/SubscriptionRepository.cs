@@ -12,6 +12,11 @@ public class SubscriptionRepository(IAppDbContext DbContext) : ISubscriptionRepo
             .Where(s => s.AppUserId == userId)
             .ToListAsync(ct);
 
+    public async Task<IEnumerable<Subscription>> GetByFeedIdAsync(Guid feedId, CancellationToken ct = default)
+        => await DbContext.Subscriptions.AsNoTracking()
+            .Where(s => s.FeedId == feedId)
+            .ToListAsync(ct);
+
     public async Task AddAsync(Guid userId, Guid feedId, CancellationToken ct = default)
     {
         var subscription = new Subscription
@@ -19,7 +24,7 @@ public class SubscriptionRepository(IAppDbContext DbContext) : ISubscriptionRepo
             AppUserId = userId,
             FeedId = feedId
         };
-        
+
         await DbContext.Subscriptions.AddAsync(subscription, ct);
         await DbContext.SaveChangesAsync(ct);
     }

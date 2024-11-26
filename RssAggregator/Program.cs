@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
@@ -33,10 +34,6 @@ builder.Services
         signingOptions.SigningKey = singingKey;
     })
     .AddAuthorization()
-    .Configure<JsonOptions>(options =>
-    {
-        options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-    })
     .SwaggerDocument()
     .AddFastEndpoints();
 

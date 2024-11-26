@@ -12,7 +12,6 @@ public class GetUserPostsEndpoint(IPostRepository PostRepository) : Endpoint<Get
     public override void Configure()
     {
         Get("api/posts/me");
-        
     }
 
     public override async Task<GetUserPostsResponse> ExecuteAsync(GetUserPostsRequest req, CancellationToken ct)
@@ -23,9 +22,15 @@ public class GetUserPostsEndpoint(IPostRepository PostRepository) : Endpoint<Get
             Page = req.Page,
             PageSize = req.PageSize,
         };
-        
-        var posts = await PostRepository.GetByUserIdAsync(userId, paginationParams, ct);
-        
+
+        var sortingParams = new SortingParams
+        {
+            SortBy = req.SortBy,
+            SortDirection = req.SortDirection,
+        };
+
+        var posts = await PostRepository.GetByUserIdAsync(userId, paginationParams, sortingParams, ct);
+
         return new GetUserPostsResponse(posts);
     }
 }
