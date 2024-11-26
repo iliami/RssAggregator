@@ -1,4 +1,5 @@
 using FastEndpoints;
+using RssAggregator.Application;
 using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Presentation.Contracts.Requests.Api;
 using RssAggregator.Presentation.Contracts.Responses.Api;
@@ -11,20 +12,19 @@ public class GetUserPostsEndpoint(IPostRepository PostRepository) : Endpoint<Get
     public override void Configure()
     {
         Get("api/posts/me");
+        
     }
 
     public override async Task<GetUserPostsResponse> ExecuteAsync(GetUserPostsRequest req, CancellationToken ct)
     {
         var (userId, _) = User.ToIdEmailTuple();
-
-        var take = req.PageSize;
-        var skip = (req.Page - 1) * req.PageSize;
+        var paginationParams = new PaginationParams
+        {
+            Page = req.Page,
+            PageSize = req.PageSize,
+        };
         
-        var allPosts = await PostRepository.GetByUserIdAsync(userId, ct);
-
-        var posts = allPosts
-            .Skip(skip)
-            .Take(take);
+        var posts = await PostRepository.GetByUserIdAsync(userId, paginationParams, ct);
         
         return new GetUserPostsResponse(posts);
     }
