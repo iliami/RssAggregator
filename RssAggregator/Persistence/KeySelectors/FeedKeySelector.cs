@@ -7,10 +7,19 @@ namespace RssAggregator.Persistence.KeySelectors;
 public class FeedKeySelector : IKeySelector<Feed>
 {
     public Expression<Func<Feed, object>> GetKeySelector(string? fieldName)
-        => fieldName switch
+        => GetLowerString(fieldName) switch
         {
-            nameof(Feed.Subscriptions) => feed => feed.Subscriptions.Count,
-            nameof(Feed.Url) => feed => feed.Url,
+            var x when 
+                x == GetLowerString(nameof(Feed.Subscriptions)) || x == "subscribers" => 
+                feed => feed.Subscriptions.Count,
+            var x when 
+                x == GetLowerString(nameof(Feed.Posts)) =>
+                feed => feed.Posts.Count,
+            var x when 
+                x == GetLowerString(nameof(Feed.Url)) => 
+                feed => feed.Url,
             _ => feed => feed.Name
         };
+
+    private string GetLowerString(string? s) => s?.ToLowerInvariant() ?? string.Empty;
 }

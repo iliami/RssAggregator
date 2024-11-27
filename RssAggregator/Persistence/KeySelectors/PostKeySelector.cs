@@ -7,9 +7,11 @@ namespace RssAggregator.Persistence.KeySelectors;
 public class PostKeySelector : IKeySelector<Post>
 {
     public Expression<Func<Post, object>> GetKeySelector(string? fieldName)
-        => fieldName switch
+        => GetLowerString(fieldName) switch
         {
-            nameof(Post.Title) => p => p.Title,
+            var x when x == GetLowerString(nameof(Post.Title)) => p => p.Title,
             _ => p => p.PublishDate
         };
+    
+    private string GetLowerString(string? s) => s?.ToLowerInvariant() ?? string.Empty;
 }
