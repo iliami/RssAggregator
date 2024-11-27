@@ -90,7 +90,7 @@ public class SyncAllFeedsJob(
                     Title = scrapedPost.Title,
                     Url = scrapedPost.Link,
                     Description = scrapedPost.Description,
-                    Category = scrapedPost.Category,
+                    Category = string.Join(", ", scrapedPost.Categories),
                     PublishDate = DateTime.Parse(scrapedPost.PubDate).ToUniversalTime(),
                     FeedId = feedId
                 }).ToList();
