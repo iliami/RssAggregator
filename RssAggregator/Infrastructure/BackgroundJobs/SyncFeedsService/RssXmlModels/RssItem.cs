@@ -8,4 +8,5 @@ public class RssItem
     [XmlElement("link")] public string Link { get; set; } = string.Empty;
     [XmlElement("description")] public string Description { get; set; } = string.Empty;
     [XmlElement("pubDate")] public string PubDate { get; set; } = string.Empty;
+    [XmlElement("category")] public string Category { get; set; } = string.Empty;
 }

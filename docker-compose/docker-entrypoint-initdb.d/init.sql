@@ -263,3 +263,22 @@ BEGIN
 END $EF$;
 COMMIT;
 
+START TRANSACTION;
+
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241127041354_Configure-Posts-AddedCategory') THEN
+    ALTER TABLE "Posts" ADD "Category" character varying(64) NOT NULL DEFAULT '';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241127041354_Configure-Posts-AddedCategory') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20241127041354_Configure-Posts-AddedCategory', '8.0.10');
+    END IF;
+END $EF$;
+COMMIT;
+
