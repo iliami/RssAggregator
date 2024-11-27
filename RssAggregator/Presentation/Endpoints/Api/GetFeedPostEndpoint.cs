@@ -26,6 +26,7 @@ public class GetFeedPostEndpoint(IPostRepository PostRepository) : EndpointWitho
             post.Id,
             post.Title,
             post.Description,
+            post.Category,
             post.PublishDate,
             post.Url,
             post.FeedId);

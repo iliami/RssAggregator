@@ -20,7 +20,7 @@ public class PostRepository(IAppDbContext DbContext) : IPostRepository
         SortingParams? sortingParams = null, CancellationToken ct = default)
         => await DbContext.Posts.AsNoTracking()
             .WithSorting(sortingParams, PostKeySelector)
-            .Select(p => new PostDto(p.Id, p.Title, p.PublishDate, p.Url, p.FeedId))
+            .Select(p => new PostDto(p.Id, p.Title, p.Category, p.PublishDate, p.Url, p.FeedId))
             .WithPagination(paginationParams)
             .ToListAsync(ct);
 
@@ -29,7 +29,7 @@ public class PostRepository(IAppDbContext DbContext) : IPostRepository
         => await DbContext.Posts.AsNoTracking()
             .Where(p => p.FeedId == feedId)
             .WithSorting(sortingParams, PostKeySelector)
-            .Select(p => new PostDto(p.Id, p.Title, p.PublishDate, p.Url, p.FeedId))
+            .Select(p => new PostDto(p.Id, p.Title, p.Category, p.PublishDate, p.Url, p.FeedId))
             .WithPagination(paginationParams)
             .ToListAsync(ct);
 
@@ -39,7 +39,7 @@ public class PostRepository(IAppDbContext DbContext) : IPostRepository
             .Where(p => DbContext.Subscriptions
                 .Any(s => s.AppUserId == userId && s.FeedId == p.FeedId))
             .WithSorting(sortingParams, PostKeySelector)
-            .Select(p => new PostDto(p.Id, p.Title, p.PublishDate, p.Url, p.FeedId))
+            .Select(p => new PostDto(p.Id, p.Title, p.Category, p.PublishDate, p.Url, p.FeedId))
             .WithPagination(paginationParams)
             .ToListAsync(ct);
 
