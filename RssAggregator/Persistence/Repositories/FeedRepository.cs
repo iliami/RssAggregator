@@ -20,7 +20,7 @@ public class FeedRepository(IAppDbContext DbContext) : IFeedRepository
         SortingParams? sortParams = null, CancellationToken ct = default)
         => await DbContext.Feeds.AsNoTracking()
             .WithSorting(sortParams, KeySelector)
-            .Select(f => new FeedDto(f.Id, f.Name, f.Url, f.Subscriptions.Count, f.Posts.Count))
+            .Select(f => new FeedDto(f.Id, f.Name, f.Description, f.Url, f.Subscriptions.Count, f.Posts.Count))
             .WithPagination(paginationParams)
             .ToListAsync(ct);
 
@@ -29,7 +29,7 @@ public class FeedRepository(IAppDbContext DbContext) : IFeedRepository
         => await DbContext.Feeds.AsNoTracking()
             .Where(f => DbContext.Subscriptions.Any(s => s.FeedId == f.Id))
             .WithSorting(sortParams, KeySelector)
-            .Select(f => new FeedDto(f.Id, f.Name, f.Url, f.Subscriptions.Count, f.Posts.Count))
+            .Select(f => new FeedDto(f.Id, f.Name, f.Description, f.Url, f.Subscriptions.Count, f.Posts.Count))
             .WithPagination(paginationParams)
             .ToListAsync(ct);
 
