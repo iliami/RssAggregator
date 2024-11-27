@@ -6,8 +6,8 @@ namespace RssAggregator.Persistence.KeySelectors;
 
 public class PostKeySelector : IKeySelector<Post>
 {
-    public Expression<Func<Post, object>> GetKeySelector(string? param)
-        => param switch
+    public Expression<Func<Post, object>> GetKeySelector(string? fieldName)
+        => fieldName switch
         {
             nameof(Post.Title) => p => p.Title,
             _ => p => p.PublishDate

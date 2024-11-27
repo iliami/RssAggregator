@@ -6,8 +6,8 @@ namespace RssAggregator.Persistence.KeySelectors;
 
 public class FeedKeySelector : IKeySelector<Feed>
 {
-    public Expression<Func<Feed, object>> GetKeySelector(string? param)
-        => param switch
+    public Expression<Func<Feed, object>> GetKeySelector(string? fieldName)
+        => fieldName switch
         {
             nameof(Feed.Subscriptions) => feed => feed.Subscriptions.Count,
             nameof(Feed.Url) => feed => feed.Url,
