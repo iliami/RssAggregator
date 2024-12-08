@@ -13,25 +13,25 @@ public class FeedRepository(IAppDbContext DbContext) : IFeedRepository
 {
     private static FeedKeySelector KeySelector { get; } = new();
 
-    public async Task<Feed?> GetByIdAsync(Guid id, CancellationToken ct = default)
-        => await DbContext.Feeds.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id, ct);
+    public Task<Feed?> GetByIdAsync(Guid id, CancellationToken ct = default)
+        => DbContext.Feeds.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id, ct);
 
-    public async Task<IEnumerable<FeedDto>> GetFeedsAsync(PaginationParams? paginationParams = null,
+    public Task<FeedDto[]> GetFeedsAsync(PaginationParams? paginationParams = null,
         SortingParams? sortParams = null, CancellationToken ct = default)
-        => await DbContext.Feeds.AsNoTracking()
+        => DbContext.Feeds.AsNoTracking()
             .WithSorting(sortParams, KeySelector)
             .Select(f => new FeedDto(f.Id, f.Name, f.Description, f.Url, f.Subscriptions.Count, f.Posts.Count))
             .WithPagination(paginationParams)
-            .ToListAsync(ct);
+            .ToArrayAsync(ct);
 
-    public async Task<IEnumerable<FeedDto>> GetByUserIdAsync(Guid userId, PaginationParams? paginationParams = null,
+    public async Task<FeedDto[]> GetByUserIdAsync(Guid userId, PaginationParams? paginationParams = null,
         SortingParams? sortParams = null, CancellationToken ct = default)
         => await DbContext.Feeds.AsNoTracking()
             .Where(f => DbContext.Subscriptions.Any(s => s.FeedId == f.Id))
             .WithSorting(sortParams, KeySelector)
             .Select(f => new FeedDto(f.Id, f.Name, f.Description, f.Url, f.Subscriptions.Count, f.Posts.Count))
             .WithPagination(paginationParams)
-            .ToListAsync(ct);
+            .ToArrayAsync(ct);
 
     public async Task<Guid> AddAsync(string name, string url, CancellationToken ct = default)
     {
@@ -57,7 +57,6 @@ public class FeedRepository(IAppDbContext DbContext) : IFeedRepository
             storedFeed.Description = feed.Description;
             storedFeed.LastFetchedAt = feed.LastFetchedAt;
 
-            DbContext.Feeds.Entry(storedFeed).State = EntityState.Modified;
             await DbContext.SaveChangesAsync(ct);
         }
     }

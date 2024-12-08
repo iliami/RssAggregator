@@ -7,15 +7,15 @@ namespace RssAggregator.Persistence.Repositories;
 
 public class SubscriptionRepository(IAppDbContext DbContext) : ISubscriptionRepository
 {
-    public async Task<IEnumerable<Subscription>> GetByUserIdAsync(Guid userId, CancellationToken ct = default)
-        => await DbContext.Subscriptions.AsNoTracking()
+    public Task<Subscription[]> GetByUserIdAsync(Guid userId, CancellationToken ct = default)
+        => DbContext.Subscriptions.AsNoTracking()
             .Where(s => s.AppUserId == userId)
-            .ToListAsync(ct);
+            .ToArrayAsync(ct);
 
-    public async Task<IEnumerable<Subscription>> GetByFeedIdAsync(Guid feedId, CancellationToken ct = default)
-        => await DbContext.Subscriptions.AsNoTracking()
+    public Task<Subscription[]> GetByFeedIdAsync(Guid feedId, CancellationToken ct = default)
+        => DbContext.Subscriptions.AsNoTracking()
             .Where(s => s.FeedId == feedId)
-            .ToListAsync(ct);
+            .ToArrayAsync(ct);
 
     public async Task AddAsync(Guid userId, Guid feedId, CancellationToken ct = default)
     {

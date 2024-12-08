@@ -22,6 +22,6 @@ public class AppUserRepository(IAppDbContext DbContext) : IAppUserRepository
         return user.Id;
     }
 
-    public async Task<AppUser?> GetByEmailAsync(string email, CancellationToken ct = default)
-        => await DbContext.AppUsers.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email, ct);
+    public Task<AppUser?> GetByEmailAsync(string email, CancellationToken ct = default)
+        => DbContext.AppUsers.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email, ct);
 }
