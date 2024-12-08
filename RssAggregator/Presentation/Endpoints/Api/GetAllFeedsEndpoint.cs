@@ -1,6 +1,7 @@
 using FastEndpoints;
 using RssAggregator.Application;
 using RssAggregator.Application.Abstractions.Repositories;
+using RssAggregator.Application.Params;
 using RssAggregator.Presentation.Contracts.Requests.Api;
 using RssAggregator.Presentation.Contracts.Responses.Api;
 

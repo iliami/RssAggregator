@@ -3,35 +3,33 @@ using RssAggregator.Application;
 using RssAggregator.Application.Abstractions;
 using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Application.DTO;
+using RssAggregator.Application.Params;
 using RssAggregator.Domain.Entities;
 using RssAggregator.Persistence.KeySelectors;
 using RssAggregator.Persistence.QueryExtensions;
-
 namespace RssAggregator.Persistence.Repositories;
 
 public class FeedRepository(IAppDbContext DbContext) : IFeedRepository
 {
+    public Task<PagedResult<FeedDto>> GetFeedsAsync(PaginationParams? paginationParams = null,
+        SortingParams? sortParams = null, CancellationToken ct = default)
+        => DbContext.Feeds.AsNoTracking()
+            .WithSorting(sortParams, KeySelector)
+            .Select(f => new FeedDto(f.Id, f.Name, f.Description, f.Url, f.Subscriptions.Count, f.Posts.Count))
+            .ToPagedResultAsync(paginationParams, ct);
+
     private static FeedKeySelector KeySelector { get; } = new();
 
     public Task<Feed?> GetByIdAsync(Guid id, CancellationToken ct = default)
         => DbContext.Feeds.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id, ct);
 
-    public Task<FeedDto[]> GetFeedsAsync(PaginationParams? paginationParams = null,
+    public Task<PagedResult<FeedDto>> GetByUserIdAsync(Guid userId, PaginationParams? paginationParams = null,
         SortingParams? sortParams = null, CancellationToken ct = default)
         => DbContext.Feeds.AsNoTracking()
-            .WithSorting(sortParams, KeySelector)
-            .Select(f => new FeedDto(f.Id, f.Name, f.Description, f.Url, f.Subscriptions.Count, f.Posts.Count))
-            .WithPagination(paginationParams)
-            .ToArrayAsync(ct);
-
-    public async Task<FeedDto[]> GetByUserIdAsync(Guid userId, PaginationParams? paginationParams = null,
-        SortingParams? sortParams = null, CancellationToken ct = default)
-        => await DbContext.Feeds.AsNoTracking()
             .Where(f => DbContext.Subscriptions.Any(s => s.FeedId == f.Id))
             .WithSorting(sortParams, KeySelector)
             .Select(f => new FeedDto(f.Id, f.Name, f.Description, f.Url, f.Subscriptions.Count, f.Posts.Count))
-            .WithPagination(paginationParams)
-            .ToArrayAsync(ct);
+            .ToPagedResultAsync(paginationParams, ct);
 
     public async Task<Guid> AddAsync(string name, string url, CancellationToken ct = default)
     {

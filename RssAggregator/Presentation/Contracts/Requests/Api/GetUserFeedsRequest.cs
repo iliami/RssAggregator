@@ -1,4 +1,5 @@
 using RssAggregator.Application;
+using RssAggregator.Application.Params;
 
 namespace RssAggregator.Presentation.Contracts.Requests.Api;
 

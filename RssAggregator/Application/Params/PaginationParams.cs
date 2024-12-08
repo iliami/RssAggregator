@@ -1,4 +1,4 @@
-namespace RssAggregator.Application;
+namespace RssAggregator.Application.Params;
 
 public class PaginationParams
 {

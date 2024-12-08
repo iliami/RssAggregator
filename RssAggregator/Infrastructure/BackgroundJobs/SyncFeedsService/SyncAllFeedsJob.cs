@@ -21,7 +21,7 @@ public class SyncAllFeedsJob(
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<SyncAllFeedsJob>>();
         var postRepository = scope.ServiceProvider.GetRequiredService<IPostRepository>();
         
-        var posts = await postRepository.GetPostsAsync(ct: stoppingToken);
+        var posts = (await postRepository.GetPostsAsync(ct: stoppingToken)).Array;
 
         foreach (var post in posts)
         {
@@ -57,7 +57,7 @@ public class SyncAllFeedsJob(
 
         var feedRepository = scope.ServiceProvider.GetRequiredService<IFeedRepository>();
         
-        var allFeeds = await feedRepository.GetFeedsAsync(ct: ct);
+        var allFeeds = (await feedRepository.GetFeedsAsync(ct: ct)).Array;
 
         await Parallel.ForEachAsync(allFeeds, ct,
             async (feed, token) => await FetchSingleFeed(feed.Id, token));
