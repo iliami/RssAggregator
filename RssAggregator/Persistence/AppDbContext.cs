@@ -4,7 +4,7 @@ using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Persistence;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options), IAppDbContext
+public class AppDbContext(IConfiguration configuration) : DbContext, IAppDbContext
 {
     public DbSet<AppUser> AppUsers { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
@@ -13,19 +13,21 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        base.OnConfiguring(optionsBuilder);
+        var connectionString = Environment.GetEnvironmentVariable("ASPNETCORE_RSSAGGREGATOR_DATABASE_CONNECTIONSTRING") ??
+                               configuration.GetConnectionString("DevelopmentPostgres");
+        
+        optionsBuilder
+            .UseNpgsql(connectionString)
+            .UseLoggerFactory(CreateLoggerFactory())
+            .EnableSensitiveDataLogging();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AppUser>()
-            .HasMany(u => u.Feeds)
-            .WithMany(f => f.Users)
-            .UsingEntity<Subscription>();
-
-        modelBuilder.Entity<Subscription>()
-            .HasKey(s => new { s.AppUserId, s.FeedId });
-        
-        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
+
+    private static ILoggerFactory CreateLoggerFactory() =>
+        LoggerFactory.Create(builder => builder.AddConsole());
+
 }

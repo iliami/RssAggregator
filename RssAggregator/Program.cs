@@ -14,12 +14,7 @@ using RssAggregator.Presentation.Middleware;
 
 var builder = WebApplication.CreateBuilder();
 builder.Services
-    .AddDbContext<AppDbContext>(options =>
-    {
-        var connectionString = Environment.GetEnvironmentVariable("ASPNETCORE_RSSAGGREGATOR_DATABASE_CONNECTIONSTRING") ??
-                               builder.Configuration.GetConnectionString("DevelopmentPostgres");
-        options.UseNpgsql(connectionString);
-    })
+    .AddDbContext<AppDbContext>()
     .AddScoped<IAppDbContext, AppDbContext>()
     .AddScoped<IAppUserRepository, AppUserRepository>()
     .AddScoped<ISubscriptionRepository, SubscriptionRepository>()
