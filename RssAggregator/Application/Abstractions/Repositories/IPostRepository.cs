@@ -10,5 +10,5 @@ public interface IPostRepository
     Task<PagedResult<PostDto>> GetPostsAsync(PaginationParams? paginationParams = null, SortingParams? sortingParams = null, CancellationToken ct = default);
     Task<PagedResult<PostDto>> GetByFeedIdAsync(Guid feedId, PaginationParams? paginationParams = null, SortingParams? sortingParams = null, CancellationToken ct = default);
     Task<PagedResult<PostDto>> GetByUserIdAsync(Guid userId, PaginationParams? paginationParams = null, SortingParams? sortingParams = null, CancellationToken ct = default);
-    Task AddRangeAsync(IEnumerable<Post> posts, CancellationToken ct = default);
+    Task AttachRangeAsync(IEnumerable<Post> posts, CancellationToken ct = default);
 }

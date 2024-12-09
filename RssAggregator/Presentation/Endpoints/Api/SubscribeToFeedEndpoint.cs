@@ -15,6 +15,6 @@ public class SubscribeToFeedEndpoint(ISubscriptionRepository SubscriptionReposit
     public override async Task HandleAsync(SubscribeToFeedRequest req, CancellationToken ct)
     {
         var (userId, _) = User.ToIdEmailTuple();
-        await SubscriptionRepository.AddAsync(userId, req.FeedId, ct);
+        await SubscriptionRepository.AttachAsync(userId, req.FeedId, ct);
     }
 }

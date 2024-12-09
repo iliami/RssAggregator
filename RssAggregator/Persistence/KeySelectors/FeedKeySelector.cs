@@ -10,8 +10,8 @@ public class FeedKeySelector : IKeySelector<Feed>
         => GetLowerString(fieldName) switch
         {
             var x when 
-                x == GetLowerString(nameof(Feed.Subscriptions)) || x == "subscribers" => 
-                feed => feed.Subscriptions.Count,
+                x == GetLowerString(nameof(Feed.Subscribers)) => 
+                feed => feed.Subscribers.Count,
             var x when 
                 x == GetLowerString(nameof(Feed.Posts)) =>
                 feed => feed.Posts.Count,

@@ -57,9 +57,9 @@ public class SyncAllFeedsJob(
 
         var feedRepository = scope.ServiceProvider.GetRequiredService<IFeedRepository>();
         
-        var allFeeds = (await feedRepository.GetFeedsAsync(ct: ct)).Array;
+        var allFeeds = await feedRepository.GetFeedsAsync(ct: ct);
 
-        await Parallel.ForEachAsync(allFeeds, ct,
+        await Parallel.ForEachAsync(allFeeds.Array, ct,
             async (feed, token) => await FetchSingleFeed(feed.Id, token));
     }
 
@@ -92,7 +92,7 @@ public class SyncAllFeedsJob(
                     Description = scrapedPost.Description,
                     Category = string.Join(", ", scrapedPost.Categories),
                     PublishDate = DateTime.Parse(scrapedPost.PubDate).ToUniversalTime(),
-                    FeedId = feedId
+                    Feed = feed
                 }).ToList();
 
             if (feed.Name != feedFromInternet.Channel.Title)
@@ -109,7 +109,7 @@ public class SyncAllFeedsJob(
             {
                 var postRepository = scope.ServiceProvider.GetRequiredService<IPostRepository>();
 
-                await postRepository.AddRangeAsync(posts, ct);
+                await postRepository.AttachRangeAsync(posts, ct);
 
                 var key = $"feed_{feed.Id}";
                 foreach (var post in posts)

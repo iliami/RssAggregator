@@ -15,7 +15,7 @@ public static class CommonQueryExtensions
             return new PagedResult<T>([], 0);
         }
 
-        paginationParams ??= new PaginationParams { Page = 0, PageSize = count };   
+        paginationParams ??= new PaginationParams { Page = 1, PageSize = count };   
         
         var skip = (paginationParams.Page - 1) * paginationParams.PageSize;
         var take = paginationParams.PageSize;

@@ -1,43 +1,45 @@
 using Microsoft.EntityFrameworkCore;
 using RssAggregator.Application.Abstractions;
 using RssAggregator.Application.Abstractions.Repositories;
-using RssAggregator.Domain.Entities;
+using RssAggregator.Application.DTO;
 
 namespace RssAggregator.Persistence.Repositories;
 
 public class SubscriptionRepository(IAppDbContext DbContext) : ISubscriptionRepository
 {
-    public Task<Subscription[]> GetByUserIdAsync(Guid userId, CancellationToken ct = default)
-        => DbContext.Subscriptions.AsNoTracking()
-            .Where(s => s.AppUserId == userId)
+    public Task<SubscriptionDto[]> GetByUserIdAsync(Guid userId, CancellationToken ct = default)
+        => DbContext.Feeds.AsNoTracking()
+            .Where(f => f.Subscribers.Any(u => u.Id == userId))
+            .SelectMany(
+                f => f.Subscribers, 
+                (feed, user) => new SubscriptionDto(user, feed))
             .ToArrayAsync(ct);
 
-    public Task<Subscription[]> GetByFeedIdAsync(Guid feedId, CancellationToken ct = default)
-        => DbContext.Subscriptions.AsNoTracking()
-            .Where(s => s.FeedId == feedId)
+    public Task<SubscriptionDto[]> GetByFeedIdAsync(Guid feedId, CancellationToken ct = default)
+        => DbContext.Feeds.AsNoTracking()
+            .Where(f => f.Id == feedId)
+            .SelectMany(
+                f => f.Subscribers, 
+                (feed, user) => new SubscriptionDto(user, feed))
             .ToArrayAsync(ct);
 
-    public async Task AddAsync(Guid userId, Guid feedId, CancellationToken ct = default)
+    public async Task AttachAsync(Guid userId, Guid feedId, CancellationToken ct = default)
     {
-        var subscription = new Subscription
-        {
-            AppUserId = userId,
-            FeedId = feedId
-        };
-
-        await DbContext.Subscriptions.AddAsync(subscription, ct);
+        var appUser = await DbContext.AppUsers.FirstOrDefaultAsync(u => u.Id == userId, ct);
+        var feed = await DbContext.Feeds.FirstOrDefaultAsync(f => f.Id == feedId, ct);
+        
+        feed?.Subscribers.Add(appUser);
+        
         await DbContext.SaveChangesAsync(ct);
     }
 
     public async Task RemoveAsync(Guid userId, Guid feedId, CancellationToken ct = default)
     {
-        var subscription = await DbContext.Subscriptions
-            .FirstOrDefaultAsync(s => s.AppUserId == userId && s.FeedId == feedId, ct);
-
-        if (subscription is not null)
-        {
-            DbContext.Subscriptions.Entry(subscription).State = EntityState.Deleted;
-            await DbContext.SaveChangesAsync(ct);
-        }
+        var appUser = await DbContext.AppUsers.FirstOrDefaultAsync(u => u.Id == userId, ct);
+        var feed = await DbContext.Feeds.FirstOrDefaultAsync(f => f.Id == feedId, ct);
+        
+        feed?.Subscribers.Remove(appUser);
+        
+        await DbContext.SaveChangesAsync(ct);
     }
 }

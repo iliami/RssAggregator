@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using RssAggregator.Application;
 using RssAggregator.Application.Abstractions;
 using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Application.DTO;
@@ -15,7 +14,7 @@ public class FeedRepository(IAppDbContext DbContext) : IFeedRepository
         SortingParams? sortParams = null, CancellationToken ct = default)
         => DbContext.Feeds.AsNoTracking()
             .WithSorting(sortParams, KeySelector)
-            .Select(f => new FeedDto(f.Id, f.Name, f.Description, f.Url, f.Subscriptions.Count, f.Posts.Count))
+            .Select(f => new FeedDto(f.Id, f.Name, f.Description, f.Url, f.Subscribers.Count, f.Posts.Count))
             .ToPagedResultAsync(paginationParams, ct);
 
     private static FeedKeySelector KeySelector { get; } = new();
@@ -26,9 +25,9 @@ public class FeedRepository(IAppDbContext DbContext) : IFeedRepository
     public Task<PagedResult<FeedDto>> GetByUserIdAsync(Guid userId, PaginationParams? paginationParams = null,
         SortingParams? sortParams = null, CancellationToken ct = default)
         => DbContext.Feeds.AsNoTracking()
-            .Where(f => DbContext.Subscriptions.Any(s => s.FeedId == f.Id))
+            .Where(f => f.Subscribers.Any(u => u.Id == userId))
             .WithSorting(sortParams, KeySelector)
-            .Select(f => new FeedDto(f.Id, f.Name, f.Description, f.Url, f.Subscriptions.Count, f.Posts.Count))
+            .Select(f => new FeedDto(f.Id, f.Name, f.Description, f.Url, f.Subscribers.Count, f.Posts.Count))
             .ToPagedResultAsync(paginationParams, ct);
 
     public async Task<Guid> AddAsync(string name, string url, CancellationToken ct = default)

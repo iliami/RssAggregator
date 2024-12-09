@@ -29,7 +29,7 @@ public class GetFeedPostEndpoint(IPostRepository PostRepository) : EndpointWitho
             post.Category,
             post.PublishDate,
             post.Url,
-            post.FeedId);
+            post.Feed.Id);
 
         return res;
     }
