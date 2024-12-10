@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using RssAggregator.Application;
 using RssAggregator.Application.Abstractions;
 using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Application.DTO;
@@ -20,6 +19,11 @@ public class PostRepository(IAppDbContext DbContext) : IPostRepository
             .Include(p => p.Feed)
             .FirstOrDefaultAsync(p => p.Id == id, ct);
 
+    public Task<List<PostUrlDto>> GetPostsUrlsAsync(CancellationToken ct = default)
+        => DbContext.Posts.AsNoTracking()
+            .Select(p => new PostUrlDto(p.Id, p.Url, p.Feed.Id))
+            .ToListAsync(ct);
+    
     public Task<PagedResult<PostDto>> GetPostsAsync(PaginationParams? paginationParams = null,
         SortingParams? sortingParams = null, CancellationToken ct = default)
         => DbContext.Posts.AsNoTracking()

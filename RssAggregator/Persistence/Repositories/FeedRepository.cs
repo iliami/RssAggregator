@@ -6,18 +6,24 @@ using RssAggregator.Application.Params;
 using RssAggregator.Domain.Entities;
 using RssAggregator.Persistence.KeySelectors;
 using RssAggregator.Persistence.QueryExtensions;
+
 namespace RssAggregator.Persistence.Repositories;
 
 public class FeedRepository(IAppDbContext DbContext) : IFeedRepository
 {
+    private static FeedKeySelector KeySelector { get; } = new();
+
+    public Task<List<FeedIdDto>> GetFeedsIdsAsync(CancellationToken ct = default)
+        => DbContext.Feeds.AsNoTracking()
+            .Select(f => new FeedIdDto(f.Id))
+            .ToListAsync(ct);
+    
     public Task<PagedResult<FeedDto>> GetFeedsAsync(PaginationParams? paginationParams = null,
         SortingParams? sortParams = null, CancellationToken ct = default)
         => DbContext.Feeds.AsNoTracking()
             .WithSorting(sortParams, KeySelector)
             .Select(f => new FeedDto(f.Id, f.Name, f.Description, f.Url, f.Subscribers.Count, f.Posts.Count))
             .ToPagedResultAsync(paginationParams, ct);
-
-    private static FeedKeySelector KeySelector { get; } = new();
 
     public Task<Feed?> GetByIdAsync(Guid id, CancellationToken ct = default)
         => DbContext.Feeds.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id, ct);
