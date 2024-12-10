@@ -1,10 +1,6 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
-using Microsoft.AspNetCore.Http.Json;
-using Microsoft.EntityFrameworkCore;
 using RssAggregator.Application.Abstractions;
 using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Infrastructure.BackgroundJobs.SyncFeedsService;

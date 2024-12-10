@@ -2,7 +2,7 @@ using FastEndpoints;
 using FastEndpoints.Security;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace RssAggregator.Presentation.Endpoints.UserManagement;
+namespace RssAggregator.Presentation.Endpoints.Auth;
 
 public class RefreshTokenRequest : TokenRequest { }
 

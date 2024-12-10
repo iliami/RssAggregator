@@ -2,7 +2,7 @@ using FastEndpoints;
 using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Presentation.Extensions;
 
-namespace RssAggregator.Presentation.Endpoints.UserManagement;
+namespace RssAggregator.Presentation.Endpoints.Auth;
 
 public record RegisterRequest(string Email, string Password);
 

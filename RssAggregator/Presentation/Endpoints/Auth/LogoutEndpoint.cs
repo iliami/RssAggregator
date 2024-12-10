@@ -2,7 +2,7 @@ using FastEndpoints;
 using Microsoft.Extensions.Caching.Memory;
 using RssAggregator.Presentation.Extensions;
 
-namespace RssAggregator.Presentation.Endpoints.UserManagement;
+namespace RssAggregator.Presentation.Endpoints.Auth;
 
 public class LogoutEndpoint(IMemoryCache memoryCache) : EndpointWithoutRequest
 {
