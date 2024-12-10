@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RssAggregator.Application.Abstractions;
 using RssAggregator.Application.Abstractions.Repositories;
-using RssAggregator.Application.DTO;
+using RssAggregator.Application.Models.DTO;
 
 namespace RssAggregator.Persistence.Repositories;
 

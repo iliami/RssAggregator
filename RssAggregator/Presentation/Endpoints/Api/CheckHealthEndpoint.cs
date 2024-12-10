@@ -1,8 +1,10 @@
 using FastEndpoints;
-using RssAggregator.Presentation.Contracts.Requests.Api;
-using RssAggregator.Presentation.Contracts.Responses.Api;
 
 namespace RssAggregator.Presentation.Endpoints.Api;
+
+public record CheckHealthRequest(string Check);
+
+public record CheckHealthResponse(string AllCaps);
 
 public class CheckHealthEndpoint : Endpoint<CheckHealthRequest, CheckHealthResponse>
 {

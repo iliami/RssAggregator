@@ -1,11 +1,13 @@
 using FastEndpoints;
 using RssAggregator.Application.Abstractions.Repositories;
-using RssAggregator.Presentation.Contracts.Requests.Api;
 using RssAggregator.Presentation.Extensions;
 
 namespace RssAggregator.Presentation.Endpoints.Api;
 
-public class UnsubscribeToFeedEndpoint(ISubscriptionRepository SubscriptionRepository) : Endpoint<UnsubscribeToFeedRequest>
+public record UnsubscribeToFeedRequest(Guid FeedId);
+
+public class UnsubscribeToFeedEndpoint(ISubscriptionRepository SubscriptionRepository)
+    : Endpoint<UnsubscribeToFeedRequest>
 {
     public override void Configure()
     {

@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace RssAggregator.Application.Params;
+namespace RssAggregator.Application.Models.Params;
 
 public class SortingParams
 {

@@ -1,8 +1,9 @@
 using FastEndpoints;
 using RssAggregator.Application.Abstractions.Repositories;
-using RssAggregator.Presentation.Contracts.Requests.Admin;
 
 namespace RssAggregator.Presentation.Endpoints.Admin;
+
+public record CreateFeedRequest(string Name, string Url);
 
 public class CreateFeedEndpoint(IFeedRepository FeedRepository) : Endpoint<CreateFeedRequest>
 {

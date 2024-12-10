@@ -1,10 +1,12 @@
 using FastEndpoints;
 using RssAggregator.Application.Abstractions.Repositories;
-using RssAggregator.Application.Extensions;
-using RssAggregator.Presentation.Contracts.Requests.UserManagement;
-using RssAggregator.Presentation.Contracts.Responses.UserManagement;
+using RssAggregator.Presentation.Extensions;
 
 namespace RssAggregator.Presentation.Endpoints.UserManagement;
+
+public record RegisterRequest(string Email, string Password);
+
+public record RegisterResponse(string Id, string Email);
 
 public class RegisterEndpoint(IAppUserRepository UserRepository) : Endpoint<RegisterRequest, RegisterResponse>
 {

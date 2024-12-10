@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RssAggregator.Application.Abstractions.KeySelectors;
-using RssAggregator.Application.DTO;
-using RssAggregator.Application.Params;
+using RssAggregator.Application.Models.DTO;
+using RssAggregator.Application.Models.Params;
 
 namespace RssAggregator.Persistence.QueryExtensions;
 

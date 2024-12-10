@@ -1,10 +1,10 @@
 using FastEndpoints;
 using FastEndpoints.Security;
 using Microsoft.Extensions.Caching.Memory;
-using RssAggregator.Presentation.Contracts.Requests.UserManagement;
-using RssAggregator.Presentation.Contracts.Responses.UserManagement;
 
 namespace RssAggregator.Presentation.Endpoints.UserManagement;
+
+public class RefreshTokenRequest : TokenRequest { }
 
 public class RefreshTokenEndpoint : RefreshTokenService<RefreshTokenRequest, AuthResponse>
 {

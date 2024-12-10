@@ -2,14 +2,18 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using FastEndpoints;
 using FastEndpoints.Security;
-using Microsoft.EntityFrameworkCore;
 using RssAggregator.Application.Abstractions;
 using RssAggregator.Application.Abstractions.Repositories;
-using RssAggregator.Application.Extensions;
-using RssAggregator.Presentation.Contracts.Requests.UserManagement;
-using RssAggregator.Presentation.Contracts.Responses.UserManagement;
+using RssAggregator.Presentation.Extensions;
 
 namespace RssAggregator.Presentation.Endpoints.UserManagement;
+
+public record LoginRequest(string Email, string Password);
+
+public class AuthResponse : TokenResponse
+{
+    public string Email { get; set; } = null!;
+}
 
 public class LoginEndpoint(IAppDbContext DbContext, IAppUserRepository UserRepository) : Endpoint<LoginRequest, AuthResponse>
 {

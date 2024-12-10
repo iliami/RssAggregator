@@ -1,6 +1,5 @@
 using FastEndpoints;
 using Microsoft.Extensions.Caching.Memory;
-using RssAggregator.Presentation.Contracts.Responses.UserManagement;
 using RssAggregator.Presentation.Extensions;
 
 namespace RssAggregator.Presentation.Endpoints.UserManagement;

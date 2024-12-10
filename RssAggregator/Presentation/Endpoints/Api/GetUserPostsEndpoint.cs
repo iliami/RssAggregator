@@ -1,12 +1,18 @@
 using FastEndpoints;
-using RssAggregator.Application;
 using RssAggregator.Application.Abstractions.Repositories;
-using RssAggregator.Application.Params;
-using RssAggregator.Presentation.Contracts.Requests.Api;
-using RssAggregator.Presentation.Contracts.Responses.Api;
+using RssAggregator.Application.Models.DTO;
+using RssAggregator.Application.Models.Params;
 using RssAggregator.Presentation.Extensions;
 
 namespace RssAggregator.Presentation.Endpoints.Api;
+
+public record GetUserPostsRequest(
+    int Page = 1,
+    int PageSize = 50,
+    string? SortBy = null,
+    SortDirection SortDirection = SortDirection.None);
+
+public record GetUserPostsResponse(PagedResult<PostDto> Posts);
 
 public class GetUserPostsEndpoint(IPostRepository PostRepository) : Endpoint<GetUserPostsRequest, GetUserPostsResponse>
 {
@@ -21,13 +27,13 @@ public class GetUserPostsEndpoint(IPostRepository PostRepository) : Endpoint<Get
         var paginationParams = new PaginationParams
         {
             Page = req.Page,
-            PageSize = req.PageSize,
+            PageSize = req.PageSize
         };
 
         var sortingParams = new SortingParams
         {
             SortBy = req.SortBy,
-            SortDirection = req.SortDirection,
+            SortDirection = req.SortDirection
         };
 
         var posts = await PostRepository.GetByUserIdAsync(userId, paginationParams, sortingParams, ct);

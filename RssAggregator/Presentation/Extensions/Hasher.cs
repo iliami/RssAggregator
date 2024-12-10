@@ -1,4 +1,4 @@
-namespace RssAggregator.Application.Extensions;
+namespace RssAggregator.Presentation.Extensions;
 
 public static class Hasher
 {

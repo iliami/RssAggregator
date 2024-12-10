@@ -1,8 +1,16 @@
 using FastEndpoints;
 using RssAggregator.Application.Abstractions.Repositories;
-using RssAggregator.Presentation.Contracts.Responses.Api;
 
 namespace RssAggregator.Presentation.Endpoints.Api;
+
+public record GetFeedPostResponse(
+    Guid Id,
+    string Title,
+    string Description,
+    string Category,
+    DateTime PublishDate,
+    string Url,
+    Guid FeedId);
 
 public class GetFeedPostEndpoint(IPostRepository PostRepository) : EndpointWithoutRequest<GetFeedPostResponse>
 {
@@ -14,14 +22,11 @@ public class GetFeedPostEndpoint(IPostRepository PostRepository) : EndpointWitho
     public override async Task<GetFeedPostResponse> ExecuteAsync(CancellationToken ct)
     {
         var postId = Route<Guid>("id");
-        
+
         var post = await PostRepository.GetByIdAsync(postId, ct);
 
-        if (post is null)
-        {
-            ThrowError("Post not found", StatusCodes.Status404NotFound);
-        }
-        
+        if (post is null) ThrowError("Post not found", StatusCodes.Status404NotFound);
+
         var res = new GetFeedPostResponse(
             post.Id,
             post.Title,

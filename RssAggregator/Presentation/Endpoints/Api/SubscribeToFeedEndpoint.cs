@@ -1,9 +1,10 @@
 using FastEndpoints;
 using RssAggregator.Application.Abstractions.Repositories;
-using RssAggregator.Presentation.Contracts.Requests.Api;
 using RssAggregator.Presentation.Extensions;
 
 namespace RssAggregator.Presentation.Endpoints.Api;
+
+public record SubscribeToFeedRequest(Guid FeedId);
 
 public class SubscribeToFeedEndpoint(ISubscriptionRepository SubscriptionRepository) : Endpoint<SubscribeToFeedRequest>
 {

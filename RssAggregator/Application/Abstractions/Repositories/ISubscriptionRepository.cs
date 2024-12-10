@@ -1,4 +1,4 @@
-using RssAggregator.Application.DTO;
+using RssAggregator.Application.Models.DTO;
 
 namespace RssAggregator.Application.Abstractions.Repositories;
 
