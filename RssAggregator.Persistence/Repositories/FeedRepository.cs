@@ -9,7 +9,7 @@ using RssAggregator.Persistence.QueryExtensions;
 
 namespace RssAggregator.Persistence.Repositories;
 
-public class FeedRepository(IAppDbContext DbContext) : IFeedRepository
+public class FeedRepository(AppDbContext DbContext) : IFeedRepository
 {
     private static FeedKeySelector KeySelector { get; } = new();
 

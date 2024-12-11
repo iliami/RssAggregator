@@ -9,7 +9,7 @@ using RssAggregator.Persistence.QueryExtensions;
 
 namespace RssAggregator.Persistence.Repositories;
 
-public class PostRepository(IAppDbContext DbContext) : IPostRepository
+public class PostRepository(AppDbContext DbContext) : IPostRepository
 {
     private static PostKeySelector PostKeySelector { get; } = new();
 

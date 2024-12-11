@@ -1,5 +1,8 @@
 using System.Xml.Serialization;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Domain.Entities;
 using RssAggregator.Infrastructure.BackgroundJobs.SyncFeedsService.RssXmlModels;

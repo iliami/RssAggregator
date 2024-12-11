@@ -5,7 +5,7 @@ using RssAggregator.Application.Models.DTO;
 
 namespace RssAggregator.Persistence.Repositories;
 
-public class SubscriptionRepository(IAppDbContext DbContext) : ISubscriptionRepository
+public class SubscriptionRepository(AppDbContext DbContext) : ISubscriptionRepository
 {
     public Task<SubscriptionDto[]> GetByUserIdAsync(Guid userId, CancellationToken ct = default)
         => DbContext.Feeds.AsNoTracking()

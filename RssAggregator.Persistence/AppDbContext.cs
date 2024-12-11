@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using RssAggregator.Application.Abstractions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Persistence;
 
-public class AppDbContext(IConfiguration configuration) : DbContext, IAppDbContext
+public class AppDbContext(IConfiguration configuration) : DbContext
 {
     public DbSet<AppUser> AppUsers { get; set; }
     public DbSet<Feed> Feeds { get; set; }

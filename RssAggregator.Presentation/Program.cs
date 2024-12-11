@@ -11,7 +11,6 @@ using RssAggregator.Presentation.Middleware;
 var builder = WebApplication.CreateBuilder();
 builder.Services
     .AddDbContext<AppDbContext>()
-    .AddScoped<IAppDbContext, AppDbContext>()
     .AddScoped<IAppUserRepository, AppUserRepository>()
     .AddScoped<ISubscriptionRepository, SubscriptionRepository>()
     .AddScoped<IFeedRepository, FeedRepository>()

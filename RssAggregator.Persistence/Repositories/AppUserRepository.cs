@@ -5,7 +5,7 @@ using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Persistence.Repositories;
 
-public class AppUserRepository(IAppDbContext DbContext) : IAppUserRepository
+public class AppUserRepository(AppDbContext DbContext) : IAppUserRepository
 {
     public async Task<Guid> AddAsync(string email, string passwordHash, string role, CancellationToken ct = default)
     {
