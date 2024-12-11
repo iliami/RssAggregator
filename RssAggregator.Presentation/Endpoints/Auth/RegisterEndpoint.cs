@@ -19,12 +19,12 @@ public class RegisterEndpoint(IAppUserRepository UserRepository) : Endpoint<Regi
     public override async Task<RegisterResponse> ExecuteAsync(RegisterRequest req, CancellationToken ct)
     {
         var id = await UserRepository.AddAsync(
-            req.Email, 
-            req.Password.GetHash(), 
+            req.Email,
+            req.Password.GetHash(),
             "base_user", ct);
-        
+
         var res = new RegisterResponse(id.ToString(), req.Email);
-        
+
         return res;
     }
 }

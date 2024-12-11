@@ -10,7 +10,7 @@ public class CreateFeedEndpoint(IFeedRepository FeedRepository) : Endpoint<Creat
     public override void Configure()
     {
         Post("admin/create-feed");
-        Roles("admin"); 
+        Roles("admin");
     }
 
     public override async Task HandleAsync(CreateFeedRequest req, CancellationToken ct)

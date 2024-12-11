@@ -23,22 +23,18 @@ public class SyncAllFeedsJob(
 
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<SyncAllFeedsJob>>();
         var postRepository = scope.ServiceProvider.GetRequiredService<IPostRepository>();
-        
-        var posts = await postRepository.GetPostsUrlsAsync(ct: stoppingToken);
+
+        var posts = await postRepository.GetPostsUrlsAsync(stoppingToken);
 
         foreach (var post in posts)
         {
             var key = $"feed_{post.FeedId}";
             if (memoryCache.TryGetValue<List<string>>(key, out var urls))
-            {
                 urls!.Add(post.Url);
-            }
             else
-            {
                 memoryCache.Set<List<string>>(key, [post.Url]);
-            }
         }
-        
+
         while (!stoppingToken.IsCancellationRequested)
         {
             try
@@ -59,8 +55,8 @@ public class SyncAllFeedsJob(
         using var scope = serviceProvider.CreateScope();
 
         var feedRepository = scope.ServiceProvider.GetRequiredService<IFeedRepository>();
-        
-        var allFeeds = await feedRepository.GetFeedsIdsAsync(ct: ct);
+
+        var allFeeds = await feedRepository.GetFeedsIdsAsync(ct);
 
         await Parallel.ForEachAsync(allFeeds, ct,
             async (feed, token) => await FetchSingleFeed(feed.Id, token));
@@ -98,15 +94,10 @@ public class SyncAllFeedsJob(
                     Feed = feed
                 }).ToList();
 
-            if (feed.Name != feedFromInternet.Channel.Title)
-            {
-                feed.Name = feedFromInternet.Channel.Title;
-            }
+            if (feed.Name != feedFromInternet.Channel.Title) feed.Name = feedFromInternet.Channel.Title;
 
             if (feed.Description != feedFromInternet.Channel.Description)
-            {
                 feed.Description = feedFromInternet.Channel.Description;
-            }
 
             if (posts.Count != 0)
             {
@@ -116,16 +107,10 @@ public class SyncAllFeedsJob(
 
                 var key = $"feed_{feed.Id}";
                 foreach (var post in posts)
-                {
                     if (memoryCache.TryGetValue<List<string>>(key, out var urls))
-                    {
                         urls!.Add(post.Url);
-                    }
                     else
-                    {
                         memoryCache.Set<List<string>>(key, [post.Url]);
-                    }
-                }
             }
 
             feed.LastFetchedAt = DateTime.UtcNow;

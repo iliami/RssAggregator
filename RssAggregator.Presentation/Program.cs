@@ -1,7 +1,6 @@
 using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
-using RssAggregator.Application.Abstractions;
 using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Infrastructure.BackgroundJobs.SyncFeedsService;
 using RssAggregator.Persistence;

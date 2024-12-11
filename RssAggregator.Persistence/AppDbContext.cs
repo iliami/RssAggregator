@@ -13,9 +13,10 @@ public class AppDbContext(IConfiguration configuration) : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var connectionString = Environment.GetEnvironmentVariable("ASPNETCORE_RSSAGGREGATOR_DATABASE_CONNECTIONSTRING") ??
-                               configuration.GetConnectionString("DevelopmentPostgres");
-        
+        var connectionString =
+            Environment.GetEnvironmentVariable("ASPNETCORE_RSSAGGREGATOR_DATABASE_CONNECTIONSTRING") ??
+            configuration.GetConnectionString("DevelopmentPostgres");
+
         optionsBuilder
             .UseNpgsql(connectionString)
             .UseLoggerFactory(CreateLoggerFactory())
@@ -27,7 +28,8 @@ public class AppDbContext(IConfiguration configuration) : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 
-    private static ILoggerFactory CreateLoggerFactory() =>
-        LoggerFactory.Create(builder => builder.AddConsole());
-
+    private static ILoggerFactory CreateLoggerFactory()
+    {
+        return LoggerFactory.Create(builder => builder.AddConsole());
+    }
 }

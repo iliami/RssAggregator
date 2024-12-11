@@ -14,7 +14,7 @@ public class LogoutEndpoint(IMemoryCache memoryCache) : EndpointWithoutRequest
     public override Task HandleAsync(CancellationToken ct)
     {
         var (userId, _) = User.ToIdEmailTuple();
-        
+
         var key = $"userid-{userId}";
         var tokens = memoryCache.Get<AuthResponse>(key);
 

@@ -4,7 +4,8 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace RssAggregator.Presentation.Middleware;
 
-public class TokenBlacklistCheckerMiddleware(RequestDelegate next, IMemoryCache memoryCache) : JwtRevocationMiddleware(next)
+public class TokenBlacklistCheckerMiddleware(RequestDelegate next, IMemoryCache memoryCache)
+    : JwtRevocationMiddleware(next)
 {
     protected override Task<bool> JwtTokenIsValidAsync(string jwtToken, CancellationToken ct)
     {
@@ -13,6 +14,7 @@ public class TokenBlacklistCheckerMiddleware(RequestDelegate next, IMemoryCache 
 
     protected override async Task SendTokenRevokedResponseAsync(HttpContext ctx, CancellationToken ct)
     {
-        await ctx.Response.SendStringAsync("This token is revoked", StatusCodes.Status401Unauthorized, cancellation: ct);
+        await ctx.Response.SendStringAsync("This token is revoked", StatusCodes.Status401Unauthorized,
+            cancellation: ct);
     }
 }

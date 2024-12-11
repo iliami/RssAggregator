@@ -9,7 +9,7 @@ public static class UserMethods
     {
         var userId = Guid.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
         var userEmail = User.FindFirstValue(JwtRegisteredClaimNames.Email)!;
-        
+
         return (userId, userEmail);
     }
 }

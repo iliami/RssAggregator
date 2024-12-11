@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using RssAggregator.Application.Abstractions;
 using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Domain.Entities;
 
@@ -15,13 +14,15 @@ public class AppUserRepository(AppDbContext DbContext) : IAppUserRepository
             Password = passwordHash,
             Role = role
         };
-        
+
         await DbContext.AppUsers.AddAsync(user, ct);
         await DbContext.SaveChangesAsync(ct);
-        
+
         return user.Id;
     }
 
     public Task<AppUser?> GetByEmailAsync(string email, CancellationToken ct = default)
-        => DbContext.AppUsers.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email, ct);
+    {
+        return DbContext.AppUsers.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email, ct);
+    }
 }
