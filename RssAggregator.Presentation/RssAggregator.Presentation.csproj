@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <UserSecretsId>5ea621d8-7343-411c-bbb7-3faf3756c823</UserSecretsId>
-        <RootNamespace>RssAggregator</RootNamespace>
+        <RootNamespace>RssAggregator.Presentation</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
