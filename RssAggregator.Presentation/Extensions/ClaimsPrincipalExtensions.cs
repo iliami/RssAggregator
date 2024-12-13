@@ -2,7 +2,7 @@ using System.Security.Claims;
 
 namespace RssAggregator.Presentation.Extensions;
 
-public static class UserMethods
+public static class ClaimsPrincipalExtensions
 {
     public static (Guid UserId, string UserEmail) ToIdEmailTuple(this ClaimsPrincipal user)
     {

@@ -1,6 +1,6 @@
 namespace RssAggregator.Presentation.Extensions;
 
-public static class Hasher
+public static class BCryptNetNextExtensions
 {
     public static string GetHash(this string stringToHash)
     {

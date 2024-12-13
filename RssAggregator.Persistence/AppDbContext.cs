@@ -14,8 +14,7 @@ public class AppDbContext(IConfiguration configuration) : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var connectionString =
-            Environment.GetEnvironmentVariable("ASPNETCORE_RSSAGGREGATOR_DATABASE_CONNECTIONSTRING") ??
-            configuration.GetConnectionString("DevelopmentPostgres");
+            configuration.GetConnectionString("Postgres");
 
         optionsBuilder
             .UseNpgsql(connectionString)

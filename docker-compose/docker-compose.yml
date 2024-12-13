@@ -6,8 +6,6 @@
       - 5183:5000
     networks:
       - net
-    environment:
-      ASPNETCORE_RSSAGGREGATOR_DATABASE_CONNECTIONSTRING: "Host=rssaggregator-db; Port=5432; Database=RssAggregatorDatabase; Username=root; Password=password;"
     depends_on:
       rssaggregator-db:
         condition: "service_healthy"
