@@ -21,7 +21,7 @@ public class GetUserPosts : IEndpoint
             [AsParameters] SortingParams sortingParams,
             [FromServices] IPostRepository postRepository,
             [FromServices] HttpContext context,
-            [FromServices] CancellationToken ct) =>
+            CancellationToken ct) =>
         {
             var (userId, _) = context.User.ToIdEmailTuple();
             
@@ -33,6 +33,6 @@ public class GetUserPosts : IEndpoint
             var response = new GetUserPostsResponse(posts);
             
             return Results.Ok(response);
-        }).WithTags(Tags.Posts);
+        }).RequireAuthorization().WithTags(EndpointsTags.Posts);
     }
 }

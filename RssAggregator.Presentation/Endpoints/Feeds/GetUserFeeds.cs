@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Application.Models.DTO;
@@ -16,10 +17,10 @@ public class GetUserFeeds : IEndpoint
             [AsParameters] PaginationParams paginationParams,
             [AsParameters] SortingParams sortingParams,
             [FromServices] IFeedRepository feedRepository,
-            [FromServices] HttpContext context,
-            [FromServices] CancellationToken ct) =>
+            ClaimsPrincipal user,
+            CancellationToken ct) =>
         {
-            var (userId, _) = context.User.ToIdEmailTuple();
+            var (userId, _) = user.ToIdEmailTuple();
             
             var feeds = await feedRepository.GetByUserIdAsync(
                 userId, 
@@ -30,6 +31,6 @@ public class GetUserFeeds : IEndpoint
             var response = new GetUserFeedsResponse(feeds);
             
             return Results.Ok(response);
-        }).WithTags(Tags.Feeds);
+        }).RequireAuthorization().WithTags(EndpointsTags.Feeds);
     }
 }

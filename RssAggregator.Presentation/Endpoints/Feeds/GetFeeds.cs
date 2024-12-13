@@ -15,7 +15,7 @@ public class GetFeeds : IEndpoint
             [AsParameters] PaginationParams paginationParams,
             [AsParameters] SortingParams sortingParams,
             [FromServices] IFeedRepository feedRepository,
-            [FromServices] CancellationToken ct) =>
+            CancellationToken ct) =>
         {
             var feeds = await feedRepository.GetFeedsAsync(
                 paginationParams, 
@@ -24,6 +24,6 @@ public class GetFeeds : IEndpoint
             var response = new GetFeedsResponse(feeds);
             
             return Results.Ok(response);
-        }).WithTags(Tags.Feeds);
+        }).AllowAnonymous().WithTags(EndpointsTags.Feeds);
     }
 }

@@ -1,14 +1,13 @@
 using System.Security.Claims;
-using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace RssAggregator.Presentation.Extensions;
 
 public static class UserMethods
 {
-    public static (Guid UserId, string UserEmail) ToIdEmailTuple(this ClaimsPrincipal User)
+    public static (Guid UserId, string UserEmail) ToIdEmailTuple(this ClaimsPrincipal user)
     {
-        var userId = Guid.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
-        var userEmail = User.FindFirstValue(JwtRegisteredClaimNames.Email)!;
+        var userId = Guid.Parse(user.FindFirstValue(TokenServiceExtensions.ClaimTypes.UserId)!);
+        var userEmail = user.FindFirstValue(TokenServiceExtensions.ClaimTypes.Email)!;
 
         return (userId, userEmail);
     }

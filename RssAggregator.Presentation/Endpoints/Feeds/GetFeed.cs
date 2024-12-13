@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Namotion.Reflection;
 using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Application.Models.DTO;
 
@@ -16,7 +15,7 @@ public class GetFeed : IEndpoint
             [FromServices] IFeedRepository feedRepository,
             [FromServices] IPostRepository postRepository,
             [FromServices] ISubscriptionRepository subscriptionRepository,
-            [FromServices] CancellationToken ct) =>
+            CancellationToken ct) =>
         {
             var feed = await feedRepository.GetByIdAsync(id, ct);
 
@@ -29,6 +28,6 @@ public class GetFeed : IEndpoint
                 id, feed.Name, feed.Description, feed.Url, subscribers.Length, posts.Total));
 
             return Results.Ok(response);
-        }).WithTags(Tags.Feeds);
+        }).RequireAuthorization().WithTags(EndpointsTags.Feeds);
     }
 }

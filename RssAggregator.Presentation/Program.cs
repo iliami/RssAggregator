@@ -1,15 +1,21 @@
 using System.Reflection;
-using FastEndpoints;
-using FastEndpoints.Security;
-using FastEndpoints.Swagger;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Infrastructure.BackgroundJobs.SyncFeedsService;
 using RssAggregator.Persistence;
 using RssAggregator.Persistence.Repositories;
 using RssAggregator.Presentation.Extensions;
 using RssAggregator.Presentation.Middleware;
+using RssAggregator.Presentation.Options;
+using RssAggregator.Presentation.Services;
+using RssAggregator.Presentation.Services.Abstractions;
 
 var builder = WebApplication.CreateBuilder();
+
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
+
 builder.Services
     .AddDbContext<AppDbContext>()
     .AddScoped<IAppUserRepository, AppUserRepository>()
@@ -20,16 +26,55 @@ builder.Services
     .AddHostedService<SyncAllFeedsJob>()
     .AddMemoryCache()
     .AddHttpContextAccessor()
-    .AddEndpointsApiExplorer()
-    .AddSwaggerGen();
-    // .AddAuthenticationJwtBearer(signingOptions =>
-    // {
-    //     var singingKey = builder.Configuration["JwtOptions:SecretKey"];
-    //     signingOptions.SigningKey = singingKey;
-    // })
-    // .AddAuthorization()
-    // .SwaggerDocument()
-    // .AddFastEndpoints();
+    .AddEndpointsApiExplorer();
+
+builder.Services.AddScoped<ITokenService, TokenService>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+    {
+        var jwtOptions = builder.Configuration.GetRequiredSection("JwtOptions").Get<JwtOptions>();
+        
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = jwtOptions!.GetSecurityKey()
+        };
+    });
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "RssAggregator", Version = "v1" });
+
+    options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "JWT Authorization header using the Bearer scheme.",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = JwtBearerDefaults.AuthenticationScheme
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = JwtBearerDefaults.AuthenticationScheme
+                }
+            },
+            []
+        }
+    });
+});
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
@@ -48,60 +93,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// app
-//     .UseSwaggerGen()
-//     .UseJwtRevocation<TokenBlacklistCheckerMiddleware>()
-//     .UseAuthentication()
-//     .UseAuthorization()
-//     .UseFastEndpoints();
+app.UseMiddleware<JwtRevocationMiddleware>();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
-
-
-
-/*
-var builder = WebApplication.CreateBuilder(args);
-   
-   // Add services to the container.
-   // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-   builder.Services.AddEndpointsApiExplorer();
-   builder.Services.AddSwaggerGen();
-   
-   var app = builder.Build();
-   
-   // Configure the HTTP request pipeline.
-   if (app.Environment.IsDevelopment())
-   {
-       app.UseSwagger();
-       app.UseSwaggerUI();
-   }
-   
-   app.UseHttpsRedirection();
-   
-   var summaries = new[]
-   {
-       "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-   };
-   
-   app.MapGet("/weatherforecast", () =>
-       {
-           var forecast = Enumerable.Range(1, 5).Select(index =>
-                   new WeatherForecast
-                   (
-                       DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                       Random.Shared.Next(-20, 55),
-                       summaries[Random.Shared.Next(summaries.Length)]
-                   ))
-               .ToArray();
-           return forecast;
-       })
-       .WithName("GetWeatherForecast")
-       .WithOpenApi();
-   
-   app.Run();
-   
-   record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-   {
-       public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-   }
-*/

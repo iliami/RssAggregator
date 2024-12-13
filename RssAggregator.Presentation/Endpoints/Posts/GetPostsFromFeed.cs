@@ -20,7 +20,7 @@ public class GetPostsFromFeed : IEndpoint
             [AsParameters] PaginationParams paginationParams,
             [AsParameters] SortingParams sortingParams,
             [FromServices] IPostRepository postRepository,
-            [FromServices] CancellationToken ct) =>
+            CancellationToken ct) =>
         {
             var posts = await postRepository.GetByFeedIdAsync(
                 id,
@@ -30,6 +30,6 @@ public class GetPostsFromFeed : IEndpoint
             var response = new GetPostsResponse(posts);
             
             return Results.Ok(response);
-        }).WithTags(Tags.Posts);
+        }).AllowAnonymous().WithTags(EndpointsTags.Posts);
     }
 }

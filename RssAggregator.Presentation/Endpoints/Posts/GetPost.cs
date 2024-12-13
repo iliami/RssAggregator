@@ -19,7 +19,7 @@ public class GetPost : IEndpoint
         app.MapGet("posts/{id:guid}", async (
             [FromRoute]    Guid id,
             [FromServices] IPostRepository postRepository,
-            [FromServices] CancellationToken ct) =>
+            CancellationToken ct) =>
         {
             var post = await postRepository.GetByIdAsync(id, ct);
 
@@ -35,6 +35,6 @@ public class GetPost : IEndpoint
                 post.Feed.Id);
             
             return Results.Ok(response);
-        }).WithTags(Tags.Posts);
+        }).RequireAuthorization().WithTags(EndpointsTags.Posts);
     }
 }

@@ -10,16 +10,16 @@ public class Unsubscribe : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete("subscribtions", async (
+        app.MapDelete("subscriptions", async (
             [FromBody] UnsubscribeRequest request,
             [FromServices] ISubscriptionRepository subscriptionRepository,
-            [FromServices] HttpContext context,
-            [FromServices] CancellationToken ct) =>
+            HttpContext context,
+            CancellationToken ct) =>
         {
             var (userId, _) = context.User.ToIdEmailTuple();
             await subscriptionRepository.RemoveAsync(userId, request.FeedId, ct);
             
             context.Response.StatusCode = StatusCodes.Status204NoContent;
-        }).WithTags(Tags.Subscriptions);
+        }).RequireAuthorization().WithTags(EndpointsTags.Subscriptions);
     }
 }
