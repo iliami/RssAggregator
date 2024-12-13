@@ -14,8 +14,6 @@ using RssAggregator.Presentation.Services.Abstractions;
 
 var builder = WebApplication.CreateBuilder();
 
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
-
 builder.Services
     .AddDbContext<AppDbContext>()
     .AddScoped<IAppUserRepository, AppUserRepository>()
@@ -27,6 +25,10 @@ builder.Services
     .AddMemoryCache()
     .AddHttpContextAccessor()
     .AddEndpointsApiExplorer();
+
+
+// Auth
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 
@@ -78,13 +80,14 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
+
+
 var app = builder.Build();
 
 var apiPrefix = app.MapGroup("api/");
 
 app.MapEndpoints(apiPrefix);
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
