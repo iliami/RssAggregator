@@ -11,6 +11,8 @@ public class AppDbContext(IConfiguration configuration) : DbContext
     public DbSet<Feed> Feeds { get; set; }
     public DbSet<Post> Posts { get; set; }
 
+    public DbSet<Category> Categories { get; set; }
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var connectionString =

@@ -7,7 +7,7 @@ public record GetPostResponse(
     Guid Id,
     string Title,
     string Description,
-    string Category,
+    string Categories,
     DateTime PublishDate,
     string Url,
     Guid FeedId);
@@ -29,7 +29,7 @@ public class GetPost : IEndpoint
                 post.Id,
                 post.Title,
                 post.Description,
-                post.Category,
+                string.Join(", ", post.Categories),
                 post.PublishDate,
                 post.Url,
                 post.Feed.Id);

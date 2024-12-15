@@ -84,14 +84,22 @@ public class SyncAllFeedsJob(
                     (memoryCache.TryGetValue<List<string>>($"feed_{feed.Id}", out var urls) &&
                      urls!.All(url => scrapedPost.Link != url)) ||
                     urls is null)
-                .Select(scrapedPost => new Post
+                .Select(scrapedPost =>
                 {
-                    Title = scrapedPost.Title,
-                    Url = scrapedPost.Link,
-                    Description = scrapedPost.Description,
-                    Category = string.Join(", ", scrapedPost.Categories),
-                    PublishDate = DateTime.Parse(scrapedPost.PubDate).ToUniversalTime(),
-                    Feed = feed
+                    var categories = scrapedPost.Categories.Select(c => new Category
+                    {
+                        Name = c
+                    });
+                    
+                    return new Post
+                    {
+                        Title = scrapedPost.Title,
+                        Url = scrapedPost.Link,
+                        Description = scrapedPost.Description,
+                        Categories = categories.ToArray(),
+                        PublishDate = DateTime.Parse(scrapedPost.PubDate).ToUniversalTime(),
+                        Feed = feed
+                    };
                 }).ToList();
 
             if (feed.Name != feedFromInternet.Channel.Title) feed.Name = feedFromInternet.Channel.Title;

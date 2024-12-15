@@ -7,6 +7,6 @@ public class Post
     public required string Description { get; set; }
     public DateTime PublishDate { get; set; }
     public required string Url { get; set; }
-    public required string Category { get; set; }
+    public required ICollection<Category> Categories { get; set; } = [];
     public required Feed Feed { get; set; }
 }
