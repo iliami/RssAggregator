@@ -79,6 +79,8 @@ public class SyncAllFeedsJob(
 
             var feedFromInternet = (RssRoot)serializer.Deserialize(stringReader)!;
 
+            var feedFromInternetCategories = await GetCategoriesFromScrapedFeedAsync(feedFromInternet.Channel, feed, scope, ct);
+            
             var posts = feedFromInternet.Channel.Items
                 .Where(scrapedPost =>
                     (memoryCache.TryGetValue<List<string>>($"feed_{feed.Id}", out var urls) &&
@@ -86,26 +88,31 @@ public class SyncAllFeedsJob(
                     urls is null)
                 .Select(scrapedPost =>
                 {
-                    var categories = scrapedPost.Categories.Select(c => new Category
-                    {
-                        Name = c
-                    });
+                    var scrapedPostCategories = feedFromInternetCategories
+                        .Where(c => scrapedPost.Categories.Contains(c.Name)).ToArray();
+
+                    var scrapedPostPublishDate = DateTime.Parse(scrapedPost.PubDate).ToUniversalTime();
                     
                     return new Post
                     {
                         Title = scrapedPost.Title,
                         Url = scrapedPost.Link,
                         Description = scrapedPost.Description,
-                        Categories = categories.ToArray(),
-                        PublishDate = DateTime.Parse(scrapedPost.PubDate).ToUniversalTime(),
+                        Categories = scrapedPostCategories,
+                        PublishDate = scrapedPostPublishDate,
                         Feed = feed
                     };
                 }).ToList();
 
-            if (feed.Name != feedFromInternet.Channel.Title) feed.Name = feedFromInternet.Channel.Title;
+            if (feed.Name != feedFromInternet.Channel.Title)
+            {
+                feed.Name = feedFromInternet.Channel.Title;
+            }
 
             if (feed.Description != feedFromInternet.Channel.Description)
+            {
                 feed.Description = feedFromInternet.Channel.Description;
+            }
 
             if (posts.Count != 0)
             {
@@ -115,10 +122,16 @@ public class SyncAllFeedsJob(
 
                 var key = $"feed_{feed.Id}";
                 foreach (var post in posts)
+                {
                     if (memoryCache.TryGetValue<List<string>>(key, out var urls))
+                    {
                         urls!.Add(post.Url);
+                    }
                     else
+                    {
                         memoryCache.Set<List<string>>(key, [post.Url]);
+                    }
+                }
             }
 
             feed.LastFetchedAt = DateTime.UtcNow;
@@ -129,5 +142,37 @@ public class SyncAllFeedsJob(
         {
             logger.LogError(e, "Error fetching posts from the feed {feedId}.", feedId);
         }
+    }
+
+    private static async Task<Category[]> GetCategoriesFromScrapedFeedAsync(RssFeed feedFromInternet, Feed storedFeed, IServiceScope scope, CancellationToken ct = default)
+    {
+        var categoryRepository = scope.ServiceProvider.GetRequiredService<ICategoryRepository>();
+        var allFeedCategories = await categoryRepository.GetByFeedIdWithTrackingAsync(storedFeed.Id, ct);
+        
+        var categories = feedFromInternet.Items
+            .Select(scrapedPost => scrapedPost.Categories)
+            .Aggregate(
+                (acc, seq) => acc.Concat(seq).ToList())
+            .Distinct()
+            .Select(categoryName =>
+            {
+                var storedCategory = allFeedCategories.FirstOrDefault(x => x.Name == categoryName);
+                if (storedCategory is not null)
+                {
+                    return storedCategory;
+                }
+
+                var newCategory = new Category
+                {
+                    Name = categoryName,
+                    Feed = storedFeed
+                };
+                return newCategory;
+            })
+            .ToArray();
+        
+        await categoryRepository.AttachRangeAsync(categories, storedFeed.Id, ct);
+        
+        return categories;
     }
 }

@@ -13,5 +13,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         builder.Property(x => x.Name).HasMaxLength(64);
     
         builder.HasIndex(x => x.Name).IsUnique();
+
+        builder.HasOne(c => c.Feed).WithMany();
     }
 }

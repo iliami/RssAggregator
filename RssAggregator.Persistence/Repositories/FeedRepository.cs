@@ -30,7 +30,7 @@ public class FeedRepository(AppDbContext DbContext) : IFeedRepository
 
     public Task<Feed?> GetByIdAsync(Guid id, CancellationToken ct = default)
     {
-        return DbContext.Feeds.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id, ct);
+        return DbContext.Feeds.FirstOrDefaultAsync(f => f.Id == id, ct);
     }
 
     public Task<PagedResult<FeedDto>> GetByUserIdAsync(Guid userId, PaginationParams? paginationParams = null,

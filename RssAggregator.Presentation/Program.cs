@@ -20,6 +20,7 @@ builder.Services
     .AddScoped<ISubscriptionRepository, SubscriptionRepository>()
     .AddScoped<IFeedRepository, FeedRepository>()
     .AddScoped<IPostRepository, PostRepository>()
+    .AddScoped<ICategoryRepository, CategoryRepository>()
     .AddHttpClient()
     .AddHostedService<SyncAllFeedsJob>()
     .AddMemoryCache()
