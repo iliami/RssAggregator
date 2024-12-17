@@ -1,8 +1,11 @@
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RssAggregator.Application.Abstractions.Repositories;
+using RssAggregator.Application.Models.Params;
 using RssAggregator.Infrastructure.BackgroundJobs.SyncFeedsService;
 using RssAggregator.Persistence;
 using RssAggregator.Persistence.Repositories;
@@ -77,6 +80,11 @@ builder.Services.AddSwaggerGen(options =>
             []
         }
     });
+});
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter<SortDirection>(JsonNamingPolicy.CamelCase));
 });
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
