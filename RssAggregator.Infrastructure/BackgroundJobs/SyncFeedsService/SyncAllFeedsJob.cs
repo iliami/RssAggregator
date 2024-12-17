@@ -113,6 +113,7 @@ public class SyncAllFeedsJob(
                     var newCategory = new Category
                     {
                         Name = categoryName,
+                        NormalizedName = categoryName.ToLowerInvariant(),
                         Feed = storedFeed
                     };
                     return newCategory;

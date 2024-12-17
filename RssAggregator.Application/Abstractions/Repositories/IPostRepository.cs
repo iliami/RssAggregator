@@ -10,13 +10,13 @@ public interface IPostRepository
     Task<List<PostUrlDto>> GetPostsUrlsAsync(CancellationToken ct = default);
 
     Task<PagedResult<PostDto>> GetPostsAsync(PaginationParams? paginationParams = null,
-        SortingParams? sortingParams = null, CancellationToken ct = default);
+        SortingParams? sortingParams = null, PostFilterParams? filterParams = null, CancellationToken ct = default);
 
     Task<PagedResult<PostDto>> GetByFeedIdAsync(Guid feedId, PaginationParams? paginationParams = null,
-        SortingParams? sortingParams = null, CancellationToken ct = default);
+        SortingParams? sortingParams = null, PostFilterParams? filterParams = null, CancellationToken ct = default);
 
     Task<PagedResult<PostDto>> GetByUserIdAsync(Guid userId, PaginationParams? paginationParams = null,
-        SortingParams? sortingParams = null, CancellationToken ct = default);
+        SortingParams? sortingParams = null, PostFilterParams? filterParams = null, CancellationToken ct = default);
 
     Task AttachRangeAsync(IEnumerable<Post> posts, CancellationToken ct = default);
 }

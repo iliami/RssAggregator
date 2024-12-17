@@ -81,11 +81,16 @@ namespace RssAggregator.Persistence.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
+                    b.Property<string>("NormalizedName")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("FeedId");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("NormalizedName")
                         .IsUnique();
 
                     b.ToTable("Categories");

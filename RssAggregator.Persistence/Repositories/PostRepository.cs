@@ -29,31 +29,52 @@ public class PostRepository(AppDbContext DbContext) : IPostRepository
     }
 
     public Task<PagedResult<PostDto>> GetPostsAsync(PaginationParams? paginationParams = null,
-        SortingParams? sortingParams = null, CancellationToken ct = default)
+        SortingParams? sortingParams = null, PostFilterParams? filterParams = null, CancellationToken ct = default)
     {
         return DbContext.Posts.AsNoTracking()
+            .WithFiltration(filterParams)
             .WithSorting(sortingParams, PostKeySelector)
-            .Select(p => new PostDto(p.Id, p.Title, string.Join(", ", p.Categories), p.PublishDate, p.Url, p.Feed.Id))
+            .Select(p => new PostDto(
+                p.Id, 
+                p.Title, 
+                p.Categories.Select(c => c.Name).ToArray(), 
+                p.PublishDate, 
+                p.Url, 
+                p.Feed.Id))
             .ToPagedResultAsync(paginationParams, ct);
     }
 
     public Task<PagedResult<PostDto>> GetByFeedIdAsync(Guid feedId, PaginationParams? paginationParams = null,
-        SortingParams? sortingParams = null, CancellationToken ct = default)
+        SortingParams? sortingParams = null, PostFilterParams? filterParams = null, CancellationToken ct = default)
     {
         return DbContext.Posts.AsNoTracking()
             .Where(p => p.Feed.Id == feedId)
+            .WithFiltration(filterParams)
             .WithSorting(sortingParams, PostKeySelector)
-            .Select(p => new PostDto(p.Id, p.Title, string.Join(", ", p.Categories), p.PublishDate, p.Url, p.Feed.Id))
+            .Select(p => new PostDto(
+                p.Id, 
+                p.Title, 
+                p.Categories.Select(c => c.Name).ToArray(), 
+                p.PublishDate, 
+                p.Url, 
+                p.Feed.Id))
             .ToPagedResultAsync(paginationParams, ct);
     }
 
     public Task<PagedResult<PostDto>> GetByUserIdAsync(Guid userId, PaginationParams? paginationParams = null,
-        SortingParams? sortingParams = null, CancellationToken ct = default)
+        SortingParams? sortingParams = null, PostFilterParams? filterParams = null, CancellationToken ct = default)
     {
         return DbContext.Posts.AsNoTracking()
             .Where(p => p.Feed.Subscribers.Any(u => u.Id == userId))
+            .WithFiltration(filterParams)
             .WithSorting(sortingParams, PostKeySelector)
-            .Select(p => new PostDto(p.Id, p.Title, string.Join(", ", p.Categories), p.PublishDate, p.Url, p.Feed.Id))
+            .Select(p => new PostDto(
+                p.Id, 
+                p.Title, 
+                p.Categories.Select(c => c.Name).ToArray(), 
+                p.PublishDate, 
+                p.Url, 
+                p.Feed.Id))
             .ToPagedResultAsync(paginationParams, ct);
     }
 
