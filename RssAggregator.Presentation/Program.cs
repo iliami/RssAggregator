@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RssAggregator.Application.Abstractions.Repositories;
+using RssAggregator.Application.DependencyInjection;
 using RssAggregator.Application.Models.Params;
 using RssAggregator.Infrastructure.BackgroundJobs.SyncFeedsService;
 using RssAggregator.Persistence;
+using RssAggregator.Persistence.DependencyInjection;
 using RssAggregator.Persistence.Repositories;
 using RssAggregator.Presentation.Extensions;
 using RssAggregator.Presentation.Middleware;
@@ -18,6 +20,8 @@ using RssAggregator.Presentation.Services.Abstractions;
 var builder = WebApplication.CreateBuilder();
 
 builder.Services
+    .AddApplication()
+    .AddPersistence()
     .AddDbContext<AppDbContext>()
     .AddScoped<IAppUserRepository, AppUserRepository>()
     .AddScoped<ISubscriptionRepository, SubscriptionRepository>()

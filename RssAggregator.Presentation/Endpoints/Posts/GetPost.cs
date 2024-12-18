@@ -1,16 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using RssAggregator.Application.Abstractions.Repositories;
+using RssAggregator.Application.UseCases.Posts.GetPost;
 
 namespace RssAggregator.Presentation.Endpoints.Posts;
-
-public record GetPostResponse(
-    Guid Id,
-    string Title,
-    string Description,
-    string Categories,
-    DateTime PublishDate,
-    string Url,
-    Guid FeedId);
 
 public class GetPost : IEndpoint
 {
@@ -18,23 +9,13 @@ public class GetPost : IEndpoint
     {
         app.MapGet("posts/{id:guid}", async (
             [FromRoute]    Guid id,
-            [FromServices] IPostRepository postRepository,
+            [FromServices] IGetPostUseCase useCase,
             CancellationToken ct) =>
         {
-            var post = await postRepository.GetByIdAsync(id, ct);
+            var request = new GetPostRequest(id);
+            var response = await useCase.Handle(request, ct);
 
-            if (post is null) return Results.NotFound();
-
-            var response = new GetPostResponse(
-                post.Id,
-                post.Title,
-                post.Description,
-                string.Join(", ", post.Categories),
-                post.PublishDate,
-                post.Url,
-                post.Feed.Id);
-            
-            return Results.Ok(response);
-        }).RequireAuthorization().WithTags(EndpointsTags.Posts);
+            return response.Id.Equals(Guid.Empty) ? Results.NotFound() : Results.Ok(response);
+        }).AllowAnonymous().WithTags(EndpointsTags.Posts);
     }
 }
