@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssAggregator.Application.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssAggregator.Persistence.DependencyInjection", "RssAggregator.Persistence.DependencyInjection\RssAggregator.Persistence.DependencyInjection.csproj", "{387D5339-655D-4658-AA09-F5EC966EA5A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssAggregator.Application.Tests", "RssAggregator.Application.Tests\RssAggregator.Application.Tests.csproj", "{2E392B3B-A214-43F6-BA4F-2B2A7FAF279D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{387D5339-655D-4658-AA09-F5EC966EA5A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{387D5339-655D-4658-AA09-F5EC966EA5A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{387D5339-655D-4658-AA09-F5EC966EA5A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E392B3B-A214-43F6-BA4F-2B2A7FAF279D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E392B3B-A214-43F6-BA4F-2B2A7FAF279D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E392B3B-A214-43F6-BA4F-2B2A7FAF279D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E392B3B-A214-43F6-BA4F-2B2A7FAF279D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8CCDB799-6EE3-4AD6-8BB0-75F82D48FA25} = {053DBD70-03E0-480F-AC98-454518A99BDF}
