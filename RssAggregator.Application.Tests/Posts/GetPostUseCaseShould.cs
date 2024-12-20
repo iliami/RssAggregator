@@ -1,17 +1,18 @@
 using FluentAssertions;
-using RssAggregator.Application.UseCases.Posts.GetPost;
 using NSubstitute;
+using RssAggregator.Application.UseCases.Posts.GetPost;
 using RssAggregator.Domain.Entities;
 
-namespace RssAggregator.Application.Tests;
+namespace RssAggregator.Application.Tests.Posts;
 
 public class GetPostUseCaseShould
 {
-    private readonly IGetPostUseCase _sut;
-    private readonly IGetPostStorage _storage = Substitute.For<IGetPostStorage>();
-    
+    private readonly GetPostUseCase _sut;
+    private readonly IGetPostStorage _storage;
+
     public GetPostUseCaseShould()
     {
+        _storage = Substitute.For<IGetPostStorage>();
         _sut = new GetPostUseCase(_storage);
     }
     
@@ -20,7 +21,7 @@ public class GetPostUseCaseShould
     {
         var postId = Guid.Parse("26060E88-B055-416A-97ED-6CBB5AB8ACF8");
         var request = new GetPostRequest(postId);
-        _storage.TryGetAsync(postId).Returns((false, null));
+        _storage.TryGetAsync(postId, Arg.Any<CancellationToken>()).Returns((false, null));
         
         var actual = await _sut.Handle(request, CancellationToken.None);
         
@@ -58,7 +59,7 @@ public class GetPostUseCaseShould
             post.Url,
             post.Feed.Id);
         var request = new GetPostRequest(postId);
-        _storage.TryGetAsync(postId).Returns((true, post));
+        _storage.TryGetAsync(postId, Arg.Any<CancellationToken>()).Returns((true, post));
         
         var actual = await _sut.Handle(request, CancellationToken.None);
         
