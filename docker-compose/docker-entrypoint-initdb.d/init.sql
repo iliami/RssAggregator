@@ -11,7 +11,7 @@ DO $EF$
 BEGIN
     IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241111064041_InitialCreate') THEN
     INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-    VALUES ('20241111064041_InitialCreate', '8.0.10');
+    VALUES ('20241111064041_InitialCreate', '8.0.11');
     END IF;
 END $EF$;
 COMMIT;
@@ -36,7 +36,7 @@ DO $EF$
 BEGIN
     IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241111111512_Add-AppUser') THEN
     INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-    VALUES ('20241111111512_Add-AppUser', '8.0.10');
+    VALUES ('20241111111512_Add-AppUser', '8.0.11');
     END IF;
 END $EF$;
 COMMIT;
@@ -105,7 +105,7 @@ DO $EF$
 BEGIN
     IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241113062933_Add-Feed-Configure-AppUser') THEN
     INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-    VALUES ('20241113062933_Add-Feed-Configure-AppUser', '8.0.10');
+    VALUES ('20241113062933_Add-Feed-Configure-AppUser', '8.0.11');
     END IF;
 END $EF$;
 COMMIT;
@@ -138,7 +138,7 @@ DO $EF$
 BEGIN
     IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241113131405_Add-Subscriptions') THEN
     INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-    VALUES ('20241113131405_Add-Subscriptions', '8.0.10');
+    VALUES ('20241113131405_Add-Subscriptions', '8.0.11');
     END IF;
 END $EF$;
 COMMIT;
@@ -206,7 +206,7 @@ DO $EF$
 BEGIN
     IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241113142548_Configure-Subscriptions') THEN
     INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-    VALUES ('20241113142548_Configure-Subscriptions', '8.0.10');
+    VALUES ('20241113142548_Configure-Subscriptions', '8.0.11');
     END IF;
 END $EF$;
 COMMIT;
@@ -239,7 +239,7 @@ DO $EF$
 BEGIN
     IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241114135605_Configure-Posts') THEN
     INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-    VALUES ('20241114135605_Configure-Posts', '8.0.10');
+    VALUES ('20241114135605_Configure-Posts', '8.0.11');
     END IF;
 END $EF$;
 COMMIT;
@@ -258,7 +258,7 @@ DO $EF$
 BEGIN
     IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241114161044_Configure-Feeds') THEN
     INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-    VALUES ('20241114161044_Configure-Feeds', '8.0.10');
+    VALUES ('20241114161044_Configure-Feeds', '8.0.11');
     END IF;
 END $EF$;
 COMMIT;
@@ -277,7 +277,172 @@ DO $EF$
 BEGIN
     IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241127041354_Configure-Posts-AddedCategory') THEN
     INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-    VALUES ('20241127041354_Configure-Posts-AddedCategory', '8.0.10');
+    VALUES ('20241127041354_Configure-Posts-AddedCategory', '8.0.11');
+    END IF;
+END $EF$;
+COMMIT;
+
+START TRANSACTION;
+
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241209174627_TakingOut-EntityConfigurations--Remove-SubscriptionEntity') THEN
+    ALTER TABLE "Subscriptions" DROP CONSTRAINT "PK_Subscriptions";
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241209174627_TakingOut-EntityConfigurations--Remove-SubscriptionEntity') THEN
+    DROP INDEX "IX_Subscriptions_FeedId";
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241209174627_TakingOut-EntityConfigurations--Remove-SubscriptionEntity') THEN
+    ALTER TABLE "Subscriptions" DROP COLUMN "SubscribedAt";
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241209174627_TakingOut-EntityConfigurations--Remove-SubscriptionEntity') THEN
+    ALTER TABLE "Subscriptions" ADD CONSTRAINT "PK_Subscriptions" PRIMARY KEY ("FeedId", "AppUserId");
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241209174627_TakingOut-EntityConfigurations--Remove-SubscriptionEntity') THEN
+    CREATE INDEX "IX_Subscriptions_AppUserId" ON "Subscriptions" ("AppUserId");
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241209174627_TakingOut-EntityConfigurations--Remove-SubscriptionEntity') THEN
+    CREATE UNIQUE INDEX "IX_AppUsers_Email" ON "AppUsers" ("Email");
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241209174627_TakingOut-EntityConfigurations--Remove-SubscriptionEntity') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20241209174627_TakingOut-EntityConfigurations--Remove-SubscriptionEntity', '8.0.11');
+    END IF;
+END $EF$;
+COMMIT;
+
+START TRANSACTION;
+
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241215175540_Add-CategoriesToPost') THEN
+    ALTER TABLE "Posts" DROP COLUMN "Category";
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241215175540_Add-CategoriesToPost') THEN
+    CREATE TABLE "Categories" (
+        "Id" uuid NOT NULL,
+        "Name" character varying(64) NOT NULL,
+        CONSTRAINT "PK_Categories" PRIMARY KEY ("Id")
+    );
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241215175540_Add-CategoriesToPost') THEN
+    CREATE TABLE "PostCategory" (
+        "CategoryId" uuid NOT NULL,
+        "PostId" uuid NOT NULL,
+        CONSTRAINT "PK_PostCategory" PRIMARY KEY ("CategoryId", "PostId"),
+        CONSTRAINT "FK_PostCategory_Categories_CategoryId" FOREIGN KEY ("CategoryId") REFERENCES "Categories" ("Id") ON DELETE CASCADE,
+        CONSTRAINT "FK_PostCategory_Posts_PostId" FOREIGN KEY ("PostId") REFERENCES "Posts" ("Id") ON DELETE CASCADE
+    );
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241215175540_Add-CategoriesToPost') THEN
+    CREATE UNIQUE INDEX "IX_Categories_Name" ON "Categories" ("Name");
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241215175540_Add-CategoriesToPost') THEN
+    CREATE INDEX "IX_PostCategory_PostId" ON "PostCategory" ("PostId");
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241215175540_Add-CategoriesToPost') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20241215175540_Add-CategoriesToPost', '8.0.11');
+    END IF;
+END $EF$;
+COMMIT;
+
+START TRANSACTION;
+
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241217163819_Configure-Category') THEN
+    DROP INDEX "IX_Categories_Name";
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241217163819_Configure-Category') THEN
+    ALTER TABLE "Categories" ADD "FeedId" uuid NOT NULL DEFAULT '00000000-0000-0000-0000-000000000000';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241217163819_Configure-Category') THEN
+    ALTER TABLE "Categories" ADD "NormalizedName" character varying(64) NOT NULL DEFAULT '';
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241217163819_Configure-Category') THEN
+    CREATE INDEX "IX_Categories_FeedId" ON "Categories" ("FeedId");
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241217163819_Configure-Category') THEN
+    CREATE UNIQUE INDEX "IX_Categories_NormalizedName" ON "Categories" ("NormalizedName");
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241217163819_Configure-Category') THEN
+    ALTER TABLE "Categories" ADD CONSTRAINT "FK_Categories_Feeds_FeedId" FOREIGN KEY ("FeedId") REFERENCES "Feeds" ("Id") ON DELETE CASCADE;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20241217163819_Configure-Category') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20241217163819_Configure-Category', '8.0.11');
     END IF;
 END $EF$;
 COMMIT;
