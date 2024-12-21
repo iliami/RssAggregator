@@ -4,7 +4,7 @@ namespace RssAggregator.Application.Models.Params;
 
 public class SortingParams
 {
-    public string? SortBy { get; set; }
+    [DefaultValue("")] public string SortBy { get; set; } = string.Empty;
     [DefaultValue("None")] public SortDirection SortDirection { get; set; } = SortDirection.None;
 }
 

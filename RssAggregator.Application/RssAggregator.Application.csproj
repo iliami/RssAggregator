@@ -10,4 +10,26 @@
         <ProjectReference Include="..\RssAggregator.Domain\RssAggregator.Domain.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="FluentValidation" Version="11.11.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="UseCases\Posts\GetPosts\GetPostsRequestValidator.cs">
+        <DependentUpon>GetPostsRequest.cs</DependentUpon>
+      </Compile>
+      <Compile Update="UseCases\Posts\GetPost\GetPostRequestValidator.cs">
+        <DependentUpon>GetPostRequest.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Models\Params\PaginationParamsValidator.cs">
+        <DependentUpon>PaginationParams.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Models\Params\PostFilterParamsValidator.cs">
+        <DependentUpon>PostFilterParams.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Models\Params\SortingParamsValidator.cs">
+        <DependentUpon>SortingParams.cs</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

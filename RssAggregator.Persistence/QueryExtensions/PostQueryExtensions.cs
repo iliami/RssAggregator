@@ -5,9 +5,9 @@ namespace RssAggregator.Persistence.QueryExtensions;
 
 public static class PostQueryExtensions
 {
-    public static IQueryable<Post> WithFiltration(this IQueryable<Post> query, PostFilterParams? filterParams = null)
+    public static IQueryable<Post> WithFiltration(this IQueryable<Post> query, PostFilterParams filterParams)
     {
-        if (filterParams?.Categories is null || filterParams.Categories.Length == 0)
+        if (filterParams.Categories.Length == 0)
         {
             return query;
         }

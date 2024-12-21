@@ -1,9 +1,13 @@
+using FluentValidation;
+
 namespace RssAggregator.Application.UseCases.Posts.GetPost;
 
-public class GetPostUseCase(IGetPostStorage storage) : IGetPostUseCase
+public class GetPostUseCase(IGetPostStorage storage, IValidator<GetPostRequest> validator) : IGetPostUseCase
 {
     public async Task<GetPostResponse> Handle(GetPostRequest request, CancellationToken ct = default)
     {
+        validator.ValidateAndThrow(request);
+        
         var (success, post) = await storage.TryGetAsync(request.Id, ct);
         if (!success)
         {

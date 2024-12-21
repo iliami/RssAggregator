@@ -11,8 +11,11 @@ public class GetPostsStorage(AppDbContext dbContext) : IGetPostsStorage
 {
     private static PostKeySelector PostKeySelector { get; } = new();
 
-    public Task<PagedResult<PostDto>> GetPosts(PaginationParams? paginationParams = null, SortingParams? sortingParams = null,
-        PostFilterParams? filterParams = null, CancellationToken ct = default)
+    public Task<PagedResult<PostDto>> GetPosts(
+        PaginationParams paginationParams, 
+        SortingParams sortingParams,
+        PostFilterParams filterParams, 
+        CancellationToken ct = default)
     {
         return dbContext.Posts.AsNoTracking()
             .WithFiltration(filterParams)

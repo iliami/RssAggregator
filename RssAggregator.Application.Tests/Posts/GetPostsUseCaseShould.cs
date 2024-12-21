@@ -1,4 +1,5 @@
 using FluentAssertions;
+using FluentValidation;
 using NSubstitute;
 using RssAggregator.Application.Models.DTO;
 using RssAggregator.Application.Models.Params;
@@ -13,14 +14,19 @@ public class GetPostsUseCaseShould
 
     public GetPostsUseCaseShould()
     {
+        var validator = Substitute.For<IValidator<GetPostsRequest>>();
         _storage = Substitute.For<IGetPostsStorage>();
-        _sut = new GetPostsUseCase(_storage);
+        
+        _sut = new GetPostsUseCase(_storage, validator);
     }
 
     [Fact]
     public async Task ReturnResponseWithoutPosts_WhenNoPosts()
     {
-        var request = new GetPostsRequest();
+        var request = new GetPostsRequest(
+            new PaginationParams { Page = 1, PageSize = int.MaxValue },
+            new SortingParams { SortBy = "PublishDate", SortDirection = SortDirection.Desc },
+            new PostFilterParams { Categories = [] });
         _storage
             .GetPosts(
                 Arg.Any<PaginationParams>(),
@@ -45,7 +51,7 @@ public class GetPostsUseCaseShould
     {
         var posts = GeneratePosts(20);
         var request = new GetPostsRequest(
-            new PaginationParams { Page = 1, PageSize = posts.Length },
+            new PaginationParams { Page = 1, PageSize = int.MaxValue },
             new SortingParams { SortBy = "PublishDate", SortDirection = SortDirection.Desc },
             new PostFilterParams { Categories = [] });
         _storage

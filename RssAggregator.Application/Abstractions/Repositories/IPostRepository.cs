@@ -9,8 +9,8 @@ public interface IPostRepository
     Task<Post?> GetByIdAsync(Guid id, CancellationToken ct = default);
     Task<List<PostUrlDto>> GetPostsUrlsAsync(CancellationToken ct = default);
 
-    Task<PagedResult<PostDto>> GetPostsAsync(PaginationParams? paginationParams = null,
-        SortingParams? sortingParams = null, PostFilterParams? filterParams = null, CancellationToken ct = default);
+    Task<PagedResult<PostDto>> GetPostsAsync(PaginationParams paginationParams,
+        SortingParams sortingParams, PostFilterParams filterParams, CancellationToken ct = default);
 
     Task<PagedResult<PostDto>> GetByFeedIdAsync(Guid feedId, PaginationParams? paginationParams = null,
         SortingParams? sortingParams = null, PostFilterParams? filterParams = null, CancellationToken ct = default);

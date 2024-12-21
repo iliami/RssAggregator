@@ -28,8 +28,11 @@ public class PostRepository(AppDbContext DbContext) : IPostRepository
             .ToListAsync(ct);
     }
 
-    public Task<PagedResult<PostDto>> GetPostsAsync(PaginationParams? paginationParams = null,
-        SortingParams? sortingParams = null, PostFilterParams? filterParams = null, CancellationToken ct = default)
+    public Task<PagedResult<PostDto>> GetPostsAsync(
+        PaginationParams paginationParams,
+        SortingParams sortingParams,
+        PostFilterParams filterParams, 
+        CancellationToken ct = default)
     {
         return DbContext.Posts.AsNoTracking()
             .WithFiltration(filterParams)

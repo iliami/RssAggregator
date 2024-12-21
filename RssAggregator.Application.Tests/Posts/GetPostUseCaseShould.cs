@@ -1,4 +1,5 @@
 using FluentAssertions;
+using FluentValidation;
 using NSubstitute;
 using RssAggregator.Application.UseCases.Posts.GetPost;
 using RssAggregator.Domain.Entities;
@@ -12,27 +13,50 @@ public class GetPostUseCaseShould
 
     public GetPostUseCaseShould()
     {
+        var validator = Substitute.For<IValidator<GetPostRequest>>();
         _storage = Substitute.For<IGetPostStorage>();
-        _sut = new GetPostUseCase(_storage);
+        
+        _sut = new GetPostUseCase(_storage, validator);
     }
     
     [Fact]
     public async Task ReturnEmptyGetPostResponse_WhenPostIsNotFound()
     {
         var postId = Guid.Parse("26060E88-B055-416A-97ED-6CBB5AB8ACF8");
+        
         var request = new GetPostRequest(postId);
         _storage.TryGetAsync(postId, Arg.Any<CancellationToken>()).Returns((false, null));
+        var expected = GetPostResponse.Empty;
         
         var actual = await _sut.Handle(request, CancellationToken.None);
         
-        actual.Should().BeEquivalentTo(GetPostResponse.Empty);
+        actual.Should().BeEquivalentTo(expected);
     }
     
     [Fact]
-    public async Task ReturnGetPostResponse_WhenPostIsFound()
+    public async Task ReturnSomeGetPostResponse_WhenPostIsFound()
     {
         var postId = Guid.Parse("6AE7CCA2-3D4C-4C61-B5C7-F1955409C161");
-        var post = new Post
+        var post = CreatePost(postId);
+        
+        var request = new GetPostRequest(postId);
+        _storage.TryGetAsync(postId, Arg.Any<CancellationToken>()).Returns((true, post));
+        var expected = new GetPostResponse(
+            post.Id,
+            post.Title,
+            post.Description,
+            post.Categories.Select(c => c.Name).ToArray(),
+            post.PublishDate,
+            post.Url,
+            post.Feed.Id);
+        
+        var actual = await _sut.Handle(request, CancellationToken.None);
+        
+        actual.Should().BeEquivalentTo(expected);
+    }
+
+    private static Post CreatePost(Guid postId) =>
+        new()
         {
             Id = postId,
             Title = "Title",
@@ -50,19 +74,4 @@ public class GetPostUseCaseShould
                 Subscribers = []
             }
         };
-        var expected = new GetPostResponse(
-            post.Id,
-            post.Title,
-            post.Description,
-            post.Categories.Select(c => c.Name).ToArray(),
-            post.PublishDate,
-            post.Url,
-            post.Feed.Id);
-        var request = new GetPostRequest(postId);
-        _storage.TryGetAsync(postId, Arg.Any<CancellationToken>()).Returns((true, post));
-        
-        var actual = await _sut.Handle(request, CancellationToken.None);
-        
-        actual.Should().BeEquivalentTo(expected);
-    }
 }
