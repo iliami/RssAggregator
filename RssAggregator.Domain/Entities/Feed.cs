@@ -8,5 +8,5 @@ public class Feed
     public string Description { get; set; } = string.Empty;
     public DateTimeOffset? LastFetchedAt { get; set; }
     public ICollection<AppUser> Subscribers { get; set; } = [];
-    public ICollection<Post> Posts { get; } = [];
+    public ICollection<Post> Posts { get; set; } = [];
 }

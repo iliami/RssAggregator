@@ -1,6 +1,7 @@
-using System.Reflection;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using RssAggregator.Application.UseCases.Feeds.GetFeed;
+using RssAggregator.Application.UseCases.Posts.AddPostsInFeed;
 using RssAggregator.Application.UseCases.Posts.GetPost;
 using RssAggregator.Application.UseCases.Posts.GetPosts;
 
@@ -12,5 +13,8 @@ public static class ServiceCollectionExtensions
         => services
             .AddValidatorsFromAssemblyContaining<GetPostUseCase>()
             .AddScoped<IGetPostUseCase, GetPostUseCase>()
-            .AddScoped<IGetPostsUseCase, GetPostsUseCase>();
+            .AddScoped<IGetPostsUseCase, GetPostsUseCase>()
+            .AddScoped<IAddPostsInFeedUseCase, AddPostsInFeedUseCase>()
+        
+            .AddScoped<IGetFeedUseCase, GetFeedUseCase>();
 }

@@ -8,7 +8,7 @@ public class AddPostsInFeedUseCase(IAddPostsInFeedStorage storage, IValidator<Ad
     {
         await validator.ValidateAndThrowAsync(request, ct);
 
-        var isFeedExists = await storage.IsFeedExists(request.Feed.Id);
+        var isFeedExists = await storage.IsFeedExists(request.Feed.Id, ct);
 
         if (!isFeedExists)
         {
