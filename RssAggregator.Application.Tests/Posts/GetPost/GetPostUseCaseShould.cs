@@ -4,7 +4,7 @@ using NSubstitute;
 using RssAggregator.Application.UseCases.Posts.GetPost;
 using RssAggregator.Domain.Entities;
 
-namespace RssAggregator.Application.Tests.Posts;
+namespace RssAggregator.Application.Tests.Posts.GetPost;
 
 public class GetPostUseCaseShould
 {

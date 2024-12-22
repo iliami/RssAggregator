@@ -5,7 +5,7 @@ using RssAggregator.Application.Models.DTO;
 using RssAggregator.Application.Models.Params;
 using RssAggregator.Application.UseCases.Posts.GetPosts;
 
-namespace RssAggregator.Application.Tests.Posts;
+namespace RssAggregator.Application.Tests.Posts.GetPosts;
 
 public class GetPostsUseCaseShould
 {

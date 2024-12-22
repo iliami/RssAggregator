@@ -8,12 +8,18 @@ public class GetPostsRequestValidator : AbstractValidator<GetPostsRequest>
     public GetPostsRequestValidator()
     {
         RuleFor(r => r.PaginationParams)
-            .NotNull().SetValidator(new PaginationParamsValidator());
+            .Cascade(CascadeMode.Stop)
+            .NotNull()
+            .SetValidator(new PaginationParamsValidator());
         
         RuleFor(r => r.SortingParams)
-            .NotNull().SetValidator(new SortingParamsValidator());
+            .Cascade(CascadeMode.Stop)
+            .NotNull()
+            .SetValidator(new SortingParamsValidator());
         
         RuleFor(r => r.FilterParams)
-            .NotNull().SetValidator(new PostFilterParamsValidator());
+            .Cascade(CascadeMode.Stop)
+            .NotNull()
+            .SetValidator(new PostFilterParamsValidator());
     }
 }
