@@ -16,10 +16,7 @@ public class GetPosts : IEndpoint
             [FromServices] IGetPostsUseCase useCase,
             CancellationToken ct) =>
         {
-            var filterParams = new PostFilterParams
-            {
-                Categories = categories ?? []
-            };
+            var filterParams = new PostFilterParams(categories ?? []);
             var request = new GetPostsRequest(
                 paginationParams,
                 sortingParams,

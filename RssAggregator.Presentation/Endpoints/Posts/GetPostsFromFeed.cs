@@ -21,10 +21,7 @@ public class GetPostsFromFeed : IEndpoint
             [FromServices] IPostRepository postRepository,
             CancellationToken ct) =>
         {
-            var postFilterParams = new PostFilterParams
-            {
-                Categories = categories ?? []
-            };
+            var postFilterParams = new PostFilterParams(categories ?? []);
 
             var posts = await postRepository.GetByFeedIdAsync(
                 id,

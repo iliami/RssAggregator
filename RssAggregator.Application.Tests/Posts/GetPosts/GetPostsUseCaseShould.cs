@@ -24,9 +24,9 @@ public class GetPostsUseCaseShould
     public async Task ReturnResponseWithoutPosts_WhenNoPosts()
     {
         var request = new GetPostsRequest(
-            new PaginationParams { Page = 1, PageSize = int.MaxValue },
-            new SortingParams { SortBy = "PublishDate", SortDirection = SortDirection.Desc },
-            new PostFilterParams { Categories = [] });
+            new PaginationParams(1, int.MaxValue),
+            new SortingParams("PublishDate", SortDirection.Desc),
+            new PostFilterParams([]));
         _storage
             .GetPosts(
                 Arg.Any<PaginationParams>(),
@@ -51,9 +51,9 @@ public class GetPostsUseCaseShould
     {
         var posts = GeneratePosts(20);
         var request = new GetPostsRequest(
-            new PaginationParams { Page = 1, PageSize = int.MaxValue },
+            new PaginationParams(1, int.MaxValue),
             new SortingParams { SortBy = "PublishDate", SortDirection = SortDirection.Desc },
-            new PostFilterParams { Categories = [] });
+            new PostFilterParams([]));
         _storage
             .GetPosts(
                 Arg.Any<PaginationParams>(),

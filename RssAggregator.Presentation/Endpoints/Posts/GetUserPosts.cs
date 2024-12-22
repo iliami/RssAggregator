@@ -22,20 +22,17 @@ public class GetUserPosts : IEndpoint
             CancellationToken ct) =>
         {
             var (userId, _) = user.ToIdEmailTuple();
-            
-            var postFilterParams = new PostFilterParams
-            {
-                Categories = categories ?? [],
-            };
-            
+
+            var postFilterParams = new PostFilterParams(categories ?? []);
+
             var posts = await postRepository.GetByUserIdAsync(
                 userId,
                 paginationParams, 
                 sortingParams, 
                 postFilterParams, ct);
-            
+
             var response = new GetUserPostsResponse(posts);
-            
+
             return Results.Ok(response);
         }).RequireAuthorization().WithTags(EndpointsTags.Posts);
     }
