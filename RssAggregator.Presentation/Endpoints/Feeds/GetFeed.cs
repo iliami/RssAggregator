@@ -13,7 +13,8 @@ public class GetFeed : IEndpoint
             CancellationToken ct) =>
         {
             var request = new GetFeedRequest(id);
-            var response = useCase.Handle(request, ct);
+            var response = await useCase.Handle(request, ct);
+
             return Results.Ok(response);
         }).RequireAuthorization().WithTags(EndpointsTags.Feeds);
     }

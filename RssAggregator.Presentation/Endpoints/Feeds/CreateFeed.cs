@@ -1,10 +1,8 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using RssAggregator.Application.Abstractions.Repositories;
+using RssAggregator.Application.UseCases.Feeds.CreateFeed;
 
 namespace RssAggregator.Presentation.Endpoints.Feeds;
-
-public record CreateFeedRequest(string Name, string Url);
 
 public class CreateFeed : IEndpoint
 {
@@ -12,16 +10,18 @@ public class CreateFeed : IEndpoint
     {
         app.MapPost("feeds", async (
                 [FromBody] CreateFeedRequest request,
-                [FromServices] IFeedRepository feedRepository,
+                [FromServices] ICreateFeedUseCase useCase,
                 ClaimsPrincipal user,
                 CancellationToken ct) =>
         {
             if (!user.IsInRole("admin"))
             {
-                
+                // TODO: admin role
             }
-            var feedId = await feedRepository.AddAsync(request.Name, request.Url, ct);
-            
+
+            var response = await useCase.Handle(request, ct);
+            var feedId = response.FeedId;
+
             return Results.Created($"feeds/{feedId}", feedId);
         }).RequireAuthorization().WithTags(EndpointsTags.Feeds);
     }

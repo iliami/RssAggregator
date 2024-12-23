@@ -1,11 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using RssAggregator.Application.Abstractions.Repositories;
-using RssAggregator.Application.Models.DTO;
 using RssAggregator.Application.Models.Params;
+using RssAggregator.Application.UseCases.Feeds.GetFeeds;
 
 namespace RssAggregator.Presentation.Endpoints.Feeds;
-
-public record GetFeedsResponse(PagedResult<FeedDto> Feeds);
 
 public class GetFeeds : IEndpoint
 {
@@ -14,15 +11,12 @@ public class GetFeeds : IEndpoint
         app.MapGet("feeds", async (
             [AsParameters] PaginationParams paginationParams,
             [AsParameters] SortingParams sortingParams,
-            [FromServices] IFeedRepository feedRepository,
+            [FromServices] IGetFeedsUseCase useCase,
             CancellationToken ct) =>
         {
-            var feeds = await feedRepository.GetFeedsAsync(
-                paginationParams, 
-                sortingParams, ct);
-            
-            var response = new GetFeedsResponse(feeds);
-            
+            var request = new GetFeedsRequest(paginationParams, sortingParams);
+            var response = await useCase.Handle(request, ct);
+
             return Results.Ok(response);
         }).AllowAnonymous().WithTags(EndpointsTags.Feeds);
     }

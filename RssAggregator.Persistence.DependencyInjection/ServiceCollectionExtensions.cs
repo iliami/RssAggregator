@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using RssAggregator.Application.UseCases.Feeds.CreateFeed;
 using RssAggregator.Application.UseCases.Feeds.GetFeed;
 using RssAggregator.Application.UseCases.Feeds.GetFeeds;
 using RssAggregator.Application.UseCases.Posts.AddPostsInFeed;
@@ -17,5 +18,6 @@ public static class ServiceCollectionExtensions
             .AddScoped<IAddPostsInFeedStorage, AddPostsInFeedStorage>()
             
             .AddScoped<IGetFeedStorage, GetFeedStorage>()
-            .AddScoped<IGetFeedsStorage, GetFeedsStorage>();
+            .AddScoped<IGetFeedsStorage, GetFeedsStorage>()
+            .AddScoped<ICreateFeedStorage, CreateFeedStorage>();
 }

@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using RssAggregator.Application.UseCases.Feeds.CreateFeed;
 using RssAggregator.Application.UseCases.Feeds.GetFeed;
 using RssAggregator.Application.UseCases.Feeds.GetFeeds;
 using RssAggregator.Application.UseCases.Posts.AddPostsInFeed;
@@ -18,5 +19,6 @@ public static class ServiceCollectionExtensions
             .AddScoped<IAddPostsInFeedUseCase, AddPostsInFeedUseCase>()
         
             .AddScoped<IGetFeedUseCase, GetFeedUseCase>()
-            .AddScoped<IGetFeedsUseCase, GetFeedsUseCase>();
+            .AddScoped<IGetFeedsUseCase, GetFeedsUseCase>()
+            .AddScoped<ICreateFeedUseCase, CreateFeedUseCase>();
 }
