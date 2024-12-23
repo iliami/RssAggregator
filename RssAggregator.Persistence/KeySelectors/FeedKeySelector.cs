@@ -23,7 +23,7 @@ public class FeedKeySelector : IKeySelector<Feed>
         };
     }
 
-    private string GetLowerString(string? s)
+    private static string GetLowerString(string? s)
     {
         return s?.ToLowerInvariant() ?? string.Empty;
     }
