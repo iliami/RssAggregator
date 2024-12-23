@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using RssAggregator.Domain.Entities;
+using RssAggregator.Domain.Exceptions;
 
 namespace RssAggregator.Application.UseCases.Feeds.GetFeed;
 
@@ -12,7 +14,7 @@ public class GetFeedUseCase(IGetFeedStorage storage, IValidator<GetFeedRequest> 
 
         if (!success)
         {
-            throw new Exception($"Feed not found: {request.FeedId}"); // TODO
+            throw new NotFoundException<Feed>(request.FeedId);
         }
 
         var response = new GetFeedResponse(feed);

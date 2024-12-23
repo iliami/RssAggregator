@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using RssAggregator.Domain.Entities;
+using RssAggregator.Domain.Exceptions;
 
 namespace RssAggregator.Application.UseCases.Posts.AddPostsInFeed;
 
@@ -12,7 +14,7 @@ public class AddPostsInFeedUseCase(IAddPostsInFeedStorage storage, IValidator<Ad
 
         if (!isFeedExists)
         {
-            throw new Exception("Feed does not exist"); // TODO: add domain exception
+            throw new NotFoundException<Feed>(request.Feed.Id);
         }
 
         await storage.AddPosts(request.Posts, ct);
