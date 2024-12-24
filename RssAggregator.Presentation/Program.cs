@@ -7,7 +7,7 @@ using Microsoft.OpenApi.Models;
 using RssAggregator.Application.Abstractions.Repositories;
 using RssAggregator.Application.DependencyInjection;
 using RssAggregator.Application.Models.Params;
-using RssAggregator.Infrastructure.BackgroundJobs.SyncFeedsService;
+using RssAggregator.Infrastructure.BackgroundJobs.SyncAllFeedsJob;
 using RssAggregator.Persistence;
 using RssAggregator.Persistence.DependencyInjection;
 using RssAggregator.Persistence.Repositories;

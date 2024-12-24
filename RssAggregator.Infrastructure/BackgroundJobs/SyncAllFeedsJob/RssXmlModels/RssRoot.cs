@@ -1,6 +1,6 @@
 using System.Xml.Serialization;
 
-namespace RssAggregator.Infrastructure.BackgroundJobs.SyncFeedsService.RssXmlModels;
+namespace RssAggregator.Infrastructure.BackgroundJobs.SyncAllFeedsJob.RssXmlModels;
 
 [XmlRoot("rss")]
 public class RssRoot

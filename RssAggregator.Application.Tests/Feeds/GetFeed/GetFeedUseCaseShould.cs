@@ -25,13 +25,13 @@ public class GetFeedUseCaseShould
     public async Task ReturnResponse_WhenFeedIsFound()
     {
         var feedId = Guid.Parse("83128A9B-9A93-472F-874D-90807DDE475B");
-        var feed = new FeedDto(
-            feedId,
-            "Test feed",
-            "Test feed description",
-            "https://www.example.com",
-            0,
-            0);
+        var feed = new Feed
+        {
+            Id = feedId,
+            Name = "Test feed",
+            Description = "Test feed description",
+            Url = "https://www.example.com"
+        };
         var request = new GetFeedRequest(feedId);
         _storage.TryGetFeed(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns((true, feed));
         var expected = new GetFeedResponse(feed);
@@ -40,7 +40,7 @@ public class GetFeedUseCaseShould
 
         actual.Should().BeEquivalentTo(expected);
     }
-    
+
     [Fact]
     public async Task ThrowException_WhenFeedIsNotFound()
     {

@@ -1,5 +1,5 @@
-﻿using RssAggregator.Application.Models.DTO;
+﻿using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Application.UseCases.Feeds.GetFeed;
 
-public record GetFeedResponse(FeedDto FeedDto);
+public record GetFeedResponse(Feed Feed);

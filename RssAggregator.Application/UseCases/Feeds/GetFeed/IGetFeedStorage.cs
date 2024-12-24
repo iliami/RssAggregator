@@ -1,8 +1,8 @@
-﻿using RssAggregator.Application.Models.DTO;
+﻿using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Application.UseCases.Feeds.GetFeed;
 
 public interface IGetFeedStorage
 {
-    Task<(bool success, FeedDto feed)> TryGetFeed(Guid feedId, CancellationToken ct = default);
+    Task<(bool success, Feed feed)> TryGetFeed(Guid feedId, CancellationToken ct = default);
 }

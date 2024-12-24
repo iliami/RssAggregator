@@ -4,6 +4,7 @@ using RssAggregator.Application.UseCases.Feeds.GetFeed;
 using RssAggregator.Application.UseCases.Feeds.GetFeeds;
 using RssAggregator.Application.UseCases.Feeds.UpdateFeed;
 using RssAggregator.Application.UseCases.Posts.AddPostsInFeed;
+using RssAggregator.Application.UseCases.Posts.CreatePost;
 using RssAggregator.Application.UseCases.Posts.GetPost;
 using RssAggregator.Application.UseCases.Posts.GetPosts;
 using RssAggregator.Persistence.Storages;
@@ -16,6 +17,7 @@ public static class ServiceCollectionExtensions
         => services
             .AddScoped<IGetPostStorage, GetPostStorage>()
             .AddScoped<IGetPostsStorage, GetPostsStorage>()
+            .AddScoped<ICreatePostStorage, CreatePostStorage>()
             .AddScoped<IAddPostsInFeedStorage, AddPostsInFeedStorage>()
             
             .AddScoped<IGetFeedStorage, GetFeedStorage>()

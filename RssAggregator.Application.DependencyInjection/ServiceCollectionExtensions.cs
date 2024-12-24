@@ -5,6 +5,7 @@ using RssAggregator.Application.UseCases.Feeds.GetFeed;
 using RssAggregator.Application.UseCases.Feeds.GetFeeds;
 using RssAggregator.Application.UseCases.Feeds.UpdateFeed;
 using RssAggregator.Application.UseCases.Posts.AddPostsInFeed;
+using RssAggregator.Application.UseCases.Posts.CreatePost;
 using RssAggregator.Application.UseCases.Posts.GetPost;
 using RssAggregator.Application.UseCases.Posts.GetPosts;
 
@@ -17,6 +18,7 @@ public static class ServiceCollectionExtensions
             .AddValidatorsFromAssemblyContaining<GetPostUseCase>()
             .AddScoped<IGetPostUseCase, GetPostUseCase>()
             .AddScoped<IGetPostsUseCase, GetPostsUseCase>()
+            .AddScoped<ICreatePostUseCase, CreatePostUseCase>()
             .AddScoped<IAddPostsInFeedUseCase, AddPostsInFeedUseCase>()
         
             .AddScoped<IGetFeedUseCase, GetFeedUseCase>()
