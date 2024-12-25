@@ -30,9 +30,6 @@
       <Compile Update="Models\Params\SortingParamsValidator.cs">
         <DependentUpon>SortingParams.cs</DependentUpon>
       </Compile>
-      <Compile Update="UseCases\Posts\AddPostsInFeed\AddPostsInFeedRequestValidator.cs">
-        <DependentUpon>AddPostsInFeedRequest.cs</DependentUpon>
-      </Compile>
       <Compile Update="UseCases\Feeds\GetFeed\GetFeedRequestValidator.cs">
         <DependentUpon>GetFeedRequest.cs</DependentUpon>
       </Compile>
