@@ -1,8 +1,12 @@
-﻿using RssAggregator.Domain.Entities;
+﻿using RssAggregator.Application.Abstractions.Specifications;
+using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Application.UseCases.Feeds.GetFeed;
 
 public interface IGetFeedStorage
 {
-    Task<(bool success, Feed feed)> TryGetFeed(Guid feedId, CancellationToken ct = default);
+    Task<(bool success, TProjection feed)> TryGetFeed<TProjection>(
+        Specification<Feed, TProjection> specification, 
+        CancellationToken ct = default)
+        where TProjection : class;
 }

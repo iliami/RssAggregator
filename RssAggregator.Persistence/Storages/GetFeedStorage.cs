@@ -1,14 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RssAggregator.Application.Abstractions.Specifications;
 using RssAggregator.Application.UseCases.Feeds.GetFeed;
 using RssAggregator.Domain.Entities;
+using RssAggregator.Persistence.QueryExtensions;
 
 namespace RssAggregator.Persistence.Storages;
 
 public class GetFeedStorage(AppDbContext dbContext) : IGetFeedStorage
 {
-    public async Task<(bool success, Feed feed)> TryGetFeed(Guid feedId, CancellationToken ct = default)
+    public async Task<(bool success, TProjection feed)> TryGetFeed<TProjection>(
+        Specification<Feed, TProjection> specification, 
+        CancellationToken ct = default)
+    where TProjection : class
     {
-        var success = await dbContext.Feeds.AnyAsync(f => f.Id == feedId, ct);
+        var success = await dbContext.Feeds.AnyAsync(specification.Criteria!, ct);
         
         if (!success)
         {
@@ -16,7 +21,7 @@ public class GetFeedStorage(AppDbContext dbContext) : IGetFeedStorage
         }
         
         var feed = await dbContext.Feeds
-            .Where(f => f.Id == feedId)
+            .EvaluateSpecification(specification)
             .FirstAsync(ct);
         
         return (true, feed);

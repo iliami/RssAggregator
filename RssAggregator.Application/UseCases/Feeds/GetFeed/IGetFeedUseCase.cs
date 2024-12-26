@@ -1,6 +1,7 @@
 ﻿namespace RssAggregator.Application.UseCases.Feeds.GetFeed;
 
-public interface IGetFeedUseCase
+public interface IGetFeedUseCase<TProjection>
+where TProjection : class
 {
-    Task<GetFeedResponse> Handle(GetFeedRequest request, CancellationToken ct = default);
+    Task<GetFeedResponse<TProjection>> Handle(GetFeedRequest<TProjection> request, CancellationToken ct = default);
 }

@@ -1,3 +1,7 @@
-﻿namespace RssAggregator.Application.UseCases.Feeds.GetFeed;
+﻿using RssAggregator.Application.Abstractions.Specifications;
+using RssAggregator.Domain.Entities;
 
-public record GetFeedRequest(Guid FeedId);
+namespace RssAggregator.Application.UseCases.Feeds.GetFeed;
+
+public record GetFeedRequest<TProjection>(Guid FeedId, Specification<Feed, TProjection> Specification) 
+    where TProjection : class;

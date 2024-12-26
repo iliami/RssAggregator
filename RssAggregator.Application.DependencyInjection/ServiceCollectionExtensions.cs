@@ -21,7 +21,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetPostsUseCase, GetPostsUseCase>()
             .AddScoped<ICreatePostUseCase, CreatePostUseCase>()
 
-            .AddScoped<IGetFeedUseCase, GetFeedUseCase>()
+            .AddScoped(typeof(IGetFeedUseCase<>), typeof(GetFeedUseCase<>))
             .AddScoped(typeof(IGetFeedsUseCase<>), typeof(GetFeedsUseCase<>))
             .AddScoped<ICreateFeedUseCase, CreateFeedUseCase>()
             .AddScoped<IUpdateFeedUseCase, UpdateFeedUseCase>();

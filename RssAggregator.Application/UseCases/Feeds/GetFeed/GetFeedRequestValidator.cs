@@ -2,7 +2,7 @@
 
 namespace RssAggregator.Application.UseCases.Feeds.GetFeed;
 
-public class GetFeedRequestValidator : AbstractValidator<GetFeedRequest>
-{
-    public GetFeedRequestValidator() { }
-}
+// public class GetFeedRequestValidator : AbstractValidator<GetFeedRequest>
+// {
+//     public GetFeedRequestValidator() { }
+// }
