@@ -17,7 +17,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetPostStorage, GetPostStorage>()
             .AddScoped<IGetPostsStorage, GetPostsStorage>()
             .AddScoped<ICreatePostStorage, CreatePostStorage>()
-            
+
             .AddScoped<IGetFeedStorage, GetFeedStorage>()
             .AddScoped<IGetFeedsStorage, GetFeedsStorage>()
             .AddScoped<ICreateFeedStorage, CreateFeedStorage>()

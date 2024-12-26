@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RssAggregator.Application.Models.DTO;
-using RssAggregator.Application.Models.Params;
+using RssAggregator.Application.Abstractions.Specifications;
 using RssAggregator.Application.UseCases.Feeds.GetFeeds;
+using RssAggregator.Domain.Entities;
 using RssAggregator.Persistence.KeySelectors;
 using RssAggregator.Persistence.QueryExtensions;
 
@@ -11,12 +11,11 @@ public class GetFeedsStorage(AppDbContext dbContext) : IGetFeedsStorage
 {
     private static FeedKeySelector KeySelector { get; } = new();
 
-    public Task<PagedResult<FeedDto>> GetFeeds(
-        PaginationParams paginationParams, 
-        SortingParams sortingParams,
+    public Task<TProjection[]> GetFeeds<TProjection>(
+        Specification<Feed, TProjection> specification, 
         CancellationToken ct = default)
-        => dbContext.Feeds.AsNoTracking()
-            .WithSorting(sortingParams, KeySelector)
-            .Select(f => new FeedDto(f.Id, f.Name, f.Description, f.Url, f.Subscribers.Count, f.Posts.Count))
-            .ToPagedResultAsync(paginationParams, ct);
+    where TProjection : class
+        => dbContext.Feeds
+            .EvaluateSpecification(specification)
+            .ToArrayAsync(ct);
 }

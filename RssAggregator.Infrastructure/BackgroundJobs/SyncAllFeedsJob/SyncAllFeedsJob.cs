@@ -2,8 +2,8 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using RssAggregator.Application.Abstractions.Specifications;
 using RssAggregator.Application.Models.Params;
-using RssAggregator.Application.UseCases.Feeds.GetFeed;
 using RssAggregator.Application.UseCases.Feeds.GetFeeds;
 using RssAggregator.Application.UseCases.Feeds.UpdateFeed;
 using RssAggregator.Application.UseCases.Posts.CreatePost;
@@ -59,26 +59,22 @@ public class SyncAllFeedsJob(
     {
         using var scope = serviceProvider.CreateScope();
 
-        var getFeedsRequest = new GetFeedsRequest(
-            new PaginationParams(1, int.MaxValue), 
-            new SortingParams());
-        var getFeedsUseCase = scope.ServiceProvider.GetRequiredService<IGetFeedsUseCase>();
+        var getFeedsRequest = new GetFeedsRequest<Feed>(new GetFeedsSpecification());
+        var getFeedsUseCase = scope.ServiceProvider.GetRequiredService<IGetFeedsUseCase<Feed>>();
         var getFeedsResponse = await getFeedsUseCase.Handle(getFeedsRequest, ct);
         
-        var feeds = getFeedsResponse.Feeds.Array;
+        var feeds = getFeedsResponse.Feeds;
 
         await Parallel.ForEachAsync(feeds, ct,
-            async (feed, token) => await FetchSingleFeed(feed.Id, token));
+            async (feed, token) => await FetchSingleFeed(feed, token));
     }
 
-    private async Task FetchSingleFeed(Guid feedId, CancellationToken ct = default)
+    private async Task FetchSingleFeed(Feed feed, CancellationToken ct = default)
     {
         using var scope = serviceProvider.CreateScope();
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<SyncAllFeedsJob>>();
         try
         {
-            var feed = await GetFeed(scope, feedId, ct);
-
             var rssFeedFetcher = new RssFeedFetcher(httpClientFactory, feed.Url);
             var rssFeed = await rssFeedFetcher.Fetch(ct);
 
@@ -86,15 +82,15 @@ public class SyncAllFeedsJob(
             var rssFeedProcessorResponse = rssFeedProcessor.Process();
             var allScrapedPostsInfos = rssFeedProcessorResponse.ScrapedPostsInfos;
 
-            var scrapedPostsInfosToStore = ExcludeCachedPosts(feedId, allScrapedPostsInfos);
+            var scrapedPostsInfosToStore = ExcludeCachedPosts(feed.Id, allScrapedPostsInfos);
 
-            await CreatePosts(scope, scrapedPostsInfosToStore, feedId, ct);
+            await CreatePosts(scope, scrapedPostsInfosToStore, feed.Id, ct);
 
             await UpdateFeed(scope, rssFeed, feed, ct);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error fetching posts from the feed {feedId}.", feedId);
+            logger.LogError(e, "Error fetching posts from the feed {feedId}.", feed.Id);
         }
     }
 
@@ -117,21 +113,7 @@ public class SyncAllFeedsJob(
 
         return scrapedPostInfosToStore;
     }
-
-    private static async Task<Feed> GetFeed(
-        IServiceScope scope, 
-        Guid feedId, 
-        CancellationToken ct = default)
-    {
-        var getFeedUseCase = scope.ServiceProvider.GetRequiredService<IGetFeedUseCase>();
-
-        var getFeedRequest = new GetFeedRequest(feedId);
-
-        var getFeedResponse = await getFeedUseCase.Handle(getFeedRequest, ct);
-
-        return getFeedResponse.Feed;
-    }
-
+    
     private static async Task UpdateFeed(
         IServiceScope scope, 
         RssFeed rssFeed, 
@@ -167,6 +149,14 @@ public class SyncAllFeedsJob(
                 feedId);
 
             await createPostUseCase.Handle(createPostRequest, ct);
+        }
+    }
+
+    private class GetFeedsSpecification : Specification<Feed>
+    {
+        public GetFeedsSpecification()
+        {
+            IsNoTracking = true;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using RssAggregator.Application.UseCases.Feeds.CreateFeed;
@@ -15,12 +16,22 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddApplication(this IServiceCollection services)
         => services
             .AddValidatorsFromAssemblyContaining<GetPostUseCase>()
+            
             .AddScoped<IGetPostUseCase, GetPostUseCase>()
             .AddScoped<IGetPostsUseCase, GetPostsUseCase>()
             .AddScoped<ICreatePostUseCase, CreatePostUseCase>()
-        
+
             .AddScoped<IGetFeedUseCase, GetFeedUseCase>()
-            .AddScoped<IGetFeedsUseCase, GetFeedsUseCase>()
+            .AddScoped(typeof(IGetFeedsUseCase<>), typeof(GetFeedsUseCase<>))
             .AddScoped<ICreateFeedUseCase, CreateFeedUseCase>()
             .AddScoped<IUpdateFeedUseCase, UpdateFeedUseCase>();
+
+
+    private static IServiceCollection AddValidators(this IServiceCollection services)
+    {
+        var serviceType        = typeof(IValidator<>).MakeGenericType(typeof(GetFeedsRequest<>).GetGenericTypeDefinition());
+        var implementationType = typeof(GetFeedsRequestValidator<>);
+
+        return services.AddScoped(serviceType, implementationType);
+    }
 }

@@ -1,18 +1,14 @@
 ﻿using FluentValidation;
-using RssAggregator.Application.Models.Params;
 
 namespace RssAggregator.Application.UseCases.Feeds.GetFeeds;
 
-public class GetFeedsRequestValidator : AbstractValidator<GetFeedsRequest>
+public class GetFeedsRequestValidator<TProjection> : AbstractValidator<GetFeedsRequest<TProjection>>
+    where TProjection : class
 {
     public GetFeedsRequestValidator()
     {
-        RuleFor(x => x.PaginationParams)
-            .NotNull().WithMessage("Pagination parameters are required.")
-            .SetValidator(new PaginationParamsValidator());
-        
-        RuleFor(x => x.SortingParams)
-            .NotNull().WithMessage("Soring parameters are required.")
-            .SetValidator(new SortingParamsValidator());
+        RuleFor(r => r.Specification)
+            .NotNull().WithMessage("Specification cannot be null.");
+        // TODO: Specification validator
     }
 }

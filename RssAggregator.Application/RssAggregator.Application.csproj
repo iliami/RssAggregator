@@ -33,14 +33,14 @@
       <Compile Update="UseCases\Feeds\GetFeed\GetFeedRequestValidator.cs">
         <DependentUpon>GetFeedRequest.cs</DependentUpon>
       </Compile>
-      <Compile Update="UseCases\Feeds\GetFeeds\GetFeedsRequestValidator.cs">
-        <DependentUpon>GetFeedsRequest.cs</DependentUpon>
-      </Compile>
       <Compile Update="UseCases\Feeds\CreateFeed\CreateFeedRequestValidator.cs">
         <DependentUpon>CreateFeedRequest.cs</DependentUpon>
       </Compile>
       <Compile Update="UseCases\Feeds\UpdateFeed\UpdateFeedRequestValidator.cs">
         <DependentUpon>UpdateFeedRequest.cs</DependentUpon>
+      </Compile>
+      <Compile Update="UseCases\Feeds\GetFeeds\GetFeedsRequestValidator.cs">
+        <DependentUpon>GetFeedsRequest.cs</DependentUpon>
       </Compile>
     </ItemGroup>
 
