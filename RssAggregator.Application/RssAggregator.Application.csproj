@@ -42,6 +42,9 @@
       <Compile Update="UseCases\Feeds\GetFeeds\GetFeedsRequestValidator.cs">
         <DependentUpon>GetFeedsRequest.cs</DependentUpon>
       </Compile>
+      <Compile Update="UseCases\Categories\GetCategories\GetCategoriesRequestValidator.cs">
+        <DependentUpon>GetCategoriesRequest.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>

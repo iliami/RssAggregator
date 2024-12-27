@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using RssAggregator.Application.Abstractions.KeySelectors;
+using RssAggregator.Application.UseCases.Categories.GetCategories;
 using RssAggregator.Application.UseCases.Feeds.CreateFeed;
 using RssAggregator.Application.UseCases.Feeds.GetFeed;
 using RssAggregator.Application.UseCases.Feeds.GetFeeds;
@@ -25,7 +26,9 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetFeedStorage, GetFeedStorage>()
             .AddScoped<IGetFeedsStorage, GetFeedsStorage>()
             .AddScoped<ICreateFeedStorage, CreateFeedStorage>()
-            .AddScoped<IUpdateFeedStorage, UpdateFeedStorage>();
+            .AddScoped<IUpdateFeedStorage, UpdateFeedStorage>()
+        
+            .AddScoped<IGetCategoriesStorage, GetCategoriesStorage>();
 
     private static IServiceCollection AddKeySelectors(this IServiceCollection services)
     {

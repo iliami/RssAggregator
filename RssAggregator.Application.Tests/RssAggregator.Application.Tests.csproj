@@ -28,4 +28,8 @@
       <ProjectReference Include="..\RssAggregator.Application\RssAggregator.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Categories\" />
+    </ItemGroup>
+
 </Project>
