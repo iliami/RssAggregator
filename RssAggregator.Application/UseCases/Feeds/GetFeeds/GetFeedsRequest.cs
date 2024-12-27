@@ -3,5 +3,4 @@ using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Application.UseCases.Feeds.GetFeeds;
 
-public record GetFeedsRequest<TProjection>(Specification<Feed, TProjection> Specification) 
-    where TProjection: class;
+public record GetFeedsRequest(Specification<Feed> Specification);

@@ -2,8 +2,7 @@
 
 namespace RssAggregator.Application.UseCases.Feeds.GetFeeds;
 
-public class GetFeedsRequestValidator<TProjection> : AbstractValidator<GetFeedsRequest<TProjection>>
-    where TProjection : class
+public class GetFeedsRequestValidator : AbstractValidator<GetFeedsRequest>
 {
     public GetFeedsRequestValidator()
     {

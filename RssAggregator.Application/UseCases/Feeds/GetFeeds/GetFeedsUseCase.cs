@@ -1,18 +1,18 @@
-﻿namespace RssAggregator.Application.UseCases.Feeds.GetFeeds;
+﻿using FluentValidation;
 
-public class GetFeedsUseCase<TProjection>(IGetFeedsStorage storage) 
-    : IGetFeedsUseCase<TProjection>
-    where TProjection : class
+namespace RssAggregator.Application.UseCases.Feeds.GetFeeds;
+
+public class GetFeedsUseCase(IGetFeedsStorage storage, IValidator<GetFeedsRequest> validator) : IGetFeedsUseCase
 {
-    public async Task<GetFeedsResponse<TProjection>> Handle(
-        GetFeedsRequest<TProjection> request, 
+    public async Task<GetFeedsResponse> Handle(
+        GetFeedsRequest request, 
         CancellationToken ct = default)
     {
-        // await validator.ValidateAndThrowAsync(request, ct);
+        await validator.ValidateAndThrowAsync(request, ct);
         
         var posts = await storage.GetFeeds(request.Specification, ct);
         
-        var response = new GetFeedsResponse<TProjection>(posts);
+        var response = new GetFeedsResponse(posts);
 
         return response;
     }

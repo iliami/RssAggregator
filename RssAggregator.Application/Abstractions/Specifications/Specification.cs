@@ -2,28 +2,15 @@
 
 namespace RssAggregator.Application.Abstractions.Specifications;
 
-public abstract class Specification<TEntity>() 
-    : Specification<TEntity, TEntity>(obj => obj)
-    where TEntity : class;
-
-public abstract class Specification<TEntity, TResult>(Expression<Func<TEntity, TResult>> projection)
+public abstract class Specification<TEntity>
     where TEntity : class
-    where TResult : class
 {
     public bool IsNoTracking { get; protected init; } = false;
     
     public int Skip { get; protected init; } = 0;
     public int Take { get; protected init; } = int.MaxValue;
-    
-    public Expression<Func<TEntity, TResult>> Projection { get; } = projection;
 
-    private Expression<Func<TEntity, bool>>? _criteria;
-
-    public Expression<Func<TEntity, bool>>? Criteria
-    {
-        get => _criteria;
-        protected set => _criteria = value ?? throw new ArgumentNullException(nameof(value));
-    }
+    public Expression<Func<TEntity, bool>>? Criteria { get; protected init; }
     
     public Expression<Func<TEntity, object>>? OrderBy { get; private set; }
     public bool IsAscendingOrderBy { get; private set; } = true;

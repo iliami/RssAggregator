@@ -16,23 +16,16 @@ public class GetFeed : IEndpoint
         int Subscribers,
         IEnumerable<GetFeedPostModel> Posts);
 
-    private class GetFeedSpecification : Specification<Feed, GetFeedModel>
+    private class GetFeedSpecification : Specification<Feed>
     {
-        public GetFeedSpecification(Guid feedId) : base(feed => new GetFeedModel(
-            feed.Id, 
-            feed.Name, 
-            feed.Description, 
-            feed.Subscribers.Count,
-            feed.Posts.Select(post => new GetFeedPostModel(
-                post.Id, 
-                post.Title, 
-                post.Url, 
-                post.PublishDate,
-                post.Categories.Select(category => category.Name)))))
+        public GetFeedSpecification(Guid feedId)
         {
             IsNoTracking = true;
             
             Criteria = feed => feed.Id == feedId;
+            
+            AddInclude(feed => feed.Posts);
+            AddInclude(feed => feed.Subscribers);
         }
     }
 
@@ -40,12 +33,22 @@ public class GetFeed : IEndpoint
     {
         app.MapGet("feeds/{id:guid}", async (
             [FromRoute] Guid id,
-            [FromServices] IGetFeedUseCase<GetFeedModel> useCase,
+            [FromServices] IGetFeedUseCase useCase,
             CancellationToken ct) =>
         {
-            var request = new GetFeedRequest<GetFeedModel>(id, new GetFeedSpecification(id));
+            var request = new GetFeedRequest(id, new GetFeedSpecification(id));
             var response = await useCase.Handle(request, ct);
-
+            // feed => new GetFeedModel(
+            //     feed.Id, 
+            //     feed.Name, 
+            //     feed.Description, 
+            //     feed.Subscribers.Count,
+            //     feed.Posts.Select(post => new GetFeedPostModel(
+            //         post.Id, 
+            //         post.Title, 
+            //         post.Url, 
+            //         post.PublishDate,
+            //         post.Categories.Select(category => category.Name))))
             return Results.Ok(response);
         }).RequireAuthorization().WithTags(EndpointsTags.Feeds);
     }

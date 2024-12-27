@@ -38,11 +38,10 @@ public static class CommonQueryExtensions
             ? query.OrderBy(orderBySelector)
             : query.OrderByDescending(orderBySelector);
     }
-    public static IQueryable<TResult> EvaluateSpecification<TEntity, TResult>(
+    public static IQueryable<TEntity> EvaluateSpecification<TEntity>(
         this IQueryable<TEntity> query,
-        Specification<TEntity, TResult> specification)
+        Specification<TEntity> specification)
         where TEntity : class
-        where TResult : class
     {
         if (specification.IsNoTracking)
         {
@@ -73,6 +72,6 @@ public static class CommonQueryExtensions
             query,
             (current, include) => current.Include(include));
 
-        return query.Select(specification.Projection);
+        return query;
     }
 }

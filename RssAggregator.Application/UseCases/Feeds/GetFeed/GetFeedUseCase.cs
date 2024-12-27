@@ -3,10 +3,9 @@ using RssAggregator.Domain.Exceptions;
 
 namespace RssAggregator.Application.UseCases.Feeds.GetFeed;
 
-public class GetFeedUseCase<TProjection>(IGetFeedStorage storage) : IGetFeedUseCase<TProjection>
-where TProjection : class
+public class GetFeedUseCase(IGetFeedStorage storage) : IGetFeedUseCase
 {
-    public async Task<GetFeedResponse<TProjection>> Handle(GetFeedRequest<TProjection> request, CancellationToken ct = default)
+    public async Task<GetFeedResponse> Handle(GetFeedRequest request, CancellationToken ct = default)
     {
         var (success, feed) = await storage.TryGetFeed(request.Specification, ct);
 
@@ -15,7 +14,7 @@ where TProjection : class
             throw new NotFoundException<Feed>(request.FeedId);
         }
 
-        var response = new GetFeedResponse<TProjection>(feed);
+        var response = new GetFeedResponse(feed);
 
         return response;
     }

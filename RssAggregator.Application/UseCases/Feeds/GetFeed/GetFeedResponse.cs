@@ -1,4 +1,5 @@
-﻿namespace RssAggregator.Application.UseCases.Feeds.GetFeed;
+﻿using RssAggregator.Domain.Entities;
 
-public record GetFeedResponse<TProjection>(TProjection Feed)
-    where TProjection : class;
+namespace RssAggregator.Application.UseCases.Feeds.GetFeed;
+
+public record GetFeedResponse(Feed Feed);

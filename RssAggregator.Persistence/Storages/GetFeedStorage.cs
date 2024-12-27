@@ -8,10 +8,9 @@ namespace RssAggregator.Persistence.Storages;
 
 public class GetFeedStorage(AppDbContext dbContext) : IGetFeedStorage
 {
-    public async Task<(bool success, TProjection feed)> TryGetFeed<TProjection>(
-        Specification<Feed, TProjection> specification, 
+    public async Task<(bool success, Feed feed)> TryGetFeed(
+        Specification<Feed> specification, 
         CancellationToken ct = default)
-    where TProjection : class
     {
         var success = await dbContext.Feeds.AnyAsync(specification.Criteria!, ct);
         

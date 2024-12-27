@@ -5,8 +5,7 @@ namespace RssAggregator.Application.UseCases.Feeds.GetFeeds;
 
 public interface IGetFeedsStorage
 {
-    Task<TProjection[]> GetFeeds<TProjection>(
-        Specification<Feed, TProjection> specification, 
-        CancellationToken ct = default) 
-        where TProjection : class;
+    Task<Feed[]> GetFeeds(
+        Specification<Feed> specification,
+        CancellationToken ct = default);
 }

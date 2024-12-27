@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using NSubstitute;
 using RssAggregator.Application.Abstractions.Specifications;
 using RssAggregator.Application.UseCases.Feeds.GetFeeds;
 using RssAggregator.Domain.Entities;
@@ -8,15 +7,15 @@ namespace RssAggregator.Application.Tests.Feeds.GetFeeds;
 
 public class GetFeedsRequestValidatorShould
 {
-    private class TestSpecification : Specification<Feed> {}
+    private class TestSpecification : Specification<Feed>;
     
-    private readonly GetFeedsRequestValidator<Feed> _sut = new();
+    private readonly GetFeedsRequestValidator _sut = new();
     
     [Fact]
     public void ReturnSuccess_WhenRequestIsValid()
     {
         var specification = new TestSpecification();
-        var request = new GetFeedsRequest<Feed>(specification);
+        var request = new GetFeedsRequest(specification);
 
         var actual = _sut.Validate(request);
 
@@ -25,7 +24,7 @@ public class GetFeedsRequestValidatorShould
 
     [Theory]
     [MemberData(nameof(GetInvalidRequests))]
-    public void ReturnFailure_WhenRequestIsInvalid(GetFeedsRequest<Feed> request)
+    public void ReturnFailure_WhenRequestIsInvalid(GetFeedsRequest request)
     {
         var actual = _sut.Validate(request);
 
@@ -34,6 +33,6 @@ public class GetFeedsRequestValidatorShould
 
     public static IEnumerable<object[]> GetInvalidRequests()
     {
-        yield return [new GetFeedsRequest<Feed>(null!) ];
+        yield return [new GetFeedsRequest(null!) ];
     }
 }

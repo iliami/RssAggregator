@@ -59,8 +59,8 @@ public class SyncAllFeedsJob(
     {
         using var scope = serviceProvider.CreateScope();
 
-        var getFeedsRequest = new GetFeedsRequest<Feed>(new GetFeedsSpecification());
-        var getFeedsUseCase = scope.ServiceProvider.GetRequiredService<IGetFeedsUseCase<Feed>>();
+        var getFeedsRequest = new GetFeedsRequest(new GetFeedsSpecification());
+        var getFeedsUseCase = scope.ServiceProvider.GetRequiredService<IGetFeedsUseCase>();
         var getFeedsResponse = await getFeedsUseCase.Handle(getFeedsRequest, ct);
         
         var feeds = getFeedsResponse.Feeds;
