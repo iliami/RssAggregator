@@ -1,5 +1,5 @@
-using RssAggregator.Application.Models.DTO;
+using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Application.UseCases.Posts.GetPosts;
 
-public record GetPostsResponse(PagedResult<PostDto> Posts);
+public record GetPostsResponse(Post[] Posts);

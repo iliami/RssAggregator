@@ -8,10 +8,7 @@ public class GetPostsUseCase(IGetPostsStorage storage, IValidator<GetPostsReques
     {
         await validator.ValidateAndThrowAsync(request, ct);
         
-        var posts = await storage.GetPosts(
-            request.PaginationParams, 
-            request.SortingParams, 
-            request.FilterParams, ct);
+        var posts = await storage.GetPosts(request.Specification, ct);
         
         var response = new GetPostsResponse(posts);
         

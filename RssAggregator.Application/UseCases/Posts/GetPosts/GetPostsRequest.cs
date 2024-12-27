@@ -1,8 +1,6 @@
-using RssAggregator.Application.Models.Params;
+using RssAggregator.Application.Abstractions.Specifications;
+using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Application.UseCases.Posts.GetPosts;
 
-public record GetPostsRequest(
-    PaginationParams PaginationParams,
-    SortingParams SortingParams,
-    PostFilterParams FilterParams);
+public record GetPostsRequest(Specification<Post> Specification);

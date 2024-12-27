@@ -1,13 +1,11 @@
-using RssAggregator.Application.Models.DTO;
-using RssAggregator.Application.Models.Params;
+using RssAggregator.Application.Abstractions.Specifications;
+using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Application.UseCases.Posts.GetPosts;
 
 public interface IGetPostsStorage
 {
-    Task<PagedResult<PostDto>> GetPosts(
-        PaginationParams paginationParams,
-        SortingParams sortingParams,
-        PostFilterParams filterParams, 
+    Task<Post[]> GetPosts(
+        Specification<Post> specification, 
         CancellationToken ct = default);
 }

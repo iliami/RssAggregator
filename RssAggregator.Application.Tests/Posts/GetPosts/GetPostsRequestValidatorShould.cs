@@ -1,20 +1,19 @@
 ﻿using FluentAssertions;
-using RssAggregator.Application.Models.Params;
+using RssAggregator.Application.Abstractions.Specifications;
 using RssAggregator.Application.UseCases.Posts.GetPosts;
+using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Application.Tests.Posts.GetPosts;
 
 public class GetPostsRequestValidatorShould
 {
+    private class TestSpecification : Specification<Post>;
     private readonly GetPostsRequestValidator _sut = new();
     
     [Fact]
     public void ReturnSuccess_WhenRequestIsValid()
     {
-        var request = new GetPostsRequest(
-            new PaginationParams(),
-            new SortingParams(),
-            new PostFilterParams([]));
+        var request = new GetPostsRequest(new TestSpecification());
 
         var actual = _sut.Validate(request);
 
@@ -32,13 +31,6 @@ public class GetPostsRequestValidatorShould
 
     public static IEnumerable<object[]> GetInvalidRequests()
     {
-        var request = new GetPostsRequest(
-            new PaginationParams(),
-            new SortingParams(),
-            new PostFilterParams([]));
-        
-        yield return [request with { PaginationParams = null! }];
-        yield return [request with { SortingParams = null! }];
-        yield return [request with { FilterParams = null! }];
+        yield return [new GetPostsRequest(Specification: null!)];
     }
 }

@@ -38,14 +38,11 @@ public class SyncAllFeedsJob(
 
     private async Task CacheAllPostsUrls(IServiceScope scope, CancellationToken ct = default)
     {
-        var getPostsRequest = new GetPostsRequest(
-            new PaginationParams(1, int.MaxValue), 
-            new SortingParams(), 
-            new PostFilterParams([]));
+        var getPostsRequest = new GetPostsRequest(new GetPostsSpecification());
         var getPostsUseCase = scope.ServiceProvider.GetRequiredService<IGetPostsUseCase>();
         var getPostsResponse = await getPostsUseCase.Handle(getPostsRequest, ct);
 
-        var groupedByFeedIdPosts = getPostsResponse.Posts.Array.GroupBy(key => key.FeedId);
+        var groupedByFeedIdPosts = getPostsResponse.Posts.GroupBy(key => key.Feed.Id);
         foreach (var groupedPosts in groupedByFeedIdPosts)
         {
             memoryCache.Set(
@@ -157,6 +154,16 @@ public class SyncAllFeedsJob(
         public GetFeedsSpecification()
         {
             IsNoTracking = true;
+        }
+    }
+
+    private class GetPostsSpecification : Specification<Post>
+    {
+        public GetPostsSpecification()
+        {
+            IsNoTracking = true;
+
+            AddInclude(post => post.Feed);
         }
     }
 }
