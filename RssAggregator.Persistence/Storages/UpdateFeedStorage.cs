@@ -9,17 +9,15 @@ public class UpdateFeedStorage(AppDbContext dbContext) : IUpdateFeedStorage
     public async Task<(bool success, Guid feedId)> TryUpdateFeed(Feed feed, CancellationToken ct = default)
     {
         var feedId = feed.Id;
-        var storedFeed = await dbContext.Feeds.FirstOrDefaultAsync(x => x.Id == feedId, ct);
+        var isFeedExists = await dbContext.Feeds.AnyAsync(x => x.Id == feedId, ct);
 
-        if (storedFeed is null)
+        if (!isFeedExists)
         {
             return (false, feedId);
         }
 
-        storedFeed.Name = feed.Name;
-        storedFeed.Description = feed.Description;
-        storedFeed.Url = feed.Url;
-        storedFeed.LastFetchedAt = feed.LastFetchedAt;
+        dbContext.Feeds.Attach(feed);
+        dbContext.Feeds.Entry(feed).State = EntityState.Modified;
 
         await dbContext.SaveChangesAsync(ct);
 
