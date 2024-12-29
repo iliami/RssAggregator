@@ -1,24 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
-using RssAggregator.Application.Abstractions.Repositories;
-using RssAggregator.Presentation.Extensions;
+using RssAggregator.Application.UseCases.Subscriptions.CreateSubscriptionUseCase;
 
 namespace RssAggregator.Presentation.Endpoints.Subscriptions;
-
-public record SubscribeRequest(Guid FeedId);
 
 public class Subscribe : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("subscriptions", async (
-            [FromBody]     SubscribeRequest request,
-            [FromServices] ISubscriptionRepository subscriptionRepository,
-            HttpContext context,
-            CancellationToken ct) =>
+            [FromBody]     CreateSubscriptionRequest request,
+            [FromServices] ICreateSubscriptionUseCase useCase,
+            HttpContext context) =>
         {
-            var (userId, _) = context.User.ToIdEmailTuple();
-            await subscriptionRepository.AttachAsync(userId, request.FeedId, ct);
-            
+            await useCase.Handle(request, context.RequestAborted);
             context.Response.StatusCode = StatusCodes.Status204NoContent;
         }).RequireAuthorization().WithTags(EndpointsTags.Subscriptions);
     }
