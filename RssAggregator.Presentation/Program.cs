@@ -12,7 +12,7 @@ using RssAggregator.Persistence;
 using RssAggregator.Persistence.DependencyInjection;
 using RssAggregator.Persistence.Repositories;
 using RssAggregator.Presentation.Extensions;
-using RssAggregator.Presentation.Middleware;
+using RssAggregator.Presentation.Middlewares;
 using RssAggregator.Presentation.Options;
 using RssAggregator.Presentation.Services;
 using RssAggregator.Presentation.Services.Abstractions;
@@ -109,8 +109,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseMiddleware<JwtRevocationMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<AuthenticationMiddleware>();
 
 app.Run();

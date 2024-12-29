@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Memory;
+using RssAggregator.Application.Auth;
+using RssAggregator.Presentation.Extensions;
 
-namespace RssAggregator.Presentation.Middleware;
+namespace RssAggregator.Presentation.Middlewares;
 
-public class JwtRevocationMiddleware(RequestDelegate next, IMemoryCache memoryCache)
+public class AuthenticationMiddleware(RequestDelegate next, IMemoryCache memoryCache)
 {
     private const string Bearer = "Bearer ";
 
@@ -28,6 +30,16 @@ public class JwtRevocationMiddleware(RequestDelegate next, IMemoryCache memoryCa
                 return;
             }
         }
+
+        var (userId, _) = context.User.ToIdEmailTuple();
+        var identity = new Identity
+        {
+            UserId = userId,
+            Role = "admin" // TODO: Role
+        };
+
+        var identityProvider = context.RequestServices.GetRequiredService<IIdentityProvider>();
+        identityProvider.Current = identity;
 
         await next(context);
     }

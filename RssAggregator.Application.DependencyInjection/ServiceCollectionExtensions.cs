@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using RssAggregator.Application.Auth;
 using RssAggregator.Application.UseCases.Categories.CreateCategory;
 using RssAggregator.Application.UseCases.Categories.GetCategories;
 using RssAggregator.Application.UseCases.Feeds.CreateFeed;
@@ -16,6 +17,8 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
         => services
+            .AddScoped<IIdentityProvider, IdentityProvider>()
+
             .AddValidatorsFromAssemblyContaining<GetPostUseCase>()
             
             .AddScoped<IGetPostUseCase, GetPostUseCase>()
