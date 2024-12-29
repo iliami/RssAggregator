@@ -11,6 +11,7 @@ using RssAggregator.Application.UseCases.Posts.CreatePost;
 using RssAggregator.Application.UseCases.Posts.GetPost;
 using RssAggregator.Application.UseCases.Posts.GetPosts;
 using RssAggregator.Application.UseCases.Subscriptions.CreateSubscriptionUseCase;
+using RssAggregator.Application.UseCases.Subscriptions.DeleteSubscriptionUseCase;
 
 namespace RssAggregator.Application.DependencyInjection;
 
@@ -34,5 +35,6 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetCategoriesUseCase, GetCategoriesUseCase>()
             .AddScoped<ICreateCategoryUseCase, CreateCategoryUseCase>()
 
-            .AddScoped<ICreateSubscriptionUseCase, CreateSubscriptionUseCase>();
+            .AddScoped<ICreateSubscriptionUseCase, CreateSubscriptionUseCase>()
+            .AddScoped<IDeleteSubscriptionUseCase, DeleteSubscriptionUseCase>();
 }

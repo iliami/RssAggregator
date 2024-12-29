@@ -10,6 +10,7 @@ using RssAggregator.Application.UseCases.Posts.CreatePost;
 using RssAggregator.Application.UseCases.Posts.GetPost;
 using RssAggregator.Application.UseCases.Posts.GetPosts;
 using RssAggregator.Application.UseCases.Subscriptions.CreateSubscriptionUseCase;
+using RssAggregator.Application.UseCases.Subscriptions.DeleteSubscriptionUseCase;
 using RssAggregator.Persistence.KeySelectors;
 using RssAggregator.Persistence.Storages;
 
@@ -33,7 +34,8 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetCategoriesStorage, GetCategoriesStorage>()
             .AddScoped<ICreateCategoryStorage, CreateCategoryStorage>()
 
-            .AddScoped<ICreateSubscriptionStorage, CreateSubscriptionStorage>();
+            .AddScoped<ICreateSubscriptionStorage, CreateSubscriptionStorage>()
+            .AddScoped<IDeleteSubscriptionStorage, DeleteSubscriptionStorage>();
 
     private static IServiceCollection AddKeySelectors(this IServiceCollection services)
     {
