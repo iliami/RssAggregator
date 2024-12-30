@@ -1,7 +1,5 @@
 ﻿using FluentValidation;
-using RssAggregator.Application.Abstractions.Specifications;
 using RssAggregator.Application.Auth;
-using RssAggregator.Domain.Entities;
 using RssAggregator.Domain.Exceptions;
 
 namespace RssAggregator.Application.UseCases.Posts.GetUserPosts;
@@ -26,9 +24,4 @@ public class GetUserPostsUseCase(
 
         return response;
     }
-}
-
-public interface IGetUserPostsStorage
-{
-    Task<Post[]> GetUserPosts(Guid userId, Specification<Post> specification, CancellationToken ct = default);
 }

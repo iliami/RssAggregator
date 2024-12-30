@@ -54,6 +54,9 @@
       <Compile Update="UseCases\Posts\GetUserPosts\GetUserPostsRequestValidator.cs">
         <DependentUpon>GetUserPostsRequest.cs</DependentUpon>
       </Compile>
+      <Compile Update="UseCases\Posts\GetPostsFromFeed\GetPostsFromFeedRequestValidator.cs">
+        <DependentUpon>GetPostsFromFeedRequest.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>
