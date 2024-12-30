@@ -9,6 +9,7 @@ using RssAggregator.Application.UseCases.Feeds.UpdateFeed;
 using RssAggregator.Application.UseCases.Posts.CreatePost;
 using RssAggregator.Application.UseCases.Posts.GetPost;
 using RssAggregator.Application.UseCases.Posts.GetPosts;
+using RssAggregator.Application.UseCases.Posts.GetUserPosts;
 using RssAggregator.Application.UseCases.Subscriptions.CreateSubscriptionUseCase;
 using RssAggregator.Application.UseCases.Subscriptions.DeleteSubscriptionUseCase;
 using RssAggregator.Persistence.KeySelectors;
@@ -24,6 +25,7 @@ public static class ServiceCollectionExtensions
 
             .AddScoped<IGetPostStorage, GetPostStorage>()
             .AddScoped<IGetPostsStorage, GetPostsStorage>()
+            .AddScoped<IGetUserPostsStorage, GetUserPostsStorage>()
             .AddScoped<ICreatePostStorage, CreatePostStorage>()
 
             .AddScoped<IGetFeedStorage, GetFeedStorage>()

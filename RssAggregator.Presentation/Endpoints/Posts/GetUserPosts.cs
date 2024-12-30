@@ -1,9 +1,10 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using RssAggregator.Application.Abstractions.Repositories;
+using RssAggregator.Application.Abstractions.KeySelectors;
+using RssAggregator.Application.Abstractions.Specifications;
 using RssAggregator.Application.Models.DTO;
 using RssAggregator.Application.Models.Params;
-using RssAggregator.Presentation.Extensions;
+using RssAggregator.Application.UseCases.Posts.GetUserPosts;
+using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Presentation.Endpoints.Posts;
 
@@ -11,29 +12,85 @@ public record GetUserPostsResponse(PagedResult<PostDto> Posts);
 
 public class GetUserPosts : IEndpoint
 {
+    private record GetUserPostsModel(
+        Guid Id,
+        string Title,
+        IEnumerable<string> Categories,
+        DateTime PublishDate,
+        string Url,
+        Guid FeedId);
+
+    private class GetUserPostsSpecification : Specification<Post>
+    {
+        public GetUserPostsSpecification(
+            IKeySelector<Post> keySelector,
+            PaginationParams paginationParams,
+            SortingParams sortingParams,
+            PostFilterParams filterParams)
+        {
+            IsNoTracking = true;
+
+            Skip = (paginationParams.Page - 1) * paginationParams.PageSize;
+            Take = paginationParams.PageSize;
+
+            AddInclude(post => post.Categories);
+            AddInclude(post => post.Feed);
+
+            Criteria = post => (filterParams.Categories
+                .Select(c => c.ToLowerInvariant())
+                .All(category => post.Categories
+                    .Any(c => c.NormalizedName == category)));
+
+            if (sortingParams.SortDirection == SortDirection.None)
+            {
+                return;
+            }
+
+            var selector = keySelector.GetKeySelector(sortingParams.SortBy);
+
+            if (sortingParams.SortDirection == SortDirection.Asc)
+            {
+                SetAscendingOrderBy(selector);
+            }
+            else
+            {
+                SetDescendingOrderBy(selector);
+            }
+        }
+    }
+
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("posts/me", async (
             [AsParameters] PaginationParams paginationParams,
             [AsParameters] SortingParams sortingParams,
             [FromQuery] string[]? categories,
-            [FromServices] IPostRepository postRepository,
-            ClaimsPrincipal user,
+            [FromServices] IGetUserPostsUseCase useCase,
+            [FromServices] IKeySelector<Post> selector,
             CancellationToken ct) =>
         {
-            var (userId, _) = user.ToIdEmailTuple();
+            var filterParams = new PostFilterParams(categories ?? []);
 
-            var postFilterParams = new PostFilterParams(categories ?? []);
+            var specification = new GetUserPostsSpecification(
+                selector,
+                paginationParams,
+                sortingParams,
+                filterParams);
+            var request = new GetUserPostsRequest(specification);
 
-            var posts = await postRepository.GetByUserIdAsync(
-                userId,
-                paginationParams, 
-                sortingParams, 
-                postFilterParams, ct);
+            var response = await useCase.Handle(request, ct);
 
-            var response = new GetUserPostsResponse(posts);
+            var posts = response.Posts
+                .Select(post => new GetUserPostsModel(
+                    post.Id,
+                    post.Title,
+                    post.Categories.Select(c => c.Name),
+                    post.PublishDate,
+                    post.Url,
+                    post.Feed.Id
+                ));
 
-            return Results.Ok(response);
+            return Results.Ok(posts);
         }).RequireAuthorization().WithTags(EndpointsTags.Posts);
     }
 }

@@ -51,6 +51,9 @@
       <Compile Update="UseCases\Subscriptions\CreateSubscriptionUseCase\CreateSubscriptionRequestValidator.cs">
         <DependentUpon>CreateSubscriptionRequest.cs</DependentUpon>
       </Compile>
+      <Compile Update="UseCases\Posts\GetUserPosts\GetUserPostsRequestValidator.cs">
+        <DependentUpon>GetUserPostsRequest.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>
