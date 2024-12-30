@@ -48,6 +48,9 @@
       <Compile Update="UseCases\Subscriptions\DeleteSubscriptionUseCase\DeleteSubscriptionRequestValidator.cs">
         <DependentUpon>DeleteSubscriptionRequest.cs</DependentUpon>
       </Compile>
+      <Compile Update="UseCases\Subscriptions\CreateSubscriptionUseCase\CreateSubscriptionRequestValidator.cs">
+        <DependentUpon>CreateSubscriptionRequest.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>
