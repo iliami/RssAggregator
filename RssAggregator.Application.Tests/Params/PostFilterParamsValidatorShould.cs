@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using RssAggregator.Application.Models.Params;
+using RssAggregator.Application.Params;
 
 namespace RssAggregator.Application.Tests.Params;
 

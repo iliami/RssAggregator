@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace RssAggregator.Presentation.Endpoints.Health;
 
-public record CheckHealthRequest(string Check);
-
 public record CheckHealthResponse(string AllCaps);
 
 public class CheckHealth : IEndpoint
@@ -11,11 +9,13 @@ public class CheckHealth : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("health", (
-            [AsParameters] CheckHealthRequest request) =>
+            [FromQuery] string check) =>
         {
-            var allCaps = request.Check?.ToUpper() ?? string.Empty;
+            var allCaps = check.ToUpper();
+
             var response = new CheckHealthResponse(allCaps);
+
             return Results.Ok(response);
-        }).WithTags("Health");
+        }).AllowAnonymous().WithTags("Health");
     }
 }

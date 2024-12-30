@@ -5,8 +5,8 @@ using RssAggregator.Domain.Exceptions;
 namespace RssAggregator.Application.UseCases.Categories.CreateCategory;
 
 public class CreateCategoryUseCase(
-    ICreateCategoryStorage storage, 
-    IValidator<CreateCategoryRequest> validator) 
+    ICreateCategoryStorage storage,
+    IValidator<CreateCategoryRequest> validator)
     : ICreateCategoryUseCase
 {
     public async Task<CreateCategoryResponse> Handle(

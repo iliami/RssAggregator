@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssAggregator.Persistence.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssAggregator.Application.Tests", "RssAggregator.Application.Tests\RssAggregator.Application.Tests.csproj", "{2E392B3B-A214-43F6-BA4F-2B2A7FAF279D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssAggregator.Infrastructure.DependencyInjection", "RssAggregator.Infrastructure.DependencyInjection\RssAggregator.Infrastructure.DependencyInjection.csproj", "{7F8E36CE-D607-4C71-B6AD-10896A46D015}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,9 +64,14 @@ Global
 		{2E392B3B-A214-43F6-BA4F-2B2A7FAF279D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E392B3B-A214-43F6-BA4F-2B2A7FAF279D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E392B3B-A214-43F6-BA4F-2B2A7FAF279D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F8E36CE-D607-4C71-B6AD-10896A46D015}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F8E36CE-D607-4C71-B6AD-10896A46D015}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F8E36CE-D607-4C71-B6AD-10896A46D015}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F8E36CE-D607-4C71-B6AD-10896A46D015}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8CCDB799-6EE3-4AD6-8BB0-75F82D48FA25} = {053DBD70-03E0-480F-AC98-454518A99BDF}
 		{387D5339-655D-4658-AA09-F5EC966EA5A4} = {053DBD70-03E0-480F-AC98-454518A99BDF}
+		{7F8E36CE-D607-4C71-B6AD-10896A46D015} = {053DBD70-03E0-480F-AC98-454518A99BDF}
 	EndGlobalSection
 EndGlobal

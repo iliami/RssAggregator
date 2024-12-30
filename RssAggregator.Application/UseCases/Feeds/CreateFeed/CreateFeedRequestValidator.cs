@@ -13,7 +13,8 @@ public class CreateFeedRequestValidator : AbstractValidator<CreateFeedRequest>
         RuleFor(x => x.Url)
             .NotNull().WithMessage("Url cannot be null")
             .NotEmpty().WithMessage("Url cannot be empty")
-            .Matches(@"^(https?:\/\/)?(?:www\.)?([a-zA-Z0-9]{2,}\.)+[a-zA-Z0-9]{2,}(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$").WithMessage("Url must be a valid url")
+            .Matches(@"^(https?:\/\/)?(?:www\.)?([a-zA-Z0-9]{2,}\.)+[a-zA-Z0-9]{2,}(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$")
+            .WithMessage("Url must be a valid url")
             .MaximumLength(256).WithMessage("Url cannot exceed 256 characters");
     }
 }

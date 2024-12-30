@@ -8,7 +8,7 @@ public class Subscribe : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("subscriptions", async (
-            [FromBody]     CreateSubscriptionRequest request,
+            [FromBody] CreateSubscriptionRequest request,
             [FromServices] ICreateSubscriptionUseCase useCase,
             HttpContext context) =>
         {

@@ -7,7 +7,7 @@ public class GetPostUseCase(IGetPostStorage storage, IValidator<GetPostRequest> 
     public async Task<GetPostResponse> Handle(GetPostRequest request, CancellationToken ct = default)
     {
         validator.ValidateAndThrow(request);
-        
+
         var (success, post) = await storage.TryGetAsync(request.Id, ct);
         if (!success)
         {

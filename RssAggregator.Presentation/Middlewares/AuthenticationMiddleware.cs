@@ -1,7 +1,8 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Memory;
 using RssAggregator.Application.Auth;
-using RssAggregator.Presentation.Extensions;
+using RssAggregator.Presentation.Services;
 
 namespace RssAggregator.Presentation.Middlewares;
 
@@ -31,7 +32,7 @@ public class AuthenticationMiddleware(RequestDelegate next, IMemoryCache memoryC
             }
         }
 
-        var (userId, _) = context.User.ToIdEmailTuple();
+        var userId = Guid.Parse(context.User.FindFirstValue(TokenServiceExtensions.ClaimTypes.UserId)!);
         var identity = new Identity
         {
             UserId = userId,
@@ -45,5 +46,4 @@ public class AuthenticationMiddleware(RequestDelegate next, IMemoryCache memoryC
     }
 
     private bool IsJwtTokenValid(string jwtToken) => memoryCache.TryGetValue(jwtToken, out _);
-    
 }

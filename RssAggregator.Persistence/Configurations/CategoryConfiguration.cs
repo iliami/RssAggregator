@@ -9,9 +9,9 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     public void Configure(EntityTypeBuilder<Category> builder)
     {
         builder.HasKey(x => x.Id);
-        
+
         builder.Property(x => x.Name).HasMaxLength(64);
-    
+
         builder.Property(x => x.NormalizedName).HasMaxLength(64);
 
         builder.HasIndex(x => x.NormalizedName).IsUnique();

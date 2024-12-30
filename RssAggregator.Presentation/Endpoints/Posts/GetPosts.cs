@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using RssAggregator.Application.Abstractions.KeySelectors;
-using RssAggregator.Application.Abstractions.Specifications;
-using RssAggregator.Application.Models.Params;
+using RssAggregator.Application.KeySelectors;
+using RssAggregator.Application.Params;
+using RssAggregator.Application.Specifications;
 using RssAggregator.Application.UseCases.Posts.GetPosts;
 using RssAggregator.Domain.Entities;
 
@@ -9,7 +9,13 @@ namespace RssAggregator.Presentation.Endpoints.Posts;
 
 public class GetPosts : IEndpoint
 {
-    private record GetPostsModel(Guid Id, string Title, IEnumerable<string> Categories, DateTime PublishDate, string Url, Guid FeedId);
+    private record GetPostsModel(
+        Guid Id,
+        string Title,
+        IEnumerable<string> Categories,
+        DateTime PublishDate,
+        string Url,
+        Guid FeedId);
 
     private class GetPostsSpecification : Specification<Post>
     {
@@ -20,13 +26,13 @@ public class GetPosts : IEndpoint
             PostFilterParams filterParams)
         {
             IsNoTracking = true;
-            
+
             Skip = (paginationParams.Page - 1) * paginationParams.PageSize;
             Take = paginationParams.PageSize;
-            
+
             AddInclude(post => post.Categories);
             AddInclude(post => post.Feed);
-            
+
             Criteria = post => filterParams.Categories
                 .Select(c => c.ToLowerInvariant())
                 .All(category => post.Categories
@@ -49,7 +55,7 @@ public class GetPosts : IEndpoint
             }
         }
     }
-    
+
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("posts", async (
@@ -67,9 +73,9 @@ public class GetPosts : IEndpoint
                 sortingParams,
                 filterParams);
             var request = new GetPostsRequest(specification);
-            
+
             var response = await useCase.Handle(request, ct);
-            
+
             var posts = response.Posts.Select(post => new GetPostsModel(
                 post.Id,
                 post.Title,
@@ -77,7 +83,7 @@ public class GetPosts : IEndpoint
                 post.PublishDate,
                 post.Url,
                 post.Feed.Id));
-            
+
             return Results.Ok(posts);
         }).AllowAnonymous().WithTags(EndpointsTags.Posts);
     }

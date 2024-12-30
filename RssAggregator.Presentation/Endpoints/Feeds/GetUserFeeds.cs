@@ -1,14 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using RssAggregator.Application.Abstractions.KeySelectors;
-using RssAggregator.Application.Abstractions.Specifications;
-using RssAggregator.Application.Models.DTO;
-using RssAggregator.Application.Models.Params;
+using RssAggregator.Application.KeySelectors;
+using RssAggregator.Application.Params;
+using RssAggregator.Application.Specifications;
 using RssAggregator.Application.UseCases.Feeds.GetUserFeeds;
 using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Presentation.Endpoints.Feeds;
-
-public record GetUserFeedsResponse(PagedResult<FeedDto> Feeds);
 
 public class GetUserFeeds : IEndpoint
 {
@@ -57,8 +54,8 @@ public class GetUserFeeds : IEndpoint
             CancellationToken ct) =>
         {
             var specification = new GetUserFeedsSpecification(
-                selector, 
-                paginationParams, 
+                selector,
+                paginationParams,
                 sortingParams);
 
             var request = new GetUserFeedsRequest(specification);

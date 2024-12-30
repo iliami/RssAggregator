@@ -8,11 +8,11 @@ namespace RssAggregator.Application.UseCases.Subscriptions.DeleteSubscriptionUse
 public class DeleteSubscriptionUseCase(
     IDeleteSubscriptionStorage storage,
     IValidator<DeleteSubscriptionRequest> validator,
-    IIdentityProvider identityProvider) 
+    IIdentityProvider identityProvider)
     : IDeleteSubscriptionUseCase
 {
     public async Task<DeleteSubscriptionResponse> Handle(
-        DeleteSubscriptionRequest request, 
+        DeleteSubscriptionRequest request,
         CancellationToken ct = default)
     {
         if (!identityProvider.Current.IsAuthenticated())

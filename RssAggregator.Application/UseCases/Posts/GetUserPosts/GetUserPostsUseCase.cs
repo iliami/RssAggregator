@@ -5,8 +5,8 @@ using RssAggregator.Domain.Exceptions;
 namespace RssAggregator.Application.UseCases.Posts.GetUserPosts;
 
 public class GetUserPostsUseCase(
-    IGetUserPostsStorage storage, 
-    IValidator<GetUserPostsRequest> validator, 
+    IGetUserPostsStorage storage,
+    IValidator<GetUserPostsRequest> validator,
     IIdentityProvider identityProvider) : IGetUserPostsUseCase
 {
     public async Task<GetUserPostsResponse> Handle(GetUserPostsRequest request, CancellationToken ct = default)

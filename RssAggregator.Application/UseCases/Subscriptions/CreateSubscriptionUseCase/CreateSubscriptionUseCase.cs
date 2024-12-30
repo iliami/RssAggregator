@@ -8,11 +8,11 @@ namespace RssAggregator.Application.UseCases.Subscriptions.CreateSubscriptionUse
 public class CreateSubscriptionUseCase(
     ICreateSubscriptionStorage storage,
     IValidator<CreateSubscriptionRequest> validator,
-    IIdentityProvider identityProvider) 
+    IIdentityProvider identityProvider)
     : ICreateSubscriptionUseCase
 {
     public async Task<CreateSubscriptionResponse> Handle(
-        CreateSubscriptionRequest request, 
+        CreateSubscriptionRequest request,
         CancellationToken ct = default)
     {
         if (!identityProvider.Current.IsAuthenticated())

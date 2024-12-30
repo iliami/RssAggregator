@@ -9,23 +9,23 @@ public class CreatePostUseCase(ICreatePostStorage storage, IValidator<CreatePost
     public async Task<CreatePostResponse> Handle(CreatePostRequest request, CancellationToken ct = default)
     {
         await validator.ValidateAndThrowAsync(request, ct);
-        
+
         var isFeedExist = await storage.IsFeedExist(request.FeedId, ct);
         if (!isFeedExist)
         {
             throw new NotFoundException<Feed>(request.FeedId);
         }
-        
+
         var postId = await storage.CreatePost(
-            request.Title, 
-            request.Description, 
+            request.Title,
+            request.Description,
             request.Categories,
-            request.PublishDate, 
-            request.Url, 
+            request.PublishDate,
+            request.Url,
             request.FeedId, ct);
-        
+
         var response = new CreatePostResponse(postId);
-        
+
         return response;
     }
 }

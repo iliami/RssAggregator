@@ -5,7 +5,7 @@ using RssAggregator.Domain.Exceptions;
 namespace RssAggregator.Application.UseCases.Feeds.GetUserFeeds;
 
 public class GetUserFeedsUseCase(
-    IGetUserFeedsStorage storage, 
+    IGetUserFeedsStorage storage,
     IValidator<GetUserFeedsRequest> validator,
     IIdentityProvider identityProvider) : IGetUserFeedsUseCase
 {

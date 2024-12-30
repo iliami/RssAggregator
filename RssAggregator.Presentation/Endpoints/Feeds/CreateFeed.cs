@@ -9,10 +9,10 @@ public class CreateFeed : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("feeds", async (
-                [FromBody] CreateFeedRequest request,
-                [FromServices] ICreateFeedUseCase useCase,
-                ClaimsPrincipal user,
-                CancellationToken ct) =>
+            [FromBody] CreateFeedRequest request,
+            [FromServices] ICreateFeedUseCase useCase,
+            ClaimsPrincipal user,
+            CancellationToken ct) =>
         {
             if (!user.IsInRole("admin"))
             {

@@ -9,7 +9,7 @@ public record GetPostResponse(
     string Url,
     Guid FeedId)
 {
-    public static GetPostResponse Empty => 
+    public static GetPostResponse Empty =>
         new GetPostResponse(
             Guid.Empty,
             string.Empty,

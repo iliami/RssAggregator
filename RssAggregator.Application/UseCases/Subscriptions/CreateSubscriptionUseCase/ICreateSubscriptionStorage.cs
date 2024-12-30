@@ -3,10 +3,11 @@
 public interface ICreateSubscriptionStorage
 {
     Task<bool> IsFeedExist(
-        Guid feedId, 
+        Guid feedId,
         CancellationToken ct = default);
+
     Task<bool> CreateSubscription(
-        Guid userId, 
-        Guid feedId, 
+        Guid userId,
+        Guid feedId,
         CancellationToken ct = default);
 }

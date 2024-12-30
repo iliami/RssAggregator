@@ -2,5 +2,5 @@
 
 public interface ICreateCategoryUseCase
 {
-    Task<CreateCategoryResponse> Handle(CreateCategoryRequest request, CancellationToken ct =default);
+    Task<CreateCategoryResponse> Handle(CreateCategoryRequest request, CancellationToken ct = default);
 }

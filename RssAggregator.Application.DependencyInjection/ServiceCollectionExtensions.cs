@@ -22,25 +22,21 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
         => services
+            .AddMemoryCache()
             .AddScoped<IIdentityProvider, IdentityProvider>()
-
             .AddValidatorsFromAssemblyContaining<GetPostUseCase>()
-            
             .AddScoped<IGetPostUseCase, GetPostUseCase>()
             .AddScoped<IGetPostsUseCase, GetPostsUseCase>()
             .AddScoped<IGetUserPostsUseCase, GetUserPostsUseCase>()
             .AddScoped<IGetPostsFromFeedUseCase, GetPostsFromFeedUseCase>()
             .AddScoped<ICreatePostUseCase, CreatePostUseCase>()
-
             .AddScoped<IGetFeedUseCase, GetFeedUseCase>()
             .AddScoped<IGetFeedsUseCase, GetFeedsUseCase>()
             .AddScoped<IGetUserFeedsUseCase, GetUserFeedsUseCase>()
             .AddScoped<ICreateFeedUseCase, CreateFeedUseCase>()
             .AddScoped<IUpdateFeedUseCase, UpdateFeedUseCase>()
-
             .AddScoped<IGetCategoriesUseCase, GetCategoriesUseCase>()
             .AddScoped<ICreateCategoryUseCase, CreateCategoryUseCase>()
-
             .AddScoped<ICreateSubscriptionUseCase, CreateSubscriptionUseCase>()
             .AddScoped<IDeleteSubscriptionUseCase, DeleteSubscriptionUseCase>();
 }

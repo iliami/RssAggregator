@@ -6,6 +6,5 @@ public class GetPostRequestValidator : AbstractValidator<GetPostRequest>
 {
     public GetPostRequestValidator()
     {
-        
     }
 }

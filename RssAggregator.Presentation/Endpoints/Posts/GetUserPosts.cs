@@ -1,14 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using RssAggregator.Application.Abstractions.KeySelectors;
-using RssAggregator.Application.Abstractions.Specifications;
-using RssAggregator.Application.Models.DTO;
-using RssAggregator.Application.Models.Params;
+using RssAggregator.Application.KeySelectors;
+using RssAggregator.Application.Params;
+using RssAggregator.Application.Specifications;
 using RssAggregator.Application.UseCases.Posts.GetUserPosts;
 using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Presentation.Endpoints.Posts;
-
-public record GetUserPostsResponse(PagedResult<PostDto> Posts);
 
 public class GetUserPosts : IEndpoint
 {

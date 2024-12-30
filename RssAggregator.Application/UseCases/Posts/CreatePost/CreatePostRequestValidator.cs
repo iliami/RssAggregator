@@ -9,7 +9,7 @@ public class CreatePostRequestValidator : AbstractValidator<CreatePostRequest>
         RuleFor(r => r.Title)
             .NotNull().WithMessage("Title is required")
             .MaximumLength(1024).WithMessage("Title must not exceed 1024 characters");
-        
+
         RuleFor(r => r.Description)
             .NotNull().WithMessage("Description is required")
             .MaximumLength(32768).WithMessage("Description must not exceed 32768 characters");
@@ -22,7 +22,8 @@ public class CreatePostRequestValidator : AbstractValidator<CreatePostRequest>
 
         RuleFor(r => r.Url)
             .NotNull().WithMessage("Url is required")
-            .Matches(@"^(https?:\/\/)?(?:www\.)?([a-zA-Z0-9]{2,}\.)+[a-zA-Z0-9]{2,}(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$").WithMessage("Url must be a valid url")
+            .Matches(@"^(https?:\/\/)?(?:www\.)?([a-zA-Z0-9]{2,}\.)+[a-zA-Z0-9]{2,}(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$")
+            .WithMessage("Url must be a valid url")
             .MaximumLength(256).WithMessage("Url must not exceed 256 characters");
 
         RuleFor(r => r.PublishDate)

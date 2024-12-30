@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using RssAggregator.Application.Abstractions.Repositories;
+using RssAggregator.Application.Repositories;
 using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Persistence.Repositories;

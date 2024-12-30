@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RssAggregator.Application.Abstractions.KeySelectors;
-using RssAggregator.Application.Abstractions.Specifications;
-using RssAggregator.Application.Models.Params;
+using RssAggregator.Application.KeySelectors;
+using RssAggregator.Application.Params;
+using RssAggregator.Application.Specifications;
 using RssAggregator.Application.UseCases.Feeds.GetFeeds;
 using RssAggregator.Domain.Entities;
 
@@ -9,7 +9,7 @@ namespace RssAggregator.Presentation.Endpoints.Feeds;
 
 public class GetFeeds : IEndpoint
 {
-    private record GetFeedsResponseModel(Guid Id, string Name, string Url, int Posts, int Subscribers);
+    private record GetFeedsModel(Guid Id, string Name, string Url, int Posts, int Subscribers);
 
     private class GetFeedsSpecification : Specification<Feed>
     {
@@ -51,14 +51,14 @@ public class GetFeeds : IEndpoint
             [AsParameters] SortingParams sortingParams,
             [FromServices] IGetFeedsUseCase useCase,
             [FromServices] IKeySelector<Feed> selector,
-        CancellationToken ct) =>
+            CancellationToken ct) =>
         {
             var request = new GetFeedsRequest(new GetFeedsSpecification(selector, paginationParams, sortingParams));
 
             var response = await useCase.Handle(request, ct);
 
             var feeds = response.Feeds.Select(
-                feed => new GetFeedsResponseModel(
+                feed => new GetFeedsModel(
                     feed.Id,
                     feed.Name,
                     feed.Url,

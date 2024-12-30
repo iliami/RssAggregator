@@ -15,7 +15,7 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
         builder.Property(x => x.Description).HasMaxLength(32768);
 
         builder.Property(x => x.Url).HasMaxLength(256);
-        
+
         builder.HasOne(x => x.Feed).WithMany(x => x.Posts);
 
         builder.HasMany(x => x.Categories).WithMany()

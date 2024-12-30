@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using RssAggregator.Application.Models.Params;
 
 namespace RssAggregator.Application.UseCases.Posts.GetPosts;
 

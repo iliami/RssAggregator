@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using RssAggregator.Application.Abstractions.Specifications;
+using RssAggregator.Application.Specifications;
 using RssAggregator.Application.UseCases.Feeds.GetFeed;
 using RssAggregator.Domain.Entities;
 
@@ -7,7 +7,12 @@ namespace RssAggregator.Presentation.Endpoints.Feeds;
 
 public class GetFeed : IEndpoint
 {
-    private record GetFeedPostModel(Guid Id, string Title, string Url, DateTime PublishDate, IEnumerable<string> Categories);
+    private record GetFeedPostModel(
+        Guid Id,
+        string Title,
+        string Url,
+        DateTime PublishDate,
+        IEnumerable<string> Categories);
 
     private record GetFeedModel(
         Guid Id,
@@ -21,9 +26,9 @@ public class GetFeed : IEndpoint
         public GetFeedSpecification(Guid feedId)
         {
             IsNoTracking = true;
-            
+
             Criteria = feed => feed.Id == feedId;
-            
+
             AddInclude(feed => feed.Posts);
             AddInclude(feed => feed.Subscribers);
         }

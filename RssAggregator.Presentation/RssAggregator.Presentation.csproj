@@ -30,11 +30,9 @@
 
     <ItemGroup>
         <ProjectReference Include="..\RssAggregator.Application.DependencyInjection\RssAggregator.Application.DependencyInjection.csproj" />
-        <ProjectReference Include="..\RssAggregator.Application\RssAggregator.Application.csproj"/>
         <ProjectReference Include="..\RssAggregator.Domain\RssAggregator.Domain.csproj"/>
-        <ProjectReference Include="..\RssAggregator.Infrastructure\RssAggregator.Infrastructure.csproj"/>
+        <ProjectReference Include="..\RssAggregator.Infrastructure.DependencyInjection\RssAggregator.Infrastructure.DependencyInjection.csproj" />
         <ProjectReference Include="..\RssAggregator.Persistence.DependencyInjection\RssAggregator.Persistence.DependencyInjection.csproj" />
-        <ProjectReference Include="..\RssAggregator.Persistence\RssAggregator.Persistence.csproj"/>
     </ItemGroup>
 
 </Project>

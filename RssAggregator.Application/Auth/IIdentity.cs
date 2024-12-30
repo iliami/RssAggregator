@@ -15,5 +15,7 @@ public class Identity : IIdentity
 public static class IdentityExtensions
 {
     public static bool IsAuthenticated(this IIdentity current) => current.UserId != Guid.Empty;
-    public static bool IsAdminRole(this IIdentity current) => current.Role.Equals("admin", StringComparison.InvariantCultureIgnoreCase);
+
+    public static bool IsAdminRole(this IIdentity current) =>
+        current.Role.Equals("admin", StringComparison.InvariantCultureIgnoreCase);
 }

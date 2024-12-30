@@ -8,7 +8,7 @@ public class GetPost : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("posts/{id:guid}", async (
-            [FromRoute]    Guid id,
+            [FromRoute] Guid id,
             [FromServices] IGetPostUseCase useCase,
             CancellationToken ct) =>
         {

@@ -2,7 +2,8 @@
 
 namespace RssAggregator.Application.UseCases.Categories.GetCategories;
 
-public class GetCategoriesUseCase(IGetCategoriesStorage storage, IValidator<GetCategoriesRequest> validator) : IGetCategoriesUseCase
+public class GetCategoriesUseCase(IGetCategoriesStorage storage, IValidator<GetCategoriesRequest> validator)
+    : IGetCategoriesUseCase
 {
     public async Task<GetCategoriesResponse> Handle(GetCategoriesRequest request, CancellationToken ct = default)
     {

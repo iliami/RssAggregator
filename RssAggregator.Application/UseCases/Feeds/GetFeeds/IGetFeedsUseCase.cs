@@ -3,6 +3,6 @@
 public interface IGetFeedsUseCase
 {
     Task<GetFeedsResponse> Handle(
-        GetFeedsRequest request, 
+        GetFeedsRequest request,
         CancellationToken ct = default);
 }

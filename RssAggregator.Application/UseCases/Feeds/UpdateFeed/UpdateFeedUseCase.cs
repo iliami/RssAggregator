@@ -5,7 +5,7 @@ using RssAggregator.Domain.Exceptions;
 namespace RssAggregator.Application.UseCases.Feeds.UpdateFeed;
 
 public class UpdateFeedUseCase(
-    IUpdateFeedStorage storage, 
+    IUpdateFeedStorage storage,
     IValidator<UpdateFeedRequest> validator)
     : IUpdateFeedUseCase
 {

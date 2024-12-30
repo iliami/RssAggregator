@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using RssAggregator.Presentation.Extensions;
+using RssAggregator.Presentation.Services;
 
 namespace RssAggregator.Presentation.Endpoints.Auth;
 
@@ -13,7 +13,7 @@ public class RevokeToken : IEndpoint
             [FromServices] IMemoryCache memoryCache,
             ClaimsPrincipal user) =>
         {
-            var (userId, _) = user.ToIdEmailTuple();
+            var userId = Guid.Parse(user.FindFirstValue(TokenServiceExtensions.ClaimTypes.UserId)!);
 
             var key = $"userid-{userId}";
             var success = memoryCache.TryGetValue<TokenResponse>(key, out var tokens);

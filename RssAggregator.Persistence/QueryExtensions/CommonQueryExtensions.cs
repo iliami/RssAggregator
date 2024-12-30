@@ -1,43 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using RssAggregator.Application.Abstractions.KeySelectors;
-using RssAggregator.Application.Abstractions.Specifications;
-using RssAggregator.Application.Models.DTO;
-using RssAggregator.Application.Models.Params;
+using RssAggregator.Application.Specifications;
 
 namespace RssAggregator.Persistence.QueryExtensions;
 
 public static class CommonQueryExtensions
 {
-    public static async Task<PagedResult<T>> ToPagedResultAsync<T>(
-        this IQueryable<T> query,
-        PaginationParams paginationParams,
-        CancellationToken ct = default)
-    {
-        var count = await query.CountAsync(ct);
-        if (count == 0) return new PagedResult<T>([], 0);
-
-        var skip = (paginationParams.Page - 1) * paginationParams.PageSize;
-        var take = paginationParams.PageSize;
-
-        var result = await query.Skip(skip).Take(take).ToArrayAsync(ct);
-
-        return new PagedResult<T>(result, count);
-    }
-
-    public static IQueryable<T> WithSorting<T>(
-        this IQueryable<T> query,
-        SortingParams sortParams,
-        IKeySelector<T> keySelector)
-    {
-        if (sortParams.SortBy == string.Empty || sortParams.SortDirection == SortDirection.None)
-            return query;
-
-        var orderBySelector = keySelector.GetKeySelector(sortParams.SortBy);
-
-        return sortParams.SortDirection == SortDirection.Asc
-            ? query.OrderBy(orderBySelector)
-            : query.OrderByDescending(orderBySelector);
-    }
     public static IQueryable<TEntity> EvaluateSpecification<TEntity>(
         this IQueryable<TEntity> query,
         Specification<TEntity> specification)
@@ -47,17 +14,19 @@ public static class CommonQueryExtensions
         {
             query = query.AsNoTracking();
         }
-        
+
         if (specification.Criteria is not null)
         {
             query = query.Where(specification.Criteria);
         }
-        
+
         if (specification.OrderBy is not null)
         {
-            query = specification.IsAscendingOrderBy ? query.OrderBy(specification.OrderBy) : query.OrderByDescending(specification.OrderBy);
+            query = specification.IsAscendingOrderBy
+                ? query.OrderBy(specification.OrderBy)
+                : query.OrderByDescending(specification.OrderBy);
         }
-        
+
         if (specification.Skip <= 0)
         {
             query = query.Skip(specification.Skip);
@@ -67,7 +36,7 @@ public static class CommonQueryExtensions
         {
             query = query.Take(specification.Take);
         }
-        
+
         query = specification.Includes.Aggregate(
             query,
             (current, include) => current.Include(include));

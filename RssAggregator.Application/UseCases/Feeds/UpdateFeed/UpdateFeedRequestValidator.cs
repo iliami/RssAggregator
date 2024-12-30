@@ -9,6 +9,6 @@ public class UpdateFeedRequestValidator : AbstractValidator<UpdateFeedRequest>
         RuleFor(r => r.Feed)
             .Cascade(CascadeMode.Stop)
             .NotNull().WithMessage("Feed cannot be null");
-            // TODO: am i need a feed validator here???
+        // TODO: am i need a feed validator here???
     }
 }

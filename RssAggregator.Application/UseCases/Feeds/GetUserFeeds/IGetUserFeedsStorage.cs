@@ -1,4 +1,4 @@
-﻿using RssAggregator.Application.Abstractions.Specifications;
+﻿using RssAggregator.Application.Specifications;
 using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Application.UseCases.Feeds.GetUserFeeds;

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using RssAggregator.Application.Abstractions.Repositories;
-using RssAggregator.Presentation.Extensions;
+using RssAggregator.Application.Auth;
+using RssAggregator.Application.Repositories;
+using RssAggregator.Presentation.Services;
 
 namespace RssAggregator.Presentation.Endpoints.Auth;
 
@@ -15,11 +16,12 @@ public class Register : IEndpoint
         app.MapPost("auth/register", async (
             [FromBody] RegisterRequest request,
             [FromServices] IAppUserRepository appUserRepository,
+            [FromServices] IHashCreator hashCreator,
             CancellationToken ct) =>
         {
             var id = await appUserRepository.AddAsync(
                 request.Email,
-                request.Password.GetHash(),
+                hashCreator.GetHash(request.Password),
                 "base_user", ct);
 
             var response = new RegisterResponse(id.ToString(), request.Email);

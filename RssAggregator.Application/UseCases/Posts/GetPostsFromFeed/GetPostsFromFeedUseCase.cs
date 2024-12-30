@@ -6,7 +6,7 @@ namespace RssAggregator.Application.UseCases.Posts.GetPostsFromFeed;
 
 public class GetPostsFromFeedUseCase(
     IGetPostsFromFeedStorage storage,
-    IValidator<GetPostsFromFeedRequest> validator) 
+    IValidator<GetPostsFromFeedRequest> validator)
     : IGetPostsFromFeedUseCase
 {
     public async Task<GetPostsFromFeedResponse> Handle(GetPostsFromFeedRequest request, CancellationToken ct = default)
