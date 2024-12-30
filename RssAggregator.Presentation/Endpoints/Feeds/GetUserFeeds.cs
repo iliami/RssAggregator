@@ -1,9 +1,10 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using RssAggregator.Application.Abstractions.Repositories;
+using RssAggregator.Application.Abstractions.KeySelectors;
+using RssAggregator.Application.Abstractions.Specifications;
 using RssAggregator.Application.Models.DTO;
 using RssAggregator.Application.Models.Params;
-using RssAggregator.Presentation.Extensions;
+using RssAggregator.Application.UseCases.Feeds.GetUserFeeds;
+using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Presentation.Endpoints.Feeds;
 
@@ -11,26 +12,69 @@ public record GetUserFeedsResponse(PagedResult<FeedDto> Feeds);
 
 public class GetUserFeeds : IEndpoint
 {
+    private record GetUserFeedsModel(Guid Id, string Name, string Url, int Posts, int Subscribers);
+
+    private class GetUserFeedsSpecification : Specification<Feed>
+    {
+        public GetUserFeedsSpecification(
+            IKeySelector<Feed> keySelector,
+            PaginationParams paginationParams,
+            SortingParams sortingParams)
+        {
+            IsNoTracking = true;
+
+            Skip = (paginationParams.Page - 1) * paginationParams.PageSize;
+            Take = paginationParams.PageSize;
+
+            AddInclude(feed => feed.Posts);
+            AddInclude(feed => feed.Subscribers);
+
+            if (sortingParams.SortDirection == SortDirection.None)
+            {
+                return;
+            }
+
+            var selector = keySelector.GetKeySelector(sortingParams.SortBy);
+
+            if (sortingParams.SortDirection == SortDirection.Asc)
+            {
+                SetAscendingOrderBy(selector);
+            }
+            else
+            {
+                SetDescendingOrderBy(selector);
+            }
+        }
+    }
+
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("feeds/me", async (
             [AsParameters] PaginationParams paginationParams,
             [AsParameters] SortingParams sortingParams,
-            [FromServices] IFeedRepository feedRepository,
-            ClaimsPrincipal user,
+            [FromServices] IGetUserFeedsUseCase useCase,
+            [FromServices] IKeySelector<Feed> selector,
             CancellationToken ct) =>
         {
-            var (userId, _) = user.ToIdEmailTuple();
-            
-            var feeds = await feedRepository.GetByUserIdAsync(
-                userId, 
+            var specification = new GetUserFeedsSpecification(
+                selector, 
                 paginationParams, 
-                sortingParams, 
-                ct);
-            
-            var response = new GetUserFeedsResponse(feeds);
-            
-            return Results.Ok(response);
+                sortingParams);
+
+            var request = new GetUserFeedsRequest(specification);
+
+            var response = await useCase.Handle(request, ct);
+
+            var feeds = response.Feeds.Select(
+                feed => new GetUserFeedsModel(
+                    feed.Id,
+                    feed.Name,
+                    feed.Url,
+                    feed.Posts.Count,
+                    feed.Subscribers.Count
+                ));
+
+            return Results.Ok(feeds);
         }).RequireAuthorization().WithTags(EndpointsTags.Feeds);
     }
 }
