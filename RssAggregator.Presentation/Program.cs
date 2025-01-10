@@ -4,8 +4,27 @@ using RssAggregator.Infrastructure.DependencyInjection;
 using RssAggregator.Persistence.DependencyInjection;
 using RssAggregator.Presentation.Middlewares;
 using RssAggregator.Presentation.ServiceCollectionExtensions;
+using Serilog;
+using Serilog.Filters;
+using Serilog.Sinks.OpenTelemetry;
 
 var builder = WebApplication.CreateBuilder();
+
+builder.Services.AddLogging(b => b.AddSerilog(new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.Console()
+    .Enrich.WithProperty("Application", "RssAggregator")
+    .Enrich.WithProperty("Environment", "ASPNETCORE_ENVIRONMENT")
+    .WriteTo.OpenTelemetry(options =>
+    {
+        options.Endpoint = "http://localhost:4317";
+        options.Protocol = OtlpProtocol.Grpc;
+        options.ResourceAttributes = new Dictionary<string, object>
+        {
+            ["service.name"] = "rssaggregator"
+        };
+    })
+    .CreateLogger()));
 
 builder.Services
     .AddApplication()
