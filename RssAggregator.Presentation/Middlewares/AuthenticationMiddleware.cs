@@ -33,10 +33,11 @@ public class AuthenticationMiddleware(RequestDelegate next, IMemoryCache memoryC
         }
 
         var userId = Guid.Parse(context.User.FindFirstValue(TokenServiceExtensions.ClaimTypes.UserId)!);
+        var userRole = context.User.FindFirstValue(TokenServiceExtensions.ClaimTypes.Role) ?? "base_user";
         var identity = new Identity
         {
             UserId = userId,
-            Role = "admin" // TODO: Role
+            Role = userRole
         };
 
         var identityProvider = context.RequestServices.GetRequiredService<IIdentityProvider>();

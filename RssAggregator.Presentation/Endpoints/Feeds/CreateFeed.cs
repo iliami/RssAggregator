@@ -14,15 +14,10 @@ public class CreateFeed : IEndpoint
             ClaimsPrincipal user,
             CancellationToken ct) =>
         {
-            if (!user.IsInRole("admin"))
-            {
-                // TODO: admin role
-            }
-
             var response = await useCase.Handle(request, ct);
             var feedId = response.FeedId;
 
             return Results.Created($"feeds/{feedId}", feedId);
-        }).RequireAuthorization().WithTags(EndpointsTags.Feeds);
+        }).RequireAuthorization(builder => builder.RequireRole("admin")) .WithTags(EndpointsTags.Feeds);
     }
 }

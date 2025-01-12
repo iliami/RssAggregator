@@ -62,12 +62,14 @@ public static class TokenServiceExtensions
         public const string IssAt = JwtRegisteredClaimNames.Iat;
         public const string UserId = "userid";
         public const string Email = "email";
+        public const string Role = System.Security.Claims.ClaimTypes.Role;
     }
 
     public static Claim[] CreateClaims(this AppUser user) =>
     [
         new(ClaimTypes.UserId, user.Id.ToString()),
         new(ClaimTypes.Email, user.Email),
+        new(ClaimTypes.Role, user.Role)
     ];
 
     public static SymmetricSecurityKey GetSecurityKey(this JwtOptions options)

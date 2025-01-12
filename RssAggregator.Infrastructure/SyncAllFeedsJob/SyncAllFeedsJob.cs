@@ -55,6 +55,7 @@ public class SyncAllFeedsJob(
     {
         using var scope = serviceProvider.CreateScope();
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<SyncAllFeedsJob>>();
+        logger.LogInformation("Try to fetch feed with id {feedId} by url {feedUrl}", feed.Id, feed.Url);
         try
         {
             var rssFeed = await FetchFeed(feed.Url, ct);
@@ -76,6 +77,7 @@ public class SyncAllFeedsJob(
             });
 
             await UpdateFeed(scope, rssFeed, posts, feed, ct);
+            logger.LogInformation("Successfully fetch feed with id {feedId} by url {feedUrl}", feed.Id, feed.Url);
         }
         catch (Exception e)
         {
@@ -116,7 +118,7 @@ public class SyncAllFeedsJob(
                 NormalizedName = name.ToLowerInvariant(),
                 Feed = feed
             };
-        }).ToArray();
+        }).ToArray() ?? [];
 
         if (!isAnyNewCategory)
         {
@@ -165,9 +167,18 @@ public class SyncAllFeedsJob(
         if (scrapedPostInfosToStore.Length > 0)
         {
             var newUrls = scrapedPostInfosToStore.Select(x => x.Url);
-            memoryCache.Set(
-                string.Format(CacheUrlsPostsKey, feedId),
-                urls!.Concat(newUrls).ToArray());
+            if (urls is null)
+            {
+                memoryCache.Set(
+                    string.Format(CacheUrlsPostsKey, feedId),
+                    newUrls.ToArray());
+            }
+            else
+            {
+                memoryCache.Set(
+                    string.Format(CacheUrlsPostsKey, feedId),
+                    urls!.Concat(newUrls).ToArray());
+            }
         }
 
         return scrapedPostInfosToStore;
