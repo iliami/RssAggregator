@@ -1,7 +1,7 @@
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace RssAggregator.Presentation.Options;
+namespace Iliami.Identity.Domain.Options;
 
 public class JwtOptions
 {

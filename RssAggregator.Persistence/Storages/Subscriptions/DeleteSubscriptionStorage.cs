@@ -10,7 +10,7 @@ public class DeleteSubscriptionStorage(AppDbContext dbContext) : IDeleteSubscrip
 
     public async Task<bool> DeleteSubscription(Guid userId, Guid feedId, CancellationToken ct = default)
     {
-        var appUser = await dbContext.AppUsers.FirstOrDefaultAsync(u => u.Id == userId, ct);
+        var appUser = await dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId, ct);
         if (appUser == null)
         {
             return false;

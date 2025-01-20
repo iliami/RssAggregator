@@ -34,7 +34,7 @@ public class CreateSubscriptionUseCase(
 
         if (!isSubscribedSuccessful)
         {
-            throw new NotFoundException<AppUser>(identityProvider.Current.UserId);
+            throw new NotFoundException<User>(identityProvider.Current.UserId);
         }
 
         var response = new CreateSubscriptionResponse();

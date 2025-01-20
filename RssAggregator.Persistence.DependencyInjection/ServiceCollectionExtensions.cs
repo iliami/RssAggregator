@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using RssAggregator.Application.KeySelectors;
-using RssAggregator.Application.Repositories;
 using RssAggregator.Application.UseCases.Categories.CreateCategory;
 using RssAggregator.Application.UseCases.Categories.GetCategories;
 using RssAggregator.Application.UseCases.Feeds.CreateFeed;
@@ -8,6 +7,7 @@ using RssAggregator.Application.UseCases.Feeds.GetFeed;
 using RssAggregator.Application.UseCases.Feeds.GetFeeds;
 using RssAggregator.Application.UseCases.Feeds.GetUserFeeds;
 using RssAggregator.Application.UseCases.Feeds.UpdateFeed;
+using RssAggregator.Application.UseCases.Identity.CreateUser;
 using RssAggregator.Application.UseCases.Posts.CreatePost;
 using RssAggregator.Application.UseCases.Posts.GetPost;
 using RssAggregator.Application.UseCases.Posts.GetPosts;
@@ -16,10 +16,9 @@ using RssAggregator.Application.UseCases.Posts.GetUserPosts;
 using RssAggregator.Application.UseCases.Subscriptions.CreateSubscriptionUseCase;
 using RssAggregator.Application.UseCases.Subscriptions.DeleteSubscriptionUseCase;
 using RssAggregator.Persistence.KeySelectors;
-using RssAggregator.Persistence.Repositories;
-using RssAggregator.Persistence.Storages;
 using RssAggregator.Persistence.Storages.Categories;
 using RssAggregator.Persistence.Storages.Feeds;
+using RssAggregator.Persistence.Storages.Identity;
 using RssAggregator.Persistence.Storages.Posts;
 using RssAggregator.Persistence.Storages.Subscriptions;
 
@@ -30,8 +29,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddPersistence(this IServiceCollection services)
         => services
             .AddDbContext<AppDbContext>()
-            .AddScoped<IAppUserRepository, AppUserRepository>()
             .AddKeySelectors()
+            .AddScoped<ICreateUserStorage, CreateUserStorage>()
             .AddScoped<IGetPostStorage, GetPostStorage>()
             .AddScoped<IGetPostsStorage, GetPostsStorage>()
             .AddScoped<IGetUserPostsStorage, GetUserPostsStorage>()

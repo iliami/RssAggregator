@@ -7,6 +7,6 @@ public class Feed
     public required string Url { get; set; }
     public string Description { get; set; } = string.Empty;
     public DateTimeOffset? LastFetchedAt { get; set; }
-    public ICollection<AppUser> Subscribers { get; set; } = [];
+    public ICollection<User> Subscribers { get; set; } = [];
     public ICollection<Post> Posts { get; set; } = [];
 }

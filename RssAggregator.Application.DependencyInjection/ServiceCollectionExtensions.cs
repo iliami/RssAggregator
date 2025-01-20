@@ -8,6 +8,7 @@ using RssAggregator.Application.UseCases.Feeds.GetFeed;
 using RssAggregator.Application.UseCases.Feeds.GetFeeds;
 using RssAggregator.Application.UseCases.Feeds.GetUserFeeds;
 using RssAggregator.Application.UseCases.Feeds.UpdateFeed;
+using RssAggregator.Application.UseCases.Identity.CreateUser;
 using RssAggregator.Application.UseCases.Posts.CreatePost;
 using RssAggregator.Application.UseCases.Posts.GetPost;
 using RssAggregator.Application.UseCases.Posts.GetPosts;
@@ -25,6 +26,7 @@ public static class ServiceCollectionExtensions
             .AddMemoryCache()
             .AddScoped<IIdentityProvider, IdentityProvider>()
             .AddValidatorsFromAssemblyContaining<GetPostUseCase>()
+            .AddScoped<ICreateUserUseCase, CreateUserUseCase>()
             .AddScoped<IGetPostUseCase, GetPostUseCase>()
             .AddScoped<IGetPostsUseCase, GetPostsUseCase>()
             .AddScoped<IGetUserPostsUseCase, GetUserPostsUseCase>()

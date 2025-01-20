@@ -1,6 +1,4 @@
-﻿using RssAggregator.Application.Auth;
-
-namespace RssAggregator.Presentation.Services;
+﻿namespace Iliami.Identity.Domain.HashingHelpers;
 
 public class HashingHelper : IHashCreator, IHashComparer
 {

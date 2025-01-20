@@ -1,4 +1,4 @@
-﻿namespace RssAggregator.Presentation.Services;
+﻿namespace Iliami.Identity.Domain.HashingHelpers;
 
 public interface IHashComparer
 {

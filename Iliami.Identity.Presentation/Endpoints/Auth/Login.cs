@@ -1,10 +1,11 @@
+using Iliami.Identity.Domain;
+using Iliami.Identity.Domain.HashingHelpers;
+using Iliami.Identity.Domain.TokenGenerator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using RssAggregator.Application.Auth;
-using RssAggregator.Application.Repositories;
-using RssAggregator.Presentation.Services;
+using RssAggregator.Presentation.Endpoints;
 
-namespace RssAggregator.Presentation.Endpoints.Auth;
+namespace Iliami.Identity.Presentation.Endpoints.Auth;
 
 public record LoginRequest(string Email, string Password);
 
@@ -14,13 +15,13 @@ public class Login : IEndpoint
     {
         app.MapPost("auth/login", async (
             [FromBody] LoginRequest request,
-            [FromServices] IAppUserRepository appUserRepository,
-            [FromServices] ITokenService tokenService,
+            [FromServices] IUserRepository userRepository,
+            [FromServices] ITokenGenerator tokenGenerator,
             [FromServices] IMemoryCache memoryCache,
             [FromServices] IHashComparer hashComparer,
             CancellationToken ct) =>
         {
-            var storedUser = await appUserRepository.GetByEmailAsync(request.Email, ct);
+            var storedUser = await userRepository.GetByEmailAsync(request.Email, ct);
             if (storedUser is null)
             {
                 return Results.NotFound("There is no user with this email");
@@ -32,7 +33,7 @@ public class Login : IEndpoint
                 return Results.BadRequest("Invalid password");
             }
 
-            var response = tokenService.GenerateToken(storedUser);
+            var response = tokenGenerator.GenerateToken(storedUser);
 
             var key = $"userid-{storedUser.Id}";
             var success = memoryCache.TryGetValue<TokenResponse>(key, out var tokens);

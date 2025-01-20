@@ -1,17 +1,14 @@
+﻿using Iliami.Identity.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using RssAggregator.Domain.Entities;
 
-namespace RssAggregator.Persistence;
+namespace Iliami.Identity.Persistence;
 
-public class AppDbContext(IConfiguration configuration, ILoggerFactory loggerFactory) : DbContext
+public class DbContext(IConfiguration configuration, ILoggerFactory loggerFactory) : Microsoft.EntityFrameworkCore.DbContext
 {
     public DbSet<User> Users { get; set; }
-    public DbSet<Feed> Feeds { get; set; }
-    public DbSet<Post> Posts { get; set; }
-
-    public DbSet<Category> Categories { get; set; }
+    public DbSet<IdentityEvent> IdentityEvents { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -26,6 +23,6 @@ public class AppDbContext(IConfiguration configuration, ILoggerFactory loggerFac
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(DbContext).Assembly);
     }
 }

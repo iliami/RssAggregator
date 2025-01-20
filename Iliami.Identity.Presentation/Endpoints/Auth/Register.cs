@@ -1,9 +1,9 @@
+using Iliami.Identity.Domain;
+using Iliami.Identity.Domain.HashingHelpers;
 using Microsoft.AspNetCore.Mvc;
-using RssAggregator.Application.Auth;
-using RssAggregator.Application.Repositories;
-using RssAggregator.Presentation.Services;
+using RssAggregator.Presentation.Endpoints;
 
-namespace RssAggregator.Presentation.Endpoints.Auth;
+namespace Iliami.Identity.Presentation.Endpoints.Auth;
 
 public record RegisterRequest(string Email, string Password);
 
@@ -15,7 +15,8 @@ public class Register : IEndpoint
     {
         app.MapPost("auth/register", async (
             [FromBody] RegisterRequest request,
-            [FromServices] IAppUserRepository appUserRepository,
+            [FromServices] IUserRepository appUserRepository,
+            [FromServices] IIdentityEventRepository identityEventRepository,
             [FromServices] IHashCreator hashCreator,
             CancellationToken ct) =>
         {

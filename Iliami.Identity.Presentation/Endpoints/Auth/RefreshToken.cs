@@ -1,21 +1,15 @@
 using System.Text.Json.Serialization;
+using Iliami.Identity.Domain;
+using Iliami.Identity.Domain.Options;
+using Iliami.Identity.Domain.TokenGenerator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using RssAggregator.Application.Repositories;
-using RssAggregator.Presentation.Options;
-using RssAggregator.Presentation.Services;
+using RssAggregator.Presentation.Endpoints;
 
-namespace RssAggregator.Presentation.Endpoints.Auth;
+namespace Iliami.Identity.Presentation.Endpoints.Auth;
 
 public record TokenRequest(string Email, string RefreshToken);
-
-public record TokenResponse(
-    string Email,
-    string AccessToken,
-    string RefreshToken,
-    [property: JsonIgnore] DateTime AccessTokenExpiration,
-    [property: JsonIgnore] DateTime RefreshTokenExpiration);
 
 public class RefreshToken : IEndpoint
 {
@@ -23,15 +17,15 @@ public class RefreshToken : IEndpoint
     {
         app.MapPost("auth/refresh-token", async (
             [FromBody] TokenRequest request,
-            [FromServices] IAppUserRepository appUserRepository,
+            [FromServices] IUserRepository userRepository,
             [FromServices] IOptions<JwtOptions> options,
-            [FromServices] ITokenService tokenService,
+            [FromServices] ITokenGenerator tokenGenerator,
             [FromServices] IMemoryCache memoryCache,
             CancellationToken ct) =>
         {
             var userEmail = request.Email;
 
-            var storedUser = await appUserRepository.GetByEmailAsync(userEmail, ct);
+            var storedUser = await userRepository.GetByEmailAsync(userEmail, ct);
             if (storedUser is null)
             {
                 return Results.NotFound("There is no user with this email");
@@ -49,9 +43,9 @@ public class RefreshToken : IEndpoint
                 return Results.BadRequest("Refresh tokens don't match");
             }
 
-            tokenService.ThrowIfInvalidAccessToken(options.Value, tokens.AccessToken);
+            tokenGenerator.ThrowIfInvalidAccessToken(options.Value, tokens.AccessToken);
 
-            var response = tokenService.GenerateToken(storedUser);
+            var response = tokenGenerator.GenerateToken(storedUser);
 
             memoryCache.Set(key, response, response.RefreshTokenExpiration);
 

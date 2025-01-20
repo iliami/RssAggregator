@@ -38,35 +38,6 @@ namespace RssAggregator.Persistence.Migrations
                     b.ToTable("PostCategory", (string)null);
                 });
 
-            modelBuilder.Entity("RssAggregator.Domain.Entities.AppUser", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("character varying(16)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.ToTable("AppUsers");
-                });
-
             modelBuilder.Entity("RssAggregator.Domain.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
@@ -159,6 +130,17 @@ namespace RssAggregator.Persistence.Migrations
                     b.ToTable("Posts");
                 });
 
+            modelBuilder.Entity("RssAggregator.Domain.Entities.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("Subscriptions", b =>
                 {
                     b.Property<Guid>("FeedId")
@@ -213,7 +195,7 @@ namespace RssAggregator.Persistence.Migrations
 
             modelBuilder.Entity("Subscriptions", b =>
                 {
-                    b.HasOne("RssAggregator.Domain.Entities.AppUser", null)
+                    b.HasOne("RssAggregator.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)

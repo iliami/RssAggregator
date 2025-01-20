@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\RssAggregator.Domain\RssAggregator.Domain.csproj"/>
+        <ProjectReference Include="..\RssAggregator.Domain\RssAggregator.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>

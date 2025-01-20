@@ -447,3 +447,46 @@ BEGIN
 END $EF$;
 COMMIT;
 
+START TRANSACTION;
+
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250120150629_ConfigureUser') THEN
+    ALTER TABLE "Subscriptions" DROP CONSTRAINT "FK_Subscriptions_AppUsers_AppUserId";
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250120150629_ConfigureUser') THEN
+    DROP TABLE "AppUsers";
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250120150629_ConfigureUser') THEN
+    CREATE TABLE "Users" (
+        "Id" uuid NOT NULL,
+        CONSTRAINT "PK_Users" PRIMARY KEY ("Id")
+    );
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250120150629_ConfigureUser') THEN
+    ALTER TABLE "Subscriptions" ADD CONSTRAINT "FK_Subscriptions_Users_AppUserId" FOREIGN KEY ("AppUserId") REFERENCES "Users" ("Id") ON DELETE CASCADE;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250120150629_ConfigureUser') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20250120150629_ConfigureUser', '8.0.11');
+    END IF;
+END $EF$;
+COMMIT;
+

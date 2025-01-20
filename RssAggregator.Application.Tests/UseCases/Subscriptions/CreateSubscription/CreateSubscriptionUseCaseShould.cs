@@ -91,6 +91,6 @@ public class CreateSubscriptionUseCaseShould
 
         var actual = _sut.Invoking(s => s.Handle(request, CancellationToken.None));
 
-        await actual.Should().ThrowExactlyAsync<NotFoundException<AppUser>>();
+        await actual.Should().ThrowExactlyAsync<NotFoundException<User>>();
     }
 }

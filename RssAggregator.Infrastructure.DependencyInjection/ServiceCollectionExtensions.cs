@@ -7,5 +7,6 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         => services
             .AddHttpClient()
-            .AddHostedService<SyncAllFeedsJob.SyncAllFeedsJob>();
+            .AddHostedService<SyncAllFeedsJob.SyncAllFeedsJob>()
+            .AddHostedService<IdentityEventListener>();
 }

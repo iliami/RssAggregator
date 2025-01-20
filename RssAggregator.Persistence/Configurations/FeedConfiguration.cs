@@ -18,8 +18,8 @@ public class FeedConfiguration : IEntityTypeConfiguration<Feed>
 
         builder.HasMany(x => x.Subscribers).WithMany()
             .UsingEntity("Subscriptions",
-                r => r.HasOne(typeof(AppUser)).WithMany().HasForeignKey("AppUserId")
-                    .HasPrincipalKey(nameof(AppUser.Id)),
+                r => r.HasOne(typeof(User)).WithMany().HasForeignKey("AppUserId")
+                    .HasPrincipalKey(nameof(User.Id)),
                 l => l.HasOne(typeof(Feed), nameof(Feed.Subscribers)).WithMany().HasForeignKey("FeedId")
                     .HasPrincipalKey(nameof(Feed.Id)),
                 j => j.HasKey("FeedId", "AppUserId"));

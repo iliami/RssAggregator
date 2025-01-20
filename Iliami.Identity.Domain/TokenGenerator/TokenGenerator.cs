@@ -1,19 +1,17 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Iliami.Identity.Domain.Options;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using RssAggregator.Domain.Entities;
-using RssAggregator.Presentation.Endpoints.Auth;
-using RssAggregator.Presentation.Options;
 
-namespace RssAggregator.Presentation.Services;
+namespace Iliami.Identity.Domain.TokenGenerator;
 
-public class TokenService(IOptions<JwtOptions> options) : ITokenService
+public class TokenGenerator(IOptions<JwtOptions> options) : ITokenGenerator
 {
     private JwtOptions JwtOptions { get; } = options.Value;
 
-    public TokenResponse GenerateToken(AppUser user)
+    public TokenResponse GenerateToken(User user)
     {
         var accessToken = CreateAccessToken(user);
         var accessTokenExpiration = DateTime.UtcNow
@@ -33,7 +31,7 @@ public class TokenService(IOptions<JwtOptions> options) : ITokenService
         return response;
     }
 
-    private string CreateAccessToken(AppUser user)
+    private string CreateAccessToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -54,7 +52,7 @@ public class TokenService(IOptions<JwtOptions> options) : ITokenService
         => Guid.NewGuid().ToString("N");
 }
 
-public static class TokenServiceExtensions
+public static class TokenGeneratorExtensions
 {
     public static class ClaimTypes
     {
@@ -65,20 +63,14 @@ public static class TokenServiceExtensions
         public const string Role = System.Security.Claims.ClaimTypes.Role;
     }
 
-    public static Claim[] CreateClaims(this AppUser user) =>
+    public static Claim[] CreateClaims(this User user) =>
     [
         new(ClaimTypes.UserId, user.Id.ToString()),
         new(ClaimTypes.Email, user.Email),
         new(ClaimTypes.Role, user.Role)
     ];
 
-    public static SymmetricSecurityKey GetSecurityKey(this JwtOptions options)
-        => new(Encoding.UTF8.GetBytes(options.SecretKey));
-
-    public static SigningCredentials GetSigningCredentials(this JwtOptions options)
-        => new(options.GetSecurityKey(), SecurityAlgorithms.HmacSha256);
-
-    public static void ThrowIfInvalidAccessToken(this ITokenService tokenService, JwtOptions options, string? token)
+    public static void ThrowIfInvalidAccessToken(this ITokenGenerator tokenGenerator, JwtOptions options, string? token)
     {
         var tokenValidationParameters = new TokenValidationParameters
         {

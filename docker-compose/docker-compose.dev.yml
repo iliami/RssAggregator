@@ -62,8 +62,29 @@
       - otel-collector
     networks:
       - monitoring
+    
+  iliami-identity-db:
+    container_name: IdentityDbDev
+    image: postgres
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: IliamiIdentity
+    volumes:
+      - identity-db-data:/var/lib/postgres/data
+      - ./docker-entrypoint-identity-initdb.d:/docker-entrypoint-initdb.d
+
+  rabbitmq:
+    container_name: RssAggregatorMQ
+    image: rabbitmq:4.0-management
+    ports:
+      - 15672:15672
+      - 5672:5672
 
 volumes:
+  identity-db-data:
   rssaggregator-db-data:
   rssaggregator-grafana:
 

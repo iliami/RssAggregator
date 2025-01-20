@@ -1,12 +1,12 @@
+using Iliami.Identity.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RssAggregator.Domain.Entities;
 
-namespace RssAggregator.Persistence.Configurations;
+namespace Iliami.Identity.Persistence.Configurations;
 
-public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
+public class UserConfiguration : IEntityTypeConfiguration<User>
 {
-    public void Configure(EntityTypeBuilder<AppUser> builder)
+    public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.HasKey(x => x.Id);
 

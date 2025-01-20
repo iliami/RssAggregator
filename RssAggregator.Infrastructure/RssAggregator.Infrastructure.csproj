@@ -7,14 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\RssAggregator.Application\RssAggregator.Application.csproj"/>
-        <ProjectReference Include="..\RssAggregator.Domain\RssAggregator.Domain.csproj"/>
+        <ProjectReference Include="..\RssAggregator.Application\RssAggregator.Application.csproj" />
+        <ProjectReference Include="..\RssAggregator.BusModels\RssAggregator.BusModels.csproj" />
+        <ProjectReference Include="..\RssAggregator.Domain\RssAggregator.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
       <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
-    </ItemGroup>
+	  <PackageReference Include="RabbitMQ.Client" Version="7.0.0" />
+	</ItemGroup>
 
 </Project>
