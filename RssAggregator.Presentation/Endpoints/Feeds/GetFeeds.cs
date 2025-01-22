@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RssAggregator.Application.KeySelectors;
+using RssAggregator.Application;
 using RssAggregator.Application.Params;
-using RssAggregator.Application.Specifications;
 using RssAggregator.Application.UseCases.Feeds.GetFeeds;
 using RssAggregator.Domain.Entities;
 

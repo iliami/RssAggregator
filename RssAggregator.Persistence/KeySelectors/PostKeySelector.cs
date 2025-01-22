@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using RssAggregator.Application.KeySelectors;
+using RssAggregator.Application;
 using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Persistence.KeySelectors;

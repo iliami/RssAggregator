@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using RssAggregator.Application.Specifications;
+using RssAggregator.Application;
 
 namespace RssAggregator.Persistence.QueryExtensions;
 

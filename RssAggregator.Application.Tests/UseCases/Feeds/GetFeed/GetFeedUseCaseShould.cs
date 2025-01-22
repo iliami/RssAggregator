@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using NSubstitute;
-using RssAggregator.Application.Specifications;
 using RssAggregator.Application.UseCases.Feeds.GetFeed;
 using RssAggregator.Domain.Entities;
 using RssAggregator.Domain.Exceptions;

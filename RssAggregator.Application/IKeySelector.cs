@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace RssAggregator.Application.KeySelectors;
+namespace RssAggregator.Application;
 
 public interface IKeySelector<T>
 {

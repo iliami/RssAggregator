@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RssAggregator.Application.Specifications;
+using RssAggregator.Application;
 using RssAggregator.Application.UseCases.Posts.GetUserPosts;
 using RssAggregator.Domain.Entities;
 using RssAggregator.Persistence.QueryExtensions;

@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using RssAggregator.Application.Specifications;
 using RssAggregator.Application.UseCases.Feeds.GetUserFeeds;
 using RssAggregator.Domain.Entities;
 

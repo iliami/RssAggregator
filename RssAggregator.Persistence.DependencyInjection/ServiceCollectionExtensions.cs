@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using RssAggregator.Application.KeySelectors;
+using RssAggregator.Application;
 using RssAggregator.Application.UseCases.Categories.CreateCategory;
 using RssAggregator.Application.UseCases.Categories.GetCategories;
 using RssAggregator.Application.UseCases.Feeds.CreateFeed;

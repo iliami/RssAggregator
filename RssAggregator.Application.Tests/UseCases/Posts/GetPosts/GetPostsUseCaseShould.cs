@@ -1,7 +1,6 @@
 using FluentAssertions;
 using FluentValidation;
 using NSubstitute;
-using RssAggregator.Application.Specifications;
 using RssAggregator.Application.UseCases.Posts.GetPosts;
 using RssAggregator.Domain.Entities;
 

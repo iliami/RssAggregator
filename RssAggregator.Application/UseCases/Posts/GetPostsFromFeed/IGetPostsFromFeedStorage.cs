@@ -1,5 +1,4 @@
-﻿using RssAggregator.Application.Specifications;
-using RssAggregator.Domain.Entities;
+﻿using RssAggregator.Domain.Entities;
 
 namespace RssAggregator.Application.UseCases.Posts.GetPostsFromFeed;
 

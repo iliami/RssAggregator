@@ -24,10 +24,9 @@ public class CreateUserUseCaseShould
         var userId = Guid.Parse("E75FC61A-C8DA-4BDF-B541-4BEB08DCBBD6");
         var request = new CreateUserRequest(userId);
         _storage.CreateUser(Arg.Any<Guid>(), CancellationToken.None).Returns(Task.CompletedTask);
-        var expected = new CreateUserResponse();
 
         var actual = await _sut.Handle(request);
 
-        actual.Should().BeEquivalentTo(expected);
+        actual.Should().NotBeNull().And.BeOfType<CreateUserResponse>();
     }
 }

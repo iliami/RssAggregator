@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace RssAggregator.Application.Specifications;
+namespace RssAggregator.Application;
 
 public abstract class Specification<TEntity>
     where TEntity : class

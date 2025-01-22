@@ -1,8 +1,24 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using RssAggregator.Presentation.Options;
 
 namespace RssAggregator.Presentation.ServiceCollectionExtensions;
+
+public class JwtOptions
+{
+    public string SecretKey { get; set; } = string.Empty;
+    public int AccessTokenValidityInMinutes { get; set; }
+    public int RefreshTokenValidityInMinutes { get; set; }
+}
+
+public static class JwtOptionsExtensions
+{
+    public static SymmetricSecurityKey GetSecurityKey(this JwtOptions options)
+        => new(Encoding.UTF8.GetBytes(options.SecretKey));
+
+    public static SigningCredentials GetSigningCredentials(this JwtOptions options)
+        => new(options.GetSecurityKey(), SecurityAlgorithms.HmacSha256);
+}
 
 public static class AuthExtensions
 {
