@@ -10,9 +10,9 @@ public class GetFeedsUseCase(IGetFeedsStorage storage, IValidator<GetFeedsReques
     {
         await validator.ValidateAndThrowAsync(request, ct);
 
-        var posts = await storage.GetFeeds(request.Specification, ct);
+        var feeds = await storage.GetFeeds(request.Specification, ct);
 
-        var response = new GetFeedsResponse(posts);
+        var response = new GetFeedsResponse(feeds);
 
         return response;
     }

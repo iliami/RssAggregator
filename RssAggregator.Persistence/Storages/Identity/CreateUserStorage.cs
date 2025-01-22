@@ -10,9 +10,12 @@ namespace RssAggregator.Persistence.Storages.Identity
 {
     public class CreateUserStorage(AppDbContext dbContext) : ICreateUserStorage
     {
-        public async Task CreateUser(Guid Id, CancellationToken ct = default)
+        public async Task CreateUser(Guid id, CancellationToken ct = default)
         {
-            var user = new User { Id = Id };
+            var isUserStored = dbContext.Users.Any(u => u.Id == id);
+            if (isUserStored) return;
+
+            var user = new User { Id = id };
             await dbContext.Users.AddAsync(user, ct);
             await dbContext.SaveChangesAsync(ct);
         }
