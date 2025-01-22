@@ -21,7 +21,7 @@ public class UpdateFeedUseCaseShould
     }
 
     [Fact]
-    public async Task ReturnFeedId_WhenFeedIsUpdated()
+    public async Task ReturnResponseWithFeedId_WhenFeedIsUpdated()
     {
         var feed = new Feed
         {
@@ -40,7 +40,7 @@ public class UpdateFeedUseCaseShould
     }
 
     [Fact]
-    public async Task ThrowNotUpdatedException_WhenFeedIsNotUpdated()
+    public async Task ThrowFeedNotFoundException_WhenFeedIsNotFound()
     {
         var feed = new Feed
         {
@@ -54,6 +54,6 @@ public class UpdateFeedUseCaseShould
 
         var actual = _sut.Invoking(s => s.Handle(request));
 
-        await actual.Should().ThrowExactlyAsync<NotUpdatedException<Feed>>();
+        await actual.Should().ThrowExactlyAsync<FeedNotFoundException>();
     }
 }

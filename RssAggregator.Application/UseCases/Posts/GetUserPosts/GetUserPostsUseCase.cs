@@ -13,7 +13,7 @@ public class GetUserPostsUseCase(
     {
         if (!identityProvider.Current.IsAuthenticated())
         {
-            throw new NoAccessException();
+            throw new NotAuthenticatedException();
         }
 
         await validator.ValidateAndThrowAsync(request, ct);

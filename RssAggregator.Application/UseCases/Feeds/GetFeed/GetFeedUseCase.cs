@@ -1,5 +1,4 @@
-﻿using RssAggregator.Domain.Entities;
-using RssAggregator.Domain.Exceptions;
+﻿using RssAggregator.Domain.Exceptions;
 
 namespace RssAggregator.Application.UseCases.Feeds.GetFeed;
 
@@ -11,7 +10,7 @@ public class GetFeedUseCase(IGetFeedStorage storage) : IGetFeedUseCase
 
         if (!success)
         {
-            throw new NotFoundException<Feed>(request.FeedId);
+            throw new FeedNotFoundException(request.FeedId);
         }
 
         var response = new GetFeedResponse(feed);

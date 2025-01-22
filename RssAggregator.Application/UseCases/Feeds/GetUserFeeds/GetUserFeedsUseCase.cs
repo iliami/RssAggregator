@@ -11,9 +11,11 @@ public class GetUserFeedsUseCase(
 {
     public async Task<GetUserFeedsResponse> Handle(GetUserFeedsRequest request, CancellationToken ct = default)
     {
+        await validator.ValidateAndThrowAsync(request, ct);
+
         if (!identityProvider.Current.IsAuthenticated())
         {
-            throw new NoAccessException();
+            throw new NotAuthenticatedException();
         }
 
         var feeds = await storage.GetUserFeeds(identityProvider.Current.UserId, request.Specification, ct);

@@ -21,7 +21,7 @@ public class GetFeedUseCaseShould
     }
 
     [Fact]
-    public async Task ReturnResponse_WhenFeedIsFound()
+    public async Task ReturnResponseWithFeed_WhenFeedIsFound()
     {
         var feedId = Guid.Parse("83128A9B-9A93-472F-874D-90807DDE475B");
         var feed = new Feed
@@ -41,7 +41,7 @@ public class GetFeedUseCaseShould
     }
 
     [Fact]
-    public async Task ThrowException_WhenFeedIsNotFound()
+    public async Task ThrowFeedNotFoundException_WhenFeedIsNotFound()
     {
         var feedId = Guid.Parse("4E0EE846-3FB4-471F-BCF0-A2069EB25307");
         var request = new GetFeedRequest(feedId, new TestSpecification());
@@ -49,6 +49,6 @@ public class GetFeedUseCaseShould
 
         var actual = _sut.Invoking(s => s.Handle(request));
 
-        await actual.Should().ThrowExactlyAsync<NotFoundException<Feed>>();
+        await actual.Should().ThrowExactlyAsync<FeedNotFoundException>();
     }
 }

@@ -31,15 +31,16 @@ public class GetCategoriesUseCaseShould
     }
 
     [Fact]
-    public async Task ReturnResponseWithoutCategories_WhenNoCategories()
+    public async Task ReturnResponseWithCategories_WhenAllGood()
     {
+        var categories = GenerateCategories(20);
         var request = new GetCategoriesRequest(new TestSpecification());
         _storage
             .GetCategories(
                 Arg.Any<Specification<Category>>(),
                 CancellationToken.None)
-            .Returns([]);
-        var expected = new GetCategoriesResponse([]);
+            .Returns(categories);
+        var expected = new GetCategoriesResponse(categories);
 
         var actual = await _sut.Handle(request);
 
@@ -49,27 +50,7 @@ public class GetCategoriesUseCaseShould
             Arg.Any<CancellationToken>());
     }
 
-    [Fact]
-    public async Task ReturnResponseWithCategories_WhenSomeCategoriesAreStored()
-    {
-        var posts = GeneratePosts(20);
-        var request = new GetCategoriesRequest(new TestSpecification());
-        _storage
-            .GetCategories(
-                Arg.Any<Specification<Category>>(),
-                CancellationToken.None)
-            .Returns(posts);
-        var expected = new GetCategoriesResponse(posts);
-
-        var actual = await _sut.Handle(request);
-
-        actual.Should().BeEquivalentTo(expected);
-        await _storage.Received(1).GetCategories(
-            Arg.Any<Specification<Category>>(),
-            Arg.Any<CancellationToken>());
-    }
-
-    private static Category[] GeneratePosts(int count)
+    private static Category[] GenerateCategories(int count)
     {
         return Enumerable.Range(0, count)
             .Select(i => new Category

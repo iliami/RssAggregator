@@ -44,14 +44,14 @@ public class GetUserFeedsUseCaseShould
     }
 
     [Fact]
-    public async Task ThrowNoAccessException_WhenUserIsNotAuthenticated()
+    public async Task ThrowNotAuthenticatedException_WhenUserIsNotAuthenticated()
     {
         var request = new GetUserFeedsRequest(new TestSpecification());
         _identity.UserId.Returns(Guid.Empty);
 
         var actual = _sut.Invoking(s => s.Handle(request, CancellationToken.None));
 
-        await actual.Should().ThrowExactlyAsync<NoAccessException>();
+        await actual.Should().ThrowExactlyAsync<NotAuthenticatedException>();
         await _storage
             .Received(0)
             .GetUserFeeds(Arg.Any<Guid>(), Arg.Any<Specification<Feed>>(), CancellationToken.None);

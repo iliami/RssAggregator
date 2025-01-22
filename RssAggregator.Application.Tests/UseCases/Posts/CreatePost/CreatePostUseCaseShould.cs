@@ -30,7 +30,7 @@ public class CreatePostUseCaseShould
     }
 
     [Fact]
-    public async Task ReturnPostGuid_WhenPostIsCreated()
+    public async Task ReturnResponseWithCreatedPostId_WhenPostIsCreated()
     {
         var postId = Guid.Parse("0848A88D-270A-4F36-9EEB-CE1855918243");
         var request = new CreatePostRequest(
@@ -59,7 +59,7 @@ public class CreatePostUseCaseShould
     }
 
     [Fact]
-    public async Task ThrowNotFoundException_WhenFeedIsNotFound()
+    public async Task ThrowFeedNotFoundException_WhenFeedIsNotFound()
     {
         var postId = Guid.Parse("625DDFCE-A8C8-4343-B3D0-FAF6EDF74DC3");
         var request = new CreatePostRequest(
@@ -73,7 +73,7 @@ public class CreatePostUseCaseShould
 
         var actual = _sut.Invoking(s => s.Handle(request, CancellationToken.None));
 
-        await actual.Should().ThrowExactlyAsync<NotFoundException<Feed>>();
+        await actual.Should().ThrowExactlyAsync<FeedNotFoundException>();
         await _storage.Received(0).CreatePost(
             Arg.Any<string>(),
             Arg.Any<string>(),

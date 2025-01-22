@@ -44,7 +44,7 @@ public class DeleteSubscriptionUseCaseShould
     }
 
     [Fact]
-    public async Task ThrowNoAccessException_WhenUserIsNotAuthenticated()
+    public async Task ThrowNotAuthenticatedException_WhenUserIsNotAuthenticated()
     {
         var feedId = Guid.Parse("BC41D1F3-C74B-43DB-9F03-1B07EC247603");
         var request = new DeleteSubscriptionRequest(feedId);
@@ -52,7 +52,7 @@ public class DeleteSubscriptionUseCaseShould
 
         var actual = _sut.Invoking(s => s.Handle(request, CancellationToken.None));
 
-        await actual.Should().ThrowExactlyAsync<NoAccessException>();
+        await actual.Should().ThrowExactlyAsync<NotAuthenticatedException>();
         await _storage.Received(0)
             .IsFeedExist(Arg.Any<Guid>(), CancellationToken.None);
         await _storage.Received(0)
@@ -60,7 +60,7 @@ public class DeleteSubscriptionUseCaseShould
     }
 
     [Fact]
-    public async Task ThrowNotFoundExceptionOfFeed_WhenFeedNotExists()
+    public async Task ThrowFeedNotFoundException_WhenFeedNotExists()
     {
         var feedId = Guid.Parse("BC41D1F3-C74B-43DB-9F03-1B07EC247603");
         var request = new DeleteSubscriptionRequest(feedId);
@@ -71,13 +71,13 @@ public class DeleteSubscriptionUseCaseShould
 
         var actual = _sut.Invoking(s => s.Handle(request, CancellationToken.None));
 
-        await actual.Should().ThrowExactlyAsync<NotFoundException<Feed>>();
+        await actual.Should().ThrowExactlyAsync<FeedNotFoundException>();
         await _storage.Received(0)
             .DeleteSubscription(Arg.Any<Guid>(), Arg.Any<Guid>(), CancellationToken.None);
     }
 
     [Fact]
-    public async Task ThrowNotFoundExceptionOfAppUser_WhenAppUserNotExists()
+    public async Task ThrowUserNotFoundException_WhenUserNotExists()
     {
         var feedId = Guid.Parse("BC41D1F3-C74B-43DB-9F03-1B07EC247603");
         var request = new DeleteSubscriptionRequest(feedId);
@@ -91,6 +91,6 @@ public class DeleteSubscriptionUseCaseShould
 
         var actual = _sut.Invoking(s => s.Handle(request, CancellationToken.None));
 
-        await actual.Should().ThrowExactlyAsync<NotFoundException<User>>();
+        await actual.Should().ThrowExactlyAsync<UserNotFoundException>();
     }
 }

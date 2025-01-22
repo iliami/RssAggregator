@@ -30,7 +30,7 @@ public class GetPostsFromFeedUseCaseShould
     }
 
     [Fact]
-    public async Task ReturnPosts_WhenAllGood()
+    public async Task ReturnResponseWithPosts_WhenAllGood()
     {
         var posts = GeneratePosts(10);
         var feedId = Feed.Id;
@@ -49,7 +49,7 @@ public class GetPostsFromFeedUseCaseShould
     }
 
     [Fact]
-    public async Task ThrowNotFoundExceptionOfFeed_WhenFeedNotExists()
+    public async Task ThrowFeedNotFoundException_WhenFeedNotExists()
     {
         var feedId = Feed.Id;
         var request = new GetPostsFromFeedRequest(feedId, new TestSpecification());
@@ -59,7 +59,7 @@ public class GetPostsFromFeedUseCaseShould
 
         var actual = _sut.Invoking(s => s.Handle(request, CancellationToken.None));
 
-        await actual.Should().ThrowExactlyAsync<NotFoundException<Feed>>();
+        await actual.Should().ThrowExactlyAsync<FeedNotFoundException>();
         await _storage
             .Received(0)
             .GetPostsFromFeed(Arg.Any<Guid>(), Arg.Any<Specification<Post>>(), CancellationToken.None);

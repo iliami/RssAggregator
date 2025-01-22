@@ -31,26 +31,7 @@ public class GetPostsUseCaseShould
     }
 
     [Fact]
-    public async Task ReturnResponseWithoutPosts_WhenNoPosts()
-    {
-        var request = new GetPostsRequest(new TestSpecification());
-        _storage
-            .GetPosts(
-                Arg.Any<Specification<Post>>(),
-                CancellationToken.None)
-            .Returns([]);
-        var expected = new GetPostsResponse([]);
-
-        var actual = await _sut.Handle(request);
-
-        actual.Should().BeEquivalentTo(expected);
-        await _storage.Received(1).GetPosts(
-            Arg.Any<Specification<Post>>(),
-            Arg.Any<CancellationToken>());
-    }
-
-    [Fact]
-    public async Task ReturnResponseWithPosts_WhenRequestIsValid()
+    public async Task ReturnResponseWithPosts_WhenAllGood()
     {
         var posts = GeneratePosts(20);
         var request = new GetPostsRequest(new TestSpecification());

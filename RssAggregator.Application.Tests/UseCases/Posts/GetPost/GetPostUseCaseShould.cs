@@ -3,6 +3,7 @@ using FluentValidation;
 using NSubstitute;
 using RssAggregator.Application.UseCases.Posts.GetPost;
 using RssAggregator.Domain.Entities;
+using RssAggregator.Domain.Exceptions;
 
 namespace RssAggregator.Application.Tests.UseCases.Posts.GetPost;
 
@@ -20,13 +21,30 @@ public class GetPostUseCaseShould
     }
 
     [Fact]
-    public async Task ReturnEmptyGetPostResponse_WhenPostIsNotFound()
+    public async Task ReturnResponseWithPost_WhenPostIsFound()
     {
-        var postId = Guid.Parse("26060E88-B055-416A-97ED-6CBB5AB8ACF8");
+        var postId = Guid.Parse("6AE7CCA2-3D4C-4C61-B5C7-F1955409C161");
+        var post = new Post
+        {
+            Id = postId,
+            Title = "Post name",
+            Description = "Post description",
+            Url = $"https://www.example.com/posts/{postId}",
+            PublishDate = DateTime.Now,
+            Categories = [],
+            Feed = new Feed
+            {
+                Id = Guid.Parse("18E5BDB4-D630-4481-84FF-AA435ED7BF3F"),
+                Name = "Feed name",
+                Description = "Feed description",
+                Url = "https://www.example.com/",
+                LastFetchedAt = DateTimeOffset.Now
+            }
+        };
 
         var request = new GetPostRequest(postId);
-        _storage.TryGetAsync(postId, Arg.Any<CancellationToken>()).Returns((false, null));
-        var expected = GetPostResponse.Empty;
+        _storage.TryGetPost(postId, Arg.Any<CancellationToken>()).Returns((true, post));
+        var expected = new GetPostResponse(post);
 
         var actual = await _sut.Handle(request, CancellationToken.None);
 
@@ -34,44 +52,15 @@ public class GetPostUseCaseShould
     }
 
     [Fact]
-    public async Task ReturnSomeGetPostResponse_WhenPostIsFound()
+    public async Task ThrowPostNotFoundException_WhenPostIsNotFound()
     {
-        var postId = Guid.Parse("6AE7CCA2-3D4C-4C61-B5C7-F1955409C161");
-        var post = CreatePost(postId);
-
+        var postId = Guid.Parse("26060E88-B055-416A-97ED-6CBB5AB8ACF8");
         var request = new GetPostRequest(postId);
-        _storage.TryGetAsync(postId, Arg.Any<CancellationToken>()).Returns((true, post));
-        var expected = new GetPostResponse(
-            post.Id,
-            post.Title,
-            post.Description,
-            post.Categories.Select(c => c.Name).ToArray(),
-            post.PublishDate,
-            post.Url,
-            post.Feed.Id);
 
-        var actual = await _sut.Handle(request, CancellationToken.None);
+        _storage.TryGetPost(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns((false, null!));
 
-        actual.Should().BeEquivalentTo(expected);
+        var actual = _sut.Invoking(s => s.Handle(request, CancellationToken.None));
+
+        await actual.Should().ThrowExactlyAsync<PostNotFoundException>();
     }
-
-    private static Post CreatePost(Guid postId) =>
-        new()
-        {
-            Id = postId,
-            Title = "Title",
-            Description = "Description",
-            Url = "Url",
-            PublishDate = DateTime.Now,
-            Categories = [],
-            Feed = new Feed
-            {
-                Id = Guid.Empty,
-                Name = "Name",
-                Description = "Description",
-                Url = "Url",
-                LastFetchedAt = DateTimeOffset.Now,
-                Subscribers = []
-            }
-        };
 }

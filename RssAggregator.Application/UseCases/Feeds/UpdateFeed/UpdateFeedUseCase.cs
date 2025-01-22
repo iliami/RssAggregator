@@ -17,7 +17,7 @@ public class UpdateFeedUseCase(
 
         if (!success)
         {
-            throw new NotUpdatedException<Feed>(feedId);
+            throw new FeedNotFoundException(feedId);
         }
 
         return new UpdateFeedResponse(feedId);

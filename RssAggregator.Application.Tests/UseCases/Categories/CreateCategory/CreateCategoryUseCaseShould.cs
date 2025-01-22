@@ -21,7 +21,7 @@ public class CreateCategoryUseCaseShould
     }
 
     [Fact]
-    public async Task ReturnNotEmptyId_WhenCategoryIsCreated()
+    public async Task ReturnResponseWithCreatedCategoryId_WhenCategoryIsCreated()
     {
         var categoryId = Guid.Parse("BA4FC2A5-289F-4ED3-AC95-A5A1D283867E");
         var feedId = Guid.Parse("E2326A46-E423-4DE4-AB4A-08A72C6FDEA0");
@@ -36,7 +36,7 @@ public class CreateCategoryUseCaseShould
     }
 
     [Fact]
-    public async Task ThrowNotFoundException_WhenFeedNotFound()
+    public async Task ThrowFeedNotFoundException_WhenFeedNotFound()
     {
         var feedId = Guid.Parse("E2326A46-E423-4DE4-AB4A-08A72C6FDEA0");
         var request = new CreateCategoryRequest("Category Name", feedId);
@@ -44,7 +44,7 @@ public class CreateCategoryUseCaseShould
 
         var actual = _sut.Invoking(s => s.Handle(request, CancellationToken.None));
 
-        await actual.Should().ThrowExactlyAsync<NotFoundException<Feed>>();
+        await actual.Should().ThrowExactlyAsync<FeedNotFoundException>();
         await _storage.Received(0).CreateCategory("Category Name", feedId, CancellationToken.None);
     }
 }

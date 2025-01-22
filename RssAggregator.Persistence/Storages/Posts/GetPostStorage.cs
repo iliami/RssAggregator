@@ -6,14 +6,14 @@ namespace RssAggregator.Persistence.Storages.Posts;
 
 public class GetPostStorage(AppDbContext dbContext) : IGetPostStorage
 {
-    public async Task<(bool success, Post? post)> TryGetAsync(Guid id, CancellationToken ct = default)
+    public async Task<(bool success, Post post)> TryGetPost(Guid id, CancellationToken ct = default)
     {
         var post = await dbContext.Posts
             .FirstOrDefaultAsync(x => x.Id == id, ct);
 
         if (post is null)
         {
-            return (false, null);
+            return (false, null!);
         }
 
         await dbContext.Posts

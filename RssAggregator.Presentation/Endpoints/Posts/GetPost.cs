@@ -15,7 +15,7 @@ public class GetPost : IEndpoint
             var request = new GetPostRequest(id);
             var response = await useCase.Handle(request, ct);
 
-            return response.Id.Equals(Guid.Empty) ? Results.NotFound() : Results.Ok(response);
+            return Results.Ok(response);
         }).AllowAnonymous().WithTags(EndpointsTags.Posts);
     }
 }

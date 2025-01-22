@@ -19,7 +19,7 @@ public class CreateCategoryUseCase(
 
         if (!isFeedExist)
         {
-            throw new NotFoundException<Feed>(request.FeedId);
+            throw new FeedNotFoundException(request.FeedId);
         }
 
         var categoryId = await storage.CreateCategory(

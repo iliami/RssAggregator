@@ -28,14 +28,15 @@ public class GetUserPostsUseCaseShould
     }
 
     [Fact]
-    public async Task ReturnPosts_WhenAllGood()
+    public async Task ReturnResponseWithPosts_WhenAllGood()
     {
         var request = new GetUserPostsRequest(new TestSpecification());
-        _identity.UserId.Returns(
-            Guid.Parse(
-                "F9F40938-1954-4938-B8D2-534C790BE9A8")); // TODO: should be smth like _identityProvider.Current.IsAuthenticated().Returns(true);
+        _identity.UserId.Returns(Guid.Parse("F9F40938-1954-4938-B8D2-534C790BE9A8"));
         _storage
-            .GetUserPosts(Arg.Any<Guid>(), Arg.Any<Specification<Post>>(), CancellationToken.None)
+            .GetUserPosts(
+                Arg.Any<Guid>(), 
+                Arg.Any<Specification<Post>>(), 
+                CancellationToken.None)
             .Returns([]);
         var expected = new GetUserPostsResponse([]);
 
@@ -45,7 +46,7 @@ public class GetUserPostsUseCaseShould
     }
 
     [Fact]
-    public async Task ThrowNoAccessException_WhenUserIsNotAuthenticated()
+    public async Task ThrowNotAuthenticatedException_WhenUserIsNotAuthenticated()
     {
         var request = new GetUserPostsRequest(new TestSpecification());
         _identity.UserId
@@ -54,7 +55,7 @@ public class GetUserPostsUseCaseShould
 
         var actual = _sut.Invoking(s => s.Handle(request, CancellationToken.None));
 
-        await actual.Should().ThrowExactlyAsync<NoAccessException>();
+        await actual.Should().ThrowExactlyAsync<NotAuthenticatedException>();
         await _storage.Received(0)
             .GetUserPosts(Arg.Any<Guid>(), Arg.Any<Specification<Post>>(), CancellationToken.None);
     }

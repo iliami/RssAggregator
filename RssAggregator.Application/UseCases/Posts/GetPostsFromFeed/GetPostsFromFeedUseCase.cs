@@ -16,7 +16,7 @@ public class GetPostsFromFeedUseCase(
         var isFeedExist = await storage.IsFeedExist(request.FeedId, ct);
         if (!isFeedExist)
         {
-            throw new NotFoundException<Feed>(request.FeedId);
+            throw new FeedNotFoundException(request.FeedId);
         }
 
         var posts = await storage.GetPostsFromFeed(request.FeedId, request.Specification, ct);

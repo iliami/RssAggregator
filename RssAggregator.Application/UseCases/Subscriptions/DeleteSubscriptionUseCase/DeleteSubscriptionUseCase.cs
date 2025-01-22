@@ -17,7 +17,7 @@ public class DeleteSubscriptionUseCase(
     {
         if (!identityProvider.Current.IsAuthenticated())
         {
-            throw new NoAccessException();
+            throw new NotAuthenticatedException();
         }
 
         await validator.ValidateAndThrowAsync(request, ct);
@@ -26,7 +26,7 @@ public class DeleteSubscriptionUseCase(
 
         if (!isFeedExist)
         {
-            throw new NotFoundException<Feed>(request.FeedId);
+            throw new FeedNotFoundException(request.FeedId);
         }
 
         var isUnsubscribedSuccessful = await storage.DeleteSubscription(
@@ -34,7 +34,7 @@ public class DeleteSubscriptionUseCase(
 
         if (!isUnsubscribedSuccessful)
         {
-            throw new NotFoundException<User>(identityProvider.Current.UserId);
+            throw new UserNotFoundException(identityProvider.Current.UserId);
         }
 
         var response = new DeleteSubscriptionResponse();

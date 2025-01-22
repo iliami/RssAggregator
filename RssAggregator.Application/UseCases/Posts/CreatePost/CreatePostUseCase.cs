@@ -13,7 +13,7 @@ public class CreatePostUseCase(ICreatePostStorage storage, IValidator<CreatePost
         var isFeedExist = await storage.IsFeedExist(request.FeedId, ct);
         if (!isFeedExist)
         {
-            throw new NotFoundException<Feed>(request.FeedId);
+            throw new FeedNotFoundException(request.FeedId);
         }
 
         var postId = await storage.CreatePost(
