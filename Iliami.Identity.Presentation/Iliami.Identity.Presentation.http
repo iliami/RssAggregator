@@ -1,0 +1,6 @@
+@Iliami.Identity.Presentation_HostAddress = http://localhost:5002
+
+GET {{Iliami.Identity.Presentation_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
