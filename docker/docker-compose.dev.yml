@@ -1,6 +1,6 @@
 ﻿services:
-  rssaggregator-db-development:
-    container_name: RssAggregatorDbDev
+  postgres:
+    container_name: RssAggregator-Postgres
     image: postgres
     ports:
       - 5432:5432
@@ -9,19 +9,11 @@
       POSTGRES_PASSWORD: password
       POSTGRES_DB: RssAggregatorDatabase
     volumes:
-      - rssaggregator-db-data:/var/lib/postgres/data
+      - rssaggregator-postgres-data:/var/lib/postgres/data
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 
-  adminer-local:
-    container_name: RssAggregatorDbDev-Adminer
-    image: adminer
-    ports:
-      - 8080:8080
-    depends_on:
-      - rssaggregator-db-development
-
   loki:
-    container_name: RssAggregatorLoki
+    container_name: RssAggregator-Loki
     image: grafana/loki:3.3.0
     ports:
       - 3100:3100
@@ -32,7 +24,7 @@
       - monitoring
 
   otel-collector:
-    container_name: RssAggregatorOTelCollector
+    container_name: RssAggregator-OTelCollector
     image: otel/opentelemetry-collector-contrib:0.116.1
     volumes:
       - ./config/otel-collector.yaml:/etc/otelcol-contrib/config.yaml
@@ -44,7 +36,7 @@
       - monitoring
 
   grafana:
-    container_name: RssAggregatorGrafana
+    container_name: RssAggregator-Grafana
     image: grafana/grafana:latest-ubuntu
     ports:
       - 3000:3000
@@ -63,8 +55,8 @@
     networks:
       - monitoring
     
-  iliami-identity-db:
-    container_name: IdentityDbDev
+  identity-postgres:
+    container_name: RssAggregator-IdentityPostgres
     image: postgres
     ports:
       - 5433:5432
@@ -73,19 +65,19 @@
       POSTGRES_PASSWORD: password
       POSTGRES_DB: IliamiIdentity
     volumes:
-      - identity-db-data:/var/lib/postgres/data
+      - identity-postgres-data:/var/lib/postgres/data
       - ./docker-entrypoint-identity-initdb.d:/docker-entrypoint-initdb.d
 
   rabbitmq:
-    container_name: RssAggregatorMQ
+    container_name: RssAggregator-RabbitMQ
     image: rabbitmq:4.0-management
     ports:
       - 15672:15672
       - 5672:5672
 
 volumes:
-  identity-db-data:
-  rssaggregator-db-data:
+  identity-postgres-data:
+  rssaggregator-postgres-data:
   rssaggregator-grafana:
 
 networks:

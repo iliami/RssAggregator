@@ -1,4 +1,5 @@
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using RssAggregator.Presentation.Endpoints;
 
@@ -10,6 +11,9 @@ public static class EndpointExtensions
         this IServiceCollection services,
         Assembly assembly)
     {
+        services
+            .AddProblemDetails()
+            .AddMvcCore();
         services.AddHttpContextAccessor();
         services.AddEndpointsApiExplorer();
 
