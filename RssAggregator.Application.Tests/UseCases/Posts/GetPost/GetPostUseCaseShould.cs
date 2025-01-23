@@ -41,9 +41,13 @@ public class GetPostUseCaseShould
                 LastFetchedAt = DateTimeOffset.Now
             }
         };
-
-        var request = new GetPostRequest(postId);
-        _storage.TryGetPost(postId, Arg.Any<CancellationToken>()).Returns((true, post));
+        var request = new GetPostRequest(postId, new TestSpecification());
+        _storage
+            .TryGetPost(
+                postId,
+                Arg.Any<Specification<Post>>(),
+                Arg.Any<CancellationToken>())
+            .Returns((true, post));
         var expected = new GetPostResponse(post);
 
         var actual = await _sut.Handle(request, CancellationToken.None);
@@ -55,12 +59,19 @@ public class GetPostUseCaseShould
     public async Task ThrowPostNotFoundException_WhenPostIsNotFound()
     {
         var postId = Guid.Parse("26060E88-B055-416A-97ED-6CBB5AB8ACF8");
-        var request = new GetPostRequest(postId);
+        var request = new GetPostRequest(postId, new TestSpecification());
 
-        _storage.TryGetPost(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns((false, null!));
+        _storage
+            .TryGetPost(
+                Arg.Any<Guid>(),
+                Arg.Any<Specification<Post>>(),
+                Arg.Any<CancellationToken>())
+            .Returns((false, null!));
 
         var actual = _sut.Invoking(s => s.Handle(request, CancellationToken.None));
 
         await actual.Should().ThrowExactlyAsync<PostNotFoundException>();
     }
+
+    private class TestSpecification : Specification<Post>;
 }

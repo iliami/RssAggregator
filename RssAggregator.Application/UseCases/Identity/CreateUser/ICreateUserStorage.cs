@@ -2,5 +2,5 @@
 
 public interface ICreateUserStorage
 {
-    Task CreateUser(Guid id, CancellationToken ct = default);
+    Task<bool> CreateUser(Guid id, CancellationToken ct = default);
 }

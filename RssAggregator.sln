@@ -43,6 +43,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RssAggregator.Shared", "Rss
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssAggregator.BusModels", "RssAggregator.BusModels\RssAggregator.BusModels.csproj", "{0D362C7D-455A-4EE0-A73E-56D1C47453B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssAggregator.Persistence.Tests", "RssAggregator.Persistence.Tests\RssAggregator.Persistence.Tests.csproj", "{AC210266-3596-4978-9A02-6FAE69F3F99F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,10 @@ Global
 		{0D362C7D-455A-4EE0-A73E-56D1C47453B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D362C7D-455A-4EE0-A73E-56D1C47453B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D362C7D-455A-4EE0-A73E-56D1C47453B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC210266-3596-4978-9A02-6FAE69F3F99F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC210266-3596-4978-9A02-6FAE69F3F99F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC210266-3596-4978-9A02-6FAE69F3F99F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC210266-3596-4978-9A02-6FAE69F3F99F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,5 +130,6 @@ Global
 		{53C1A1F1-2F0F-4743-B815-A76FB11FAAF2} = {469D01D5-6EFA-4BDC-AA9D-61E5722A9D19}
 		{04C0312B-FA79-43A1-9BD2-C3683CEE1EDF} = {11683CC9-AF57-4A31-91DE-C94BBBB6F84D}
 		{0D362C7D-455A-4EE0-A73E-56D1C47453B9} = {04C0312B-FA79-43A1-9BD2-C3683CEE1EDF}
+		{AC210266-3596-4978-9A02-6FAE69F3F99F} = {1AAF7A1D-B0C8-4CFA-9B01-67F63F8E0BD2}
 	EndGlobalSection
 EndGlobal

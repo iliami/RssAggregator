@@ -6,7 +6,7 @@ public class GetFeedUseCase(IGetFeedStorage storage) : IGetFeedUseCase
 {
     public async Task<GetFeedResponse> Handle(GetFeedRequest request, CancellationToken ct = default)
     {
-        var (success, feed) = await storage.TryGetFeed(request.Specification, ct);
+        var (success, feed) = await storage.TryGetFeed(request.FeedId, request.Specification, ct);
 
         if (!success)
         {

@@ -32,7 +32,7 @@ public class GetFeedUseCaseShould
             Url = "https://www.example.com"
         };
         var request = new GetFeedRequest(feedId, new TestSpecification());
-        _storage.TryGetFeed(Arg.Any<Specification<Feed>>(), Arg.Any<CancellationToken>()).Returns((true, feed));
+        _storage.TryGetFeed(Arg.Any<Guid>(), Arg.Any<Specification<Feed>>(), Arg.Any<CancellationToken>()).Returns((true, feed));
         var expected = new GetFeedResponse(feed);
 
         var actual = await _sut.Handle(request);
@@ -45,7 +45,7 @@ public class GetFeedUseCaseShould
     {
         var feedId = Guid.Parse("4E0EE846-3FB4-471F-BCF0-A2069EB25307");
         var request = new GetFeedRequest(feedId, new TestSpecification());
-        _storage.TryGetFeed(Arg.Any<Specification<Feed>>(), Arg.Any<CancellationToken>()).Returns((false, null!));
+        _storage.TryGetFeed(Arg.Any<Guid>(), Arg.Any<Specification<Feed>>(), Arg.Any<CancellationToken>()).Returns((false, null!));
 
         var actual = _sut.Invoking(s => s.Handle(request));
 

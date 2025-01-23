@@ -9,10 +9,10 @@ public class GetPostUseCase(IGetPostStorage storage, IValidator<GetPostRequest> 
     {
         await validator.ValidateAndThrowAsync(request, ct);
 
-        var (success, post) = await storage.TryGetPost(request.Id, ct);
+        var (success, post) = await storage.TryGetPost(request.PostId, request.Specification, ct);
         if (!success)
         {
-            throw new PostNotFoundException(request.Id);
+            throw new PostNotFoundException(request.PostId);
         }
 
         var response = new GetPostResponse(post);
