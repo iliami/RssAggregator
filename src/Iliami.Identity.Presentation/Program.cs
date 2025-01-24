@@ -3,7 +3,10 @@ using Iliami.Identity.Domain;
 using Iliami.Identity.Domain.HashingHelpers;
 using Iliami.Identity.Domain.Options;
 using Iliami.Identity.Domain.TokenGenerator;
+using Iliami.Identity.Domain.UseCases.Users.CreateUser;
 using Iliami.Identity.Persistence;
+using Iliami.Identity.Persistence.MQProvider;
+using Iliami.Identity.Persistence.Storages.Users;
 using Iliami.Identity.Presentation.Endpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -15,8 +18,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddMemoryCache()
     .AddDbContext<DbContext>()
+    .AddScoped<IGuidFactory, GuidFactory>()
+    .AddScoped<IIdentityEventStorage, IdentityEventStorage>()
+    .AddScoped<IChannelProvider, ChannelProvider>()
+    .AddScoped<IBusPublisher, BusPublisher>()
+    .AddScoped<ICreateUserStorage, CreateUserStorage>()
+    .AddSingleton<IUnitOfWork, UnitOfWork>()
     .AddScoped<IUserRepository, UserRepository>()
-    .AddScoped<IIdentityEventRepository, IdentityEventRepository>();
+    .AddScoped<IIdentityEventRepository, IdentityEventRepository>()
+    .AddScoped<ICreateUserUseCase, CreateUserUseCase>();
 
 builder.Services
     .AddAuth(builder.Configuration)
