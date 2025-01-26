@@ -1,16 +1,25 @@
 ﻿using Iliami.Identity.Domain.Constants;
+using Iliami.Identity.Domain.Options;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 
 namespace Iliami.Identity.Infrastructure.MQProvider;
 
-public class ChannelProvider : IChannelProvider
+public class ChannelProvider(IOptions<RabbitMQOptions> options) : IChannelProvider
 {
     private static bool _isInitialized = false;
-    private static readonly ConnectionFactory Factory = new() { HostName = "localhost" }; 
+    private readonly ConnectionFactory _factory = new()
+    {
+        HostName = options.Value.HostName,
+        Port = options.Value.Port,
+        UserName = options.Value.UserName,
+        Password = options.Value.Password,
+        VirtualHost = options.Value.VirtualHost,
+    }; 
     
     public async Task<IChannel> GetChannelAsync(CancellationToken ct = default)
     {
-        var connection = await Factory.CreateConnectionAsync(ct);
+        var connection = await _factory.CreateConnectionAsync(ct);
         var channel = await connection.CreateChannelAsync(cancellationToken: ct);
 
         if (!_isInitialized)

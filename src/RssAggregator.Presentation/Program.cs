@@ -5,7 +5,6 @@ using RssAggregator.Persistence.DependencyInjection;
 using RssAggregator.Presentation.Middlewares;
 using RssAggregator.Presentation.ServiceCollectionExtensions;
 using Serilog;
-using Serilog.Filters;
 using Serilog.Sinks.OpenTelemetry;
 
 var builder = WebApplication.CreateBuilder();
@@ -30,6 +29,7 @@ builder.Services
     .AddApplication()
     .AddPersistence()
     .AddInfrastructure()
+    .AddRabbitMQ(builder.Configuration)
     .AddAuth(builder.Configuration)
     .AddEndpoints(Assembly.GetExecutingAssembly())
     .AddSwagger();
@@ -40,11 +40,8 @@ var apiPrefix = app.MapGroup("api/");
 
 app.MapEndpoints(apiPrefix);
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

@@ -24,6 +24,8 @@ public class SyncAllFeedsJob(
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        await Task.Delay(5000);
+
         using var scope = serviceProvider.CreateScope();
 
         var getFeedsUseCase = scope.ServiceProvider.GetRequiredService<IGetFeedsUseCase>();

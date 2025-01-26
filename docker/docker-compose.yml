@@ -1,45 +1,147 @@
 ﻿services:
   rssaggregator-app:
-    container_name: RssAggregatorApp
-    build: ../RssAggregator/
+    container_name: RssAggregator-App
+    build: 
+      context: ../src
+      dockerfile: ../src/RssAggregator.Presentation/Dockerfile
     ports:
-      - 5183:5000
+      - 5183:8080
     networks:
-      - net
+      - rssaggregator
     depends_on:
-      rssaggregator-db:
+      postgres:
         condition: "service_healthy"
-  rssaggregator-db:
-    container_name: RssAggregatorDb
+      rabbitmq:
+        condition: "service_healthy"
+      otel-collector:
+        condition: "service_started"
+
+  identity-app:
+    container_name: RssAggregator-IdentityApp
+    build:
+      context: ../src
+      dockerfile: ../src/Iliami.Identity.Presentation/Dockerfile
+    ports:
+      - 5002:8080
+    networks:
+      - identity
+    depends_on:
+      identity-postgres:
+        condition: "service_healthy"
+      rabbitmq:
+        condition: "service_healthy"
+      otel-collector:
+        condition: "service_started"
+
+  postgres:
+    container_name: RssAggregator-Postgres
     image: postgres
     expose:
       - 5432
     networks:
-      - net
+      - rssaggregator
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: RssAggregatorDatabase
+      POSTGRES_DB: RssAggregator
     volumes:
-      - rssaggregator-db-data:/var/lib/postgres/data
+      - rssaggregator-postgres-data:/var/lib/postgres/data
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready", "-d", "RssAggregatorDatabase" ]
+      test: [ "CMD-SHELL", "pg_isready", "-d", "RssAggregator" ]
       interval: 30s
       timeout: 60s
       retries: 5
       start_period: 30s
-  adminer:
-    container_name: RssAggregatorDb-Adminer
-    image: adminer
-    ports:
-      - 8080:8080
+
+  identity-postgres:
+    container_name: RssAggregator-IdentityPostgres
+    image: postgres
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: IliamiIdentity
+    volumes:
+      - identity-postgres-data:/var/lib/postgres/data
+      - ./docker-entrypoint-identity-initdb.d:/docker-entrypoint-initdb.d
     networks:
-      - net
+      - identity
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "IliamiIdentity" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 30s
+
+  loki:
+    container_name: RssAggregator-Loki
+    image: grafana/loki:3.3.0
+    expose:
+      - 3100
+    volumes:
+      - ./config/loki.yaml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - monitoring
+
+  otel-collector:
+    container_name: RssAggregator-OTelCollector
+    image: otel/opentelemetry-collector-contrib:0.116.1
+    volumes:
+      - ./config/otel-collector.yaml:/etc/otelcol-contrib/config.yaml
+    expose:
+      - 4317 # gRPC
     depends_on:
-      - rssaggregator-db
+      - loki
+    networks:
+      - monitoring
+      - rssaggregator
+      - identity
+
+  grafana:
+    container_name: RssAggregator-Grafana
+    image: grafana/grafana:latest-ubuntu
+    ports:
+      - 3000:3000
+    volumes:
+      - rssaggregator-grafana:/var/lib/grafana
+      - ./config/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/ds.yaml
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+      - GF_INSTALL_PLUGINS=https://storage.googleapis.com/integration-artifacts/grafana-lokiexplore-app/grafana-lokiexplore-app-latest.zip;grafana-lokiexplore-app
+    depends_on:
+      - loki
+      - otel-collector
+    networks:
+      - monitoring
+
+  rabbitmq:
+    container_name: RssAggregator-RabbitMQ
+    image: rabbitmq:4.0-management
+    ports:
+      - 15672:15672
+    expose:
+      - 5672
+    networks:
+      - rssaggregator
+      - identity
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
 networks:
-  net:
-    driver: bridge
+  rssaggregator:
+  identity:
+  monitoring:
+
 volumes:
-  rssaggregator-db-data:
+  rssaggregator-postgres-data:
+  identity-postgres-data:
+  rssaggregator-grafana:  

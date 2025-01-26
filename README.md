@@ -6,25 +6,17 @@
 
 ## Запуск
 
-Необходимо иметь `dotnet 8 (SDK, runtime), docker (docker compose)`.
+Необходимо иметь `docker (docker compose)`.
 
 ```
 git clone https://github.com/iliami/RssAggregator.git
 cd ./RssAggregator/
-docker compose -f ./docker/docker-compose.dev.yml up -d
-dotnet run --project ./src/Iliami.Identity.Presentation/ -lp http
-```
-
-Далее нужно зайти и зарегистрировать пользователя: http://localhost:5002/swagger/
-После этого запускаем основное приложение:
-
-```
-dotnet run --project ./src/RssAggregator.Presentation/ -lp http
+docker compose -f ./docker/docker-compose.yml up -d
 ```
 
 Итого:
-- Сервис идентефикации: http://localhost:5002/
-- Основной сервис: http://localhost:5183/
+- Сервис идентефикации: http://localhost:5002/swagger
+- Основной сервис: http://localhost:5183/swagger
 - Логи: http://localhost:3000/a/grafana-lokiexplore-app/explore
 - RabbitMQ: http://localhost:15672/
 
