@@ -3,7 +3,6 @@
 namespace Iliami.Identity.Domain.TokenGenerator;
 
 public record TokenResponse(
-    string Email,
     string AccessToken,
     string RefreshToken,
     [property: JsonIgnore] DateTime AccessTokenExpiration,

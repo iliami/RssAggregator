@@ -28,6 +28,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services)
         => services
+            .AddMemoryCache()
             .AddDbContext<AppDbContext>()
             .AddKeySelectors()
             .AddScoped<ICreateUserStorage, CreateUserStorage>()

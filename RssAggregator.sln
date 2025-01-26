@@ -37,13 +37,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Iliami.Identity.Domain", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Iliami.Identity.Presentation", "src\Iliami.Identity.Presentation\Iliami.Identity.Presentation.csproj", "{9ED360AF-58B9-4C73-8FBA-D662F991ACAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Iliami.Identity.Persistence", "src\Iliami.Identity.Persistence\Iliami.Identity.Persistence.csproj", "{53C1A1F1-2F0F-4743-B815-A76FB11FAAF2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Iliami.Identity.Infrastructure", "src\Iliami.Identity.Infrastructure\Iliami.Identity.Infrastructure.csproj", "{53C1A1F1-2F0F-4743-B815-A76FB11FAAF2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RssAggregator.Shared", "RssAggregator.Shared", "{04C0312B-FA79-43A1-9BD2-C3683CEE1EDF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssAggregator.BusModels", "src\RssAggregator.BusModels\RssAggregator.BusModels.csproj", "{0D362C7D-455A-4EE0-A73E-56D1C47453B9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssAggregator.Persistence.Tests", "test\RssAggregator.Persistence.Tests\RssAggregator.Persistence.Tests.csproj", "{AC210266-3596-4978-9A02-6FAE69F3F99F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DependencyInjection", "DependencyInjection", "{AECE0FA0-BF22-4995-AD53-D2627E059E6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Iliami.Identity.Domain.DependencyInjection", "src\Iliami.Identity.Domain.DependencyInjection\Iliami.Identity.Domain.DependencyInjection.csproj", "{494C2707-B6A0-4103-9BD2-FD2B20193AE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Iliami.Identity.Infrastructure.DependencyInjection", "src\Iliami.Identity.Infrastructure.DependencyInjection\Iliami.Identity.Infrastructure.DependencyInjection.csproj", "{5E52F669-6E7B-43B0-B5F1-A66DD8D293BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -107,6 +113,14 @@ Global
 		{AC210266-3596-4978-9A02-6FAE69F3F99F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC210266-3596-4978-9A02-6FAE69F3F99F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC210266-3596-4978-9A02-6FAE69F3F99F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{494C2707-B6A0-4103-9BD2-FD2B20193AE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{494C2707-B6A0-4103-9BD2-FD2B20193AE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{494C2707-B6A0-4103-9BD2-FD2B20193AE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{494C2707-B6A0-4103-9BD2-FD2B20193AE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E52F669-6E7B-43B0-B5F1-A66DD8D293BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E52F669-6E7B-43B0-B5F1-A66DD8D293BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E52F669-6E7B-43B0-B5F1-A66DD8D293BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E52F669-6E7B-43B0-B5F1-A66DD8D293BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,5 +145,8 @@ Global
 		{04C0312B-FA79-43A1-9BD2-C3683CEE1EDF} = {11683CC9-AF57-4A31-91DE-C94BBBB6F84D}
 		{0D362C7D-455A-4EE0-A73E-56D1C47453B9} = {04C0312B-FA79-43A1-9BD2-C3683CEE1EDF}
 		{AC210266-3596-4978-9A02-6FAE69F3F99F} = {1AAF7A1D-B0C8-4CFA-9B01-67F63F8E0BD2}
+		{AECE0FA0-BF22-4995-AD53-D2627E059E6F} = {469D01D5-6EFA-4BDC-AA9D-61E5722A9D19}
+		{494C2707-B6A0-4103-9BD2-FD2B20193AE4} = {AECE0FA0-BF22-4995-AD53-D2627E059E6F}
+		{5E52F669-6E7B-43B0-B5F1-A66DD8D293BA} = {AECE0FA0-BF22-4995-AD53-D2627E059E6F}
 	EndGlobalSection
 EndGlobal

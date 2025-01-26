@@ -21,6 +21,7 @@ public class CreateFeedStorage(AppDbContext dbContext) : ICreateFeedStorage
         };
         await dbContext.Feeds.AddAsync(feed, ct);
         await dbContext.SaveChangesAsync(ct);
+        dbContext.Feeds.Entry(feed).State = EntityState.Detached;
         return feed.Id;
     }
 }

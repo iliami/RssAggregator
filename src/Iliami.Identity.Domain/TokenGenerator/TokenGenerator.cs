@@ -1,6 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using Iliami.Identity.Domain.Options;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -22,7 +21,6 @@ public class TokenGenerator(IOptions<JwtOptions> options) : ITokenGenerator
             .AddMinutes(options.Value.RefreshTokenValidityInMinutes);
 
         var response = new TokenResponse(
-            user.Email,
             accessToken,
             refreshToken,
             accessTokenExpiration,

@@ -25,8 +25,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Iliami.Identity.Domain\Iliami.Identity.Domain.csproj" />
-      <ProjectReference Include="..\Iliami.Identity.Persistence\Iliami.Identity.Persistence.csproj" />
+      <ProjectReference Include="..\Iliami.Identity.Domain.DependencyInjection\Iliami.Identity.Domain.DependencyInjection.csproj" />
+      <ProjectReference Include="..\Iliami.Identity.Infrastructure.DependencyInjection\Iliami.Identity.Infrastructure.DependencyInjection.csproj" />
     </ItemGroup>
 
 </Project>
