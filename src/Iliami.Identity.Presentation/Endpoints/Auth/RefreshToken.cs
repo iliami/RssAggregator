@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Iliami.Identity.Domain.TokenGenerator;
 using Iliami.Identity.Domain.UseCases.Tokens.RefreshTokens;
+using Iliami.Identity.Infrastructure.TokenGenerator;
 using Microsoft.AspNetCore.Mvc;
 using RssAggregator.Presentation.Endpoints;
 

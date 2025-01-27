@@ -1,10 +1,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Iliami.Identity.Domain;
 using Iliami.Identity.Domain.Options;
+using Iliami.Identity.Domain.TokenGenerator;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Iliami.Identity.Domain.TokenGenerator;
+namespace Iliami.Identity.Infrastructure.TokenGenerator;
 
 public class TokenGenerator(IOptions<JwtOptions> options) : ITokenGenerator
 {

@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Iliami.Identity.Domain;
 using Iliami.Identity.Domain.UseCases.Users;
+using Iliami.Identity.Infrastructure.MQProvider;
 
 namespace Iliami.Identity.Infrastructure;
 

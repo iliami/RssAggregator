@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using Iliami.Identity.Domain.Options;
 using Iliami.Identity.Domain.TokenGenerator;
 using Iliami.Identity.Domain.UseCases.Tokens.GenerateTokens;
 using Iliami.Identity.Domain.UseCases.Tokens.RefreshTokens;
@@ -16,7 +15,6 @@ public static class ServiceCollectionExtension
     public static IServiceCollection AddDomain(this IServiceCollection services)
         => services
             .AddValidatorsFromAssemblyContaining<ICreateUserUseCase>()
-            .AddScoped<ITokenGenerator, TokenGenerator.TokenGenerator>()
             .AddScoped<ICreateUserUseCase, CreateUserUseCase>()
             .AddScoped<IGetUserUseCase, GetUserUseCase>()
             .AddScoped<IGenerateTokensUseCase, GenerateTokensUseCase>()

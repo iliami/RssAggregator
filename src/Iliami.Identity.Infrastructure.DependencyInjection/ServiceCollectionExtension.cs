@@ -1,6 +1,7 @@
 ﻿using Iliami.Identity.Domain;
 using Iliami.Identity.Domain.HashingHelpers;
 using Iliami.Identity.Domain.Options;
+using Iliami.Identity.Domain.TokenGenerator;
 using Iliami.Identity.Domain.UseCases.Tokens.GenerateTokens;
 using Iliami.Identity.Domain.UseCases.Tokens.RefreshTokens;
 using Iliami.Identity.Domain.UseCases.Tokens.RevokeTokens;
@@ -24,13 +25,14 @@ public static class ServiceCollectionExtension
             .AddMemoryCache()
             .AddDbContext<DbContext>()
             .AddSingleton<IUnitOfWork, UnitOfWork>()
-            
+
             .AddScoped<IGuidFactory, GuidFactory>()
             .AddScoped<IChannelProvider, ChannelProvider>()
             .AddScoped<IBusPublisher, BusPublisher>()
             .AddScoped<IHashCreator, HashingHelper>()
             .AddScoped<IHashComparer, HashingHelper>()
-            
+            .AddScoped<ITokenGenerator, TokenGenerator.TokenGenerator>()
+
             .AddScoped<IIdentityEventStorage, IdentityEventStorage>()
             .AddScoped<ICreateUserStorage, CreateUserStorage>()
             .AddScoped<IGetUserStorage, GetUserStorage>()

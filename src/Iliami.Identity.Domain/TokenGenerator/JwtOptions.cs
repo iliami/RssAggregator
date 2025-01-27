@@ -1,7 +1,7 @@
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Iliami.Identity.Domain.Options;
+namespace Iliami.Identity.Domain.TokenGenerator;
 
 public class JwtOptions
 {

@@ -1,4 +1,5 @@
 ﻿using Iliami.Identity.Domain.Options;
+using Iliami.Identity.Domain.TokenGenerator;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
