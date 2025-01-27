@@ -6,10 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddDomain()
-    .AddInfrastructure()
-    .AddRabbitMQ(builder.Configuration)
+    .AddInfrastructure(builder.Configuration)
     .AddAuth(builder.Configuration)
     .AddEndpoints()
+    .AddLogging(builder.Configuration)
     .AddSwagger();
 
 var app = builder.Build();

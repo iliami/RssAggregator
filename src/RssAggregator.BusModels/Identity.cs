@@ -7,7 +7,6 @@
         public const string ExchangeRoutingKey = "identity.rssaggregator";
         public const string QueueName = "rssaggregator.identity";
         public const string ExchangeToQueueBindRoutingKey = "identity.#";
-        public const string IdentityQueueName = "rssaggregator.identity";
         public Guid Id { get; set; }
     }
 }
