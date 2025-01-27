@@ -24,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\src\Iliami.Identity.Domain\Iliami.Identity.Domain.csproj" />
+      <ProjectReference Include="..\..\src\Iliami.Identity.Domain\Iliami.Identity.Domain.csproj" />
     </ItemGroup>
 
 </Project>

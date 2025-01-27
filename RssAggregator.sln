@@ -53,7 +53,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Iliami.Identity.Infrastruct
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RssAggregator.Identity", "RssAggregator.Identity", "{69B7AAEC-D428-432A-87F0-E69BABFA28CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Iliami.Identity.Domain.Tests", "Iliami.Identity.Domain.Tests\Iliami.Identity.Domain.Tests.csproj", "{6D087977-1209-4FAB-B941-7EE98775D2C1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Iliami.Identity.Domain.Tests", "test\Iliami.Identity.Domain.Tests\Iliami.Identity.Domain.Tests.csproj", "{6D087977-1209-4FAB-B941-7EE98775D2C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
