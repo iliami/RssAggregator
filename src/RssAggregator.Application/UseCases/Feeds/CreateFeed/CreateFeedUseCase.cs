@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using RssAggregator.Application.Auth;
+using RssAggregator.Application.Identity;
 using RssAggregator.Domain.Exceptions;
 
 namespace RssAggregator.Application.UseCases.Feeds.CreateFeed;

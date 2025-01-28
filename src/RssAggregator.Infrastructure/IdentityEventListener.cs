@@ -5,10 +5,18 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using RssAggregator.Application.Options;
 using RssAggregator.Application.UseCases.Identity.CreateUser;
 
 namespace RssAggregator.Infrastructure;
+
+public class RabbitMQOptions
+{
+    public string HostName { get; set; } = string.Empty;
+    public int Port { get; set; }
+    public string UserName { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+    public string VirtualHost { get; set; } = string.Empty;
+}
 
 public class IdentityEventListener(
     ILogger<IdentityEventListener> logger, 

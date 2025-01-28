@@ -1,6 +1,6 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using RssAggregator.Application.Auth;
+using RssAggregator.Application.Identity;
 using RssAggregator.Application.UseCases.Categories.CreateCategory;
 using RssAggregator.Application.UseCases.Categories.GetCategories;
 using RssAggregator.Application.UseCases.Feeds.CreateFeed;

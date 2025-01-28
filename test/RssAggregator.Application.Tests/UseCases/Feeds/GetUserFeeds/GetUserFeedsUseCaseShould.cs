@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using FluentValidation;
 using NSubstitute;
-using RssAggregator.Application.Auth;
+using RssAggregator.Application.Identity;
 using RssAggregator.Application.UseCases.Feeds.GetUserFeeds;
 using RssAggregator.Domain.Entities;
 using RssAggregator.Domain.Exceptions;

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RssAggregator.Application.Options;
 
 namespace RssAggregator.Infrastructure.DependencyInjection;
 

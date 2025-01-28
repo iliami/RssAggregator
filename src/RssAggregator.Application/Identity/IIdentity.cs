@@ -1,4 +1,4 @@
-﻿namespace RssAggregator.Application.Auth;
+﻿namespace RssAggregator.Application.Identity;
 
 public interface IIdentity
 {

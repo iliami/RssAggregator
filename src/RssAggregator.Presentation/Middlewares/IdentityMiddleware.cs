@@ -2,7 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Memory;
-using RssAggregator.Application.Auth;
+using RssAggregator.Application.Identity;
 
 namespace RssAggregator.Presentation.Middlewares;
 
