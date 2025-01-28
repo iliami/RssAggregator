@@ -1,4 +1,4 @@
-namespace RssAggregator.Presentation.Endpoints;
+namespace Iliami.Identity.Presentation.Endpoints;
 
 public static class EndpointsTags
 {

@@ -7,3 +7,8 @@ public class User
     public required string Password { get; set; }
     public required string Role { get; set; }
 }
+
+public static class RoleConstants
+{
+    public const string Base = "base_user";
+}

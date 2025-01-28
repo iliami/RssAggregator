@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Iliami.Identity.Domain.Constants;
 using Iliami.Identity.Domain.UseCases.Tokens.RefreshTokens;
 
 namespace Iliami.Identity.Domain.Tests.UseCases.Tokens.RefreshTokens;

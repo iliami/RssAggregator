@@ -1,5 +1,4 @@
-﻿using Iliami.Identity.Domain.Constants;
-using Iliami.Identity.Domain.Options;
+﻿using Iliami.Identity.Domain.Options;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 
@@ -32,20 +31,20 @@ public class ChannelProvider(IOptions<RabbitMQOptions> options) : IChannelProvid
             _isInitialized = true;
 
             await channel.ExchangeDeclareAsync(
-                MQConstants.ExchangeName, 
-                MQConstants.ExchangeType,
+                RssAggregator.BusModels.Identity.ExchangeName, 
+                RssAggregator.BusModels.Identity.ExchangeType,
                 true, 
                 cancellationToken: ct);
             await channel.QueueDeclareAsync(
-                MQConstants.QueueName,
+                RssAggregator.BusModels.Identity.QueueName,
                 true,
                 false,
                 false,
                 cancellationToken: ct);
             await channel.QueueBindAsync(
-                MQConstants.QueueName,
-                MQConstants.ExchangeName, 
-                MQConstants.ExchangeToQueueBindRoutingKey, 
+                RssAggregator.BusModels.Identity.QueueName,
+                RssAggregator.BusModels.Identity.ExchangeName, 
+                RssAggregator.BusModels.Identity.ExchangeToQueueBindRoutingKey, 
                 cancellationToken: ct);
         }
         

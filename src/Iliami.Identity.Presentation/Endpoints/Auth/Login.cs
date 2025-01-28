@@ -1,11 +1,6 @@
-using Iliami.Identity.Domain;
-using Iliami.Identity.Domain.HashingHelpers;
-using Iliami.Identity.Domain.TokenGenerator;
 using Iliami.Identity.Domain.UseCases.Tokens.GenerateTokens;
 using Iliami.Identity.Domain.UseCases.Users.GetUser;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using RssAggregator.Presentation.Endpoints;
 
 namespace Iliami.Identity.Presentation.Endpoints.Auth;
 

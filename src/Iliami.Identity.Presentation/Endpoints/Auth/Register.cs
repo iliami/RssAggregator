@@ -1,6 +1,5 @@
 using Iliami.Identity.Domain.UseCases.Users.CreateUser;
 using Microsoft.AspNetCore.Mvc;
-using RssAggregator.Presentation.Endpoints;
 
 namespace Iliami.Identity.Presentation.Endpoints.Auth;
 public class Register : IEndpoint

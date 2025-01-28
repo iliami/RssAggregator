@@ -1,5 +1,4 @@
 ﻿using Iliami.Identity.Domain;
-using Iliami.Identity.Domain.Constants;
 using Iliami.Identity.Domain.UseCases.Users.CreateUser;
 using Microsoft.EntityFrameworkCore;
 

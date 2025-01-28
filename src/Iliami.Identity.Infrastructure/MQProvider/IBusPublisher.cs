@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using Iliami.Identity.Domain.Constants;
 using RabbitMQ.Client;
 
 namespace Iliami.Identity.Infrastructure.MQProvider;
@@ -17,8 +16,8 @@ public class BusPublisher(IChannelProvider channelProvider) : IBusPublisher
         var body = JsonSerializer.SerializeToUtf8Bytes(entity);
 
         await channel.BasicPublishAsync(
-            MQConstants.ExchangeName, 
-            MQConstants.ExchangeRoutingKey,
+            RssAggregator.BusModels.Identity.ExchangeName, 
+            RssAggregator.BusModels.Identity.ExchangeRoutingKey,
             body, 
             ct);
     }

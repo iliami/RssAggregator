@@ -1,9 +1,7 @@
 using System.Security.Claims;
-using Iliami.Identity.Domain.TokenGenerator;
 using Iliami.Identity.Domain.UseCases.Tokens.RevokeTokens;
 using Iliami.Identity.Infrastructure.TokenGenerator;
 using Microsoft.AspNetCore.Mvc;
-using RssAggregator.Presentation.Endpoints;
 
 namespace Iliami.Identity.Presentation.Endpoints.Auth;
 
