@@ -490,3 +490,29 @@ BEGIN
 END $EF$;
 COMMIT;
 
+START TRANSACTION;
+
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250128060951_ConfigurePostTitleAndDescriptionSize') THEN
+    ALTER TABLE "Posts" ALTER COLUMN "Title" TYPE character varying(4096);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250128060951_ConfigurePostTitleAndDescriptionSize') THEN
+    ALTER TABLE "Posts" ALTER COLUMN "Description" TYPE character varying(262144);
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20250128060951_ConfigurePostTitleAndDescriptionSize') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20250128060951_ConfigurePostTitleAndDescriptionSize', '8.0.11');
+    END IF;
+END $EF$;
+COMMIT;
+

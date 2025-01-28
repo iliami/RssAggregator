@@ -8,11 +8,11 @@ public class CreatePostRequestValidator : AbstractValidator<CreatePostRequest>
     {
         RuleFor(r => r.Title)
             .NotNull().WithMessage("Title is required")
-            .MaximumLength(1024).WithMessage("Title must not exceed 1024 characters");
+            .MaximumLength(4096).WithMessage("Title must not exceed 4096 characters");
 
         RuleFor(r => r.Description)
             .NotNull().WithMessage("Description is required")
-            .MaximumLength(32768).WithMessage("Description must not exceed 32768 characters");
+            .MaximumLength(262144).WithMessage("Description must not exceed 262144 characters");
 
         RuleFor(r => r.Categories)
             .NotNull().WithMessage("Categories is required");

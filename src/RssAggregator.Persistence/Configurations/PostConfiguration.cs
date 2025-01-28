@@ -10,9 +10,9 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
     {
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Title).HasMaxLength(1024);
+        builder.Property(x => x.Title).HasMaxLength(4096);
 
-        builder.Property(x => x.Description).HasMaxLength(32768);
+        builder.Property(x => x.Description).HasMaxLength(262144);
 
         builder.Property(x => x.Url).HasMaxLength(256);
 
