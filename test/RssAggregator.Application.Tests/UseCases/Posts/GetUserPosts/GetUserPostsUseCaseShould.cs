@@ -50,8 +50,7 @@ public class GetUserPostsUseCaseShould
     {
         var request = new GetUserPostsRequest(new TestSpecification());
         _identity.UserId
-            .Returns(Guid
-                .Empty); // TODO: should be smth like _identityProvider.Current.IsAuthenticated().Returns(false);
+            .Returns(Guid.Empty);
 
         var actual = _sut.Invoking(s => s.Handle(request, CancellationToken.None));
 

@@ -10,7 +10,7 @@ public static class MonitoringExtensions
         var oTelCollectorOptions = configuration
                           .GetSection(nameof(OTelCollectorOptions))
                           .Get<OTelCollectorOptions>() 
-                      ?? throw new NotImplementedException();
+                      ?? throw new ArgumentNullException(nameof(configuration));
 
         var oTelCollectorEndpoint = $"http://{oTelCollectorOptions.HostName}:{oTelCollectorOptions.Port}";
         var oTelCollectorProtocol = 

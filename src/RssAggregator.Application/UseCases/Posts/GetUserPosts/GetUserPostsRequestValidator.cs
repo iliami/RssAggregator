@@ -8,6 +8,5 @@ public class GetUserPostsRequestValidator : AbstractValidator<GetUserPostsReques
     {
         RuleFor(r => r.Specification)
             .NotNull().WithMessage("Specification cannot be null.");
-        // TODO: .SetValidator();
     }
 }

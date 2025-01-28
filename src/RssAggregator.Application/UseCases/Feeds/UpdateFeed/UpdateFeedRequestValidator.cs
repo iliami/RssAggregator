@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Data;
+using FluentValidation;
 
 namespace RssAggregator.Application.UseCases.Feeds.UpdateFeed;
 
@@ -7,8 +8,23 @@ public class UpdateFeedRequestValidator : AbstractValidator<UpdateFeedRequest>
     public UpdateFeedRequestValidator()
     {
         RuleFor(r => r.Feed)
-            .Cascade(CascadeMode.Stop)
             .NotNull().WithMessage("Feed cannot be null");
-        // TODO: am i need a feed validator here???
+
+        RuleFor(r => r.Feed.Id)
+            .NotEmpty();
+
+        RuleFor(r => r.Feed.Name)
+            .NotNull()
+            .MaximumLength(128);
+
+        RuleFor(r => r.Feed.Url)
+            .NotNull()
+            .NotEmpty()
+            .MaximumLength(256);
+
+        RuleFor(r => r.Feed.Description)
+            .NotNull()
+            .NotEmpty()
+            .MaximumLength(2048);
     }
 }

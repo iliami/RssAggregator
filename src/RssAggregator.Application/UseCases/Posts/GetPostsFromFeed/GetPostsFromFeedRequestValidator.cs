@@ -11,6 +11,5 @@ public class GetPostsFromFeedRequestValidator : AbstractValidator<GetPostsFromFe
 
         RuleFor(r => r.Specification)
             .NotNull().WithMessage("Specification cannot be null.");
-        // TODO: .SetValidator();
     }
 }

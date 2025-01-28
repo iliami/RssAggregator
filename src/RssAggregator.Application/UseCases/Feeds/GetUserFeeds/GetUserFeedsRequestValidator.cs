@@ -8,6 +8,5 @@ public class GetUserFeedsRequestValidator : AbstractValidator<GetUserFeedsReques
     {
         RuleFor(r => r.Specification)
             .NotNull().WithMessage("Specification cannot be null.");
-        // TODO: .SetValidator();
     }
 }
